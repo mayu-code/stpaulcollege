@@ -1,5 +1,6 @@
 package com.main.stpaul.Exceptions;
 
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<SuccessResponse> handleUnauthorizeException(UnauthorizeException e){
         SuccessResponse response = new SuccessResponse(HttpStatus.UNAUTHORIZED,401,e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<SuccessResponse> handleBadRequestException(BadRequestException e){
+        SuccessResponse response = new SuccessResponse(HttpStatus.BAD_REQUEST,400,e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(Exception.class)
