@@ -1,0 +1,60 @@
+package com.main.stpaul.entities;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
+@Data
+@Entity
+@Table(name = "Student")
+public class Student {
+
+    @Id
+    private String studentId;
+
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private Date dateOfBirth;
+    private String gender;
+
+    private LocalDate admissionDate;
+    private String session;
+    private String stdClass;
+    private String status;
+
+    private boolean isDelete = false;
+    private boolean isActive = true;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date addDate = new Date();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedDate = new Date();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deleteDate;
+
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<StudentAcademics> academics;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<Address> addresses;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<Documents> documents;
+    
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    private GuardianInfo guardianInfo;
+
+    @OneToOne(mappedBy = "student")
+    private BankDetail bankDetail;
+
+    @OneToOne(mappedBy = "student")
+    private LastSchool lastSchool;
+}
