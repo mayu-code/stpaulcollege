@@ -17,7 +17,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 @Entity
@@ -44,6 +43,10 @@ public class User implements UserDetails{
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Session> sessions;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<CollegeFees> collegeFees;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
