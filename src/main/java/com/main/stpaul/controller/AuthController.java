@@ -34,8 +34,7 @@ import com.main.stpaul.entities.Session;
 import com.main.stpaul.entities.User;
 import com.main.stpaul.jwtSecurity.CustomerUserDetail;
 import com.main.stpaul.jwtSecurity.JwtProvider;
-import com.main.stpaul.mapper.requestMapper.UserRequestMapper;
-import com.main.stpaul.mapper.responseMapper.UserMapper;
+import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.OtpSerivceImpl;
 import com.main.stpaul.services.impl.SessionServiceImpl;
 import com.main.stpaul.services.impl.UserServiceImpl;
@@ -52,16 +51,13 @@ public class AuthController {
     private CustomerUserDetail CustomerUserDetail;
 
     @Autowired
-    private UserRequestMapper userRequestMapper;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private OtpSerivceImpl otpSerivceImpl;
 
     @Autowired
     private SessionServiceImpl sessionServiceImpl;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @PostMapping("/register")
     public ResponseEntity<?> signUp(@RequestBody RegisterRequest request) throws Exception {
@@ -70,7 +66,7 @@ public class AuthController {
             throw new DuplicateEntityException("user already present !");
         }
         try {
-            user = userRequestMapper.toUser(request);
+            user = userMapper.toUser(request);
             user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
             this.userServiceImpl.addUser(user);
 

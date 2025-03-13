@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.main.stpaul.constants.Role;
 import com.main.stpaul.jwtSecurity.CustomerUserDetail;
 import com.main.stpaul.jwtSecurity.JwtConstants;
 import com.main.stpaul.jwtSecurity.JwtValidator;
@@ -43,9 +44,13 @@ public class SecurityConfig {
         http
             .sessionManagement(managment->managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize->authorize
-                .requestMatchers("/auth/**","swagger-ui/**","/v3/**").permitAll()
-                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                .anyRequest().permitAll())
+                .requestMatchers("api/auth/**","swagger-ui/**","/v3/**").permitAll()
+                .requestMatchers("api/user/**").hasAnyRole(Role.MANAGER.toString(),Role.ADMIN.toString(),Role.SUPERADMIN.toString(),Role.ACOUNTANT.toString())
+                .requestMatchers("api/manager/**").hasAnyRole(Role.MANAGER.toString(),Role.ADMIN.toString(),Role.SUPERADMIN.toString())
+                .requestMatchers("api/accountant/**").hasAnyRole(Role.ACOUNTANT.toString(),Role.SUPERADMIN.toString())
+                .requestMatchers("api/admin/**").hasAnyRole(Role.ADMIN.toString(),Role.SUPERADMIN.toString())
+                .requestMatchers("api/superadmin/**").hasAnyRole(Role.SUPERADMIN.toString())
+                .anyRequest().authenticated())
             .addFilterBefore(new JwtValidator(sessionServiceImpl), UsernamePasswordAuthenticationFilter.class)
             .csrf(csrf->csrf.disable())
             .cors(cors->cors.configurationSource(corsConfigurationSource()))
@@ -79,6 +84,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
-
 }

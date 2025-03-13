@@ -25,6 +25,7 @@ public class JwtValidator extends OncePerRequestFilter{
         this.sessionServiceImpl=sessionServiceImpl;
     }
 
+    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException{

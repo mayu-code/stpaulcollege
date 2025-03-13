@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.entities.User;
-import com.main.stpaul.mapper.responseMapper.UserMapper;
+import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.UserServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +27,7 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
 
     @GetMapping("/getProfile")
     @Operation(summary = "Get user by JwtToken", description = "Fetches user details by JwtToken")

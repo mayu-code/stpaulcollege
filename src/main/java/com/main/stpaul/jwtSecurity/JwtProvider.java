@@ -19,6 +19,7 @@ public class JwtProvider {
 
     public static SecretKey key = Keys.hmacShaKeyFor(JwtConstants.getApiKey().getBytes());
     
+    @SuppressWarnings("deprecation")
     public static Session generateJwtToken(Authentication auth){
         Session session = new Session();
             String jwt = Jwts.builder()
@@ -35,6 +36,7 @@ public class JwtProvider {
         return session;
     }
 
+    @SuppressWarnings("deprecation")
     public static String getEmailFromJwt(String jwt){
         jwt = jwt.substring(7);
 
@@ -45,6 +47,7 @@ public class JwtProvider {
         return email;
     }
 
+    @SuppressWarnings("deprecation")
     public static String getRoleFromJwt(String jwt){
         jwt = jwt.substring(7);
         try{
