@@ -71,7 +71,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource(){
         return request->{
             CorsConfiguration cfg = new CorsConfiguration();
-            cfg.setAllowedOrigins(Arrays.asList("*"));
+            cfg.setAllowedOrigins(Arrays.asList("http://localhost:5173/", "http://localhost:5174/"));
             cfg.setAllowedMethods(Collections.singletonList("*"));
             cfg.setAllowCredentials(true);
             cfg.setExposedHeaders(Arrays.asList(JwtConstants.JWT_HEADER,"content-type"));
