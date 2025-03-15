@@ -70,13 +70,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         return request->{
-            CorsConfiguration cfg = new CorsConfiguration();
-            cfg.setAllowedOrigins(Arrays.asList("http://localhost:5173/", "http://localhost:5174/"));
-            cfg.setAllowedMethods(Collections.singletonList("*"));
-            cfg.setAllowCredentials(true);
-            cfg.setExposedHeaders(Arrays.asList(JwtConstants.JWT_HEADER,"content-type"));
-            cfg.setMaxAge(3600L);
-            return cfg;
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:5174"));
+            configuration.setAllowedMethods(Arrays.asList("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"));
+            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+            configuration.setAllowCredentials(true);
+            configuration.setExposedHeaders(Arrays.asList("Authorization"));
+            configuration.setMaxAge(3600L);
+            return configuration;
         };
     }
 
