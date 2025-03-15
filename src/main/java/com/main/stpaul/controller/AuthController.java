@@ -41,7 +41,7 @@ import com.main.stpaul.services.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = { "", "" })
+@CrossOrigin(origins = { "http://localhost:5173/", "http://localhost:5174/" })
 public class AuthController {
 
     @Autowired

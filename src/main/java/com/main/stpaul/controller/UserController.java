@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {"",""})
+@CrossOrigin(origins = { "http://localhost:5173/", "http://localhost:5174/" })
 public class UserController {
     
     @Autowired
