@@ -1,7 +1,7 @@
 package com.main.stpaul.services.impl;
 
 import java.util.UUID;
-
+                   
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,6 @@ public class LastSchoolServiceImpl implements LastSchoolService{
 
     @Override
     public LastSchoolResponse getLastSchoolById(String id) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getLastSchoolById'");
     }
 

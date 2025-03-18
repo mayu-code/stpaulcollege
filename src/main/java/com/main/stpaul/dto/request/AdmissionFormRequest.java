@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdmissionFormRequest {
+    private String admissionDate;
     private String session;
     private String formNo;
     private String stdClass;
