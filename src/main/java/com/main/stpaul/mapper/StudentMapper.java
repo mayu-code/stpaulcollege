@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.main.stpaul.dto.request.StudentRequest;
+import com.main.stpaul.dto.response.StudentDetailResponse;
+import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
 
 @Component
@@ -14,5 +16,9 @@ public class StudentMapper {
 
     public Student toStudent(StudentRequest studentRequest){
         return this.modelMapper.map(studentRequest, Student.class);
+    }
+
+    public StudentDetailResponse toStudentDetailResponse(StudentResponse studentResponse){
+        return this.modelMapper.map(studentResponse, StudentDetailResponse.class);
     }
 }

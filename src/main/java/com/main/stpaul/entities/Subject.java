@@ -1,7 +1,5 @@
 package com.main.stpaul.entities;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -19,13 +17,6 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    private boolean isDelete = false;
-    private boolean isActive = true;
-
-    private LocalDateTime addDate = LocalDateTime.now();
-    private LocalDateTime updatedDate = LocalDateTime.now();
-    private LocalDateTime deleteDate;
 
     @ManyToOne
     @JsonIgnore

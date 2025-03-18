@@ -16,6 +16,4 @@ public class GuardianInfoMapper {
     public GuardianInfo toGuardianInfo(GuardianInfoRequest guardianInfo){
         return this.modelMapper.map(guardianInfo,GuardianInfo.class);
     }
-
-
 }

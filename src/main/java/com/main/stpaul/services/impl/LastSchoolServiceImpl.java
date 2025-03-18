@@ -2,10 +2,10 @@ package com.main.stpaul.services.impl;
 
 import java.util.UUID;
 
-import org.modelmapper.internal.bytebuddy.asm.Advice.Unused;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.response.LastSchoolResponse;
 import com.main.stpaul.entities.LastSchool;
 import com.main.stpaul.repository.LastSchoolRepo;
 import com.main.stpaul.services.serviceInterface.LastSchoolService;
@@ -25,15 +25,14 @@ public class LastSchoolServiceImpl implements LastSchoolService{
     }
 
     @Override
-    public LastSchool getLastSchoolById(String id) {
+    public LastSchoolResponse getLastSchoolById(String id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getLastSchoolById'");
     }
 
     @Override
-    public LastSchool getLastSchoolByStudent(String studentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getLastSchoolByStudent'");
+    public LastSchoolResponse getLastSchoolByStudent(String studentId) {
+        return this.lastSchoolRepo.findByStudent(studentId).orElse(null);
     }
     
 }

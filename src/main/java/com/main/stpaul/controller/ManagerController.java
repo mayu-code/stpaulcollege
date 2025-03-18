@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.AdmissionFormRequest;
 import com.main.stpaul.dto.request.BankDetailRequest;
@@ -20,6 +21,7 @@ import com.main.stpaul.dto.request.GuardianInfoRequest;
 import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.StreamRequest;
 import com.main.stpaul.dto.request.StudentRequest;
+import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.BiofocalSubject;
@@ -34,7 +36,6 @@ import com.main.stpaul.mapper.BankDetailMapper;
 import com.main.stpaul.mapper.GuardianInfoMapper;
 import com.main.stpaul.mapper.LastSchoolMapper;
 import com.main.stpaul.mapper.StudentMapper;
-import com.main.stpaul.repository.BioFocalSubjectRepo;
 import com.main.stpaul.services.impl.AdmissionFormServiceImpl;
 import com.main.stpaul.services.impl.BankDetailServiceImpl;
 import com.main.stpaul.services.impl.BioFocalSubjectServiceImpl;
@@ -48,8 +49,6 @@ import com.main.stpaul.services.impl.SubjectServiceImpl;
 @RequestMapping("/api/manager")
 @RestController
 public class ManagerController {
-
-    private final BioFocalSubjectRepo bioFocalSubjectRepo;
 
 
     @Autowired
@@ -95,11 +94,6 @@ public class ManagerController {
     private AdmissionFromMapper admissionFromMapper;
 
 
-    ManagerController(BioFocalSubjectRepo bioFocalSubjectRepo) {
-        this.bioFocalSubjectRepo = bioFocalSubjectRepo;
-    }
-
-
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestPart("admissionForm")AdmissionFormRequest admissionFormRequest,
                                             @RequestPart("student")StudentRequest studentRequest,
@@ -131,6 +125,7 @@ public class ManagerController {
 
             StudentAcademics studentAcademics = new StudentAcademics();
             studentAcademics.setStdClass(admissionForm.getStdClass());
+            studentAcademics.setStudent(student);
             this.studentAcademicsServiceImpl.addStudentAcademics(studentAcademics);
 
             Stream stream = new Stream();
@@ -161,13 +156,39 @@ public class ManagerController {
     }
     
     @GetMapping("/students")
-    public ResponseEntity<?> allStudents(){
-        return null;
+    public ResponseEntity<?> allStudents()throws Exception{
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("Get All Users Successfully !")
+                                                .data(this.studentServiceImpl.getAllStudents())
+                                                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     @GetMapping("/students/{id}")
-    public ResponseEntity<?> studentById(){
-        return null;
+    public ResponseEntity<?> studentById(@PathVariable("id")String id)throws Exception{
+        try {
+                StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
+                student.setStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsByStudent(id));
+                student.setGuardianInfo(this.guardianInfoServiceImpl.getGuardianInfoByStudent(id));
+                student.setBankDetail(this.bankDetailServiceImpl.getBankDetailByStudent(id));
+                student.setLastSchool(this.lastSchoolServiceImpl.getLastSchoolByStudent(id));
+
+            DataResponse response = DataResponse.builder()
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("Get All Users Successfully !")
+                                                .data(student)
+                                                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     @PutMapping("/students/{id}")

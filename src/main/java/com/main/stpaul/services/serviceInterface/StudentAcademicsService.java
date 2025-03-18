@@ -2,10 +2,11 @@ package com.main.stpaul.services.serviceInterface;
 
 import java.util.List;
 
+import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.entities.StudentAcademics;
 
 public interface StudentAcademicsService {
     StudentAcademics addStudentAcademics(StudentAcademics studentAcademics);
-    List<StudentAcademics> getAcademicsByStudent(String studentId);
+    List<StudentAcademicsResponse> getAcademicsByStudent(String studentId);
     StudentAcademics getAcademicsById(String id);
 }

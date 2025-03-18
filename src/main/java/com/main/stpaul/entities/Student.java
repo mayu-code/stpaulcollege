@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -45,7 +44,7 @@ public class Student {
 
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<StudentAcademics> academics;
+    private List<StudentAcademics> studentAcademics;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Address> addresses;

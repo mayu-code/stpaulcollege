@@ -1,10 +1,11 @@
 package com.main.stpaul.services.serviceInterface;
 
+import com.main.stpaul.dto.response.BankDetailResponse;
 import com.main.stpaul.entities.BankDetail;
 
 public interface BankDetailService {
 
     BankDetail addBankDetail(BankDetail bankDetail);
-    BankDetail getBankDetailById(String bdId);
-    BankDetail getBankDetailByStudent(String studentId);
+    BankDetailResponse getBankDetailById(String bdId);
+    BankDetailResponse getBankDetailByStudent(String studentId);
 }

@@ -2,11 +2,13 @@ package com.main.stpaul.services.serviceInterface;
 
 import java.util.List;
 
+import com.main.stpaul.dto.response.StudentDetailResponse;
+import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
 
 public interface StudentService {
-    
+
     Student addStudent(Student student);
-    Student getStudentById(String id);
-    List<Student> getAllStudents();
+    StudentDetailResponse getStudentById(String id);
+    List<StudentResponse> getAllStudents();
 }

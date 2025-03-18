@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.entities.StudentAcademics;
 
 public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,String> {
@@ -21,4 +23,18 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
     @Modifying
     @Query("UPDATE StudentAcademics s SET s.isDelete=true AND s.deleteDate=now WHERE s.studentAcademicsId=:id")
     void deleteStudentAcademics(long id);
+
+    @Query("""
+        SELECT new com.main.stpaul.dto.response.StudentAcademicsResponse(
+            s.studentAcademicsId, s.collegeName, s.rollNo, s.examination, s.examMonth, 
+            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,
+            NULL,
+            s.stream,
+            s.biofocalSubject
+        ) 
+        FROM StudentAcademics s
+        WHERE s.student.id = :studentId AND s.isDelete = false
+        ORDER BY s.addDate DESC
+    """)
+    List<StudentAcademicsResponse> findByStudentId(@Param("studentId") String studentId);
 }

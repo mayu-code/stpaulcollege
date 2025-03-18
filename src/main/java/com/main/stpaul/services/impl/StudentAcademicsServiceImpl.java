@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.repository.StudentAcademicsRepo;
 import com.main.stpaul.services.serviceInterface.StudentAcademicsService;
@@ -24,9 +25,8 @@ public class StudentAcademicsServiceImpl implements StudentAcademicsService{
     }
 
     @Override
-    public List<StudentAcademics> getAcademicsByStudent(String studentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAcademicsByStudent'");
+    public List<StudentAcademicsResponse> getAcademicsByStudent(String studentId) {
+        return this.studentAcademicsRepo.findByStudentId(studentId);
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.response.BankDetailResponse;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.repository.BankDetailRepo;
 import com.main.stpaul.services.serviceInterface.BankDetailService;
@@ -23,15 +24,14 @@ public class BankDetailServiceImpl implements BankDetailService{
     }
 
     @Override
-    public BankDetail getBankDetailById(String bdId) {
+    public BankDetailResponse getBankDetailById(String bdId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getBankDetailById'");
     }
 
     @Override
-    public BankDetail getBankDetailByStudent(String studentId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBankDetailByStudent'");
+    public BankDetailResponse getBankDetailByStudent(String studentId) {
+        return this.bankDetailRepo.findByStudentId(studentId).orElse(null);
     }
     
 }

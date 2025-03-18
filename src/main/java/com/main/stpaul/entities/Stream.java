@@ -1,6 +1,5 @@
 package com.main.stpaul.entities;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,14 +23,6 @@ public class Stream {
     private String stream;
     private  String subStream;
     private String medium;
-
-
-    private boolean isDelete = false;
-    private boolean isActive = true;
-
-    private LocalDateTime addDate = LocalDateTime.now();
-    private LocalDateTime updatedDate = LocalDateTime.now();
-    private LocalDateTime deleteDate;
 
     @OneToMany(mappedBy = "stream")
     private List<Subject> subjects;
