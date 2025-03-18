@@ -44,5 +44,17 @@ public class StudentServiceImpl implements StudentService{
     public List<StudentResponse> getAllStudents() {
         return this.studentRepo.findAllStudents();
     }
+
+    @Override
+    public Student updateStudent(Student student) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateStudent'");
+    }
+
+    @Override
+    public void deleteStudent(String id) {
+        this.studentRepo.deleteStudent(id);
+        return;
+    }
     
 }

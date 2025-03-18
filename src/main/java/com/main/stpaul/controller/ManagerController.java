@@ -50,7 +50,6 @@ import com.main.stpaul.services.impl.SubjectServiceImpl;
 @RestController
 public class ManagerController {
 
-
     @Autowired
     private StudentServiceImpl studentServiceImpl;
 
@@ -104,7 +103,6 @@ public class ManagerController {
                                             @RequestPart("bioFocalSubject")BioFocalSubjectRequest bioFocalSubjectRequest)throws Exception{
 
         try {
-
             Student student=this.studentServiceImpl.addStudent(this.studentMapper.toStudent(studentRequest));
 
             AdmissionForm admissionForm = this.admissionFromMapper.toAdmissionForm(admissionFormRequest);
@@ -197,7 +195,13 @@ public class ManagerController {
     }
 
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable("id")String id){
-        return null;
+    public ResponseEntity<?> deleteStudent(@PathVariable("id")String id)throws Exception{
+        try {
+            this.studentServiceImpl.deleteStudent(id);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 }

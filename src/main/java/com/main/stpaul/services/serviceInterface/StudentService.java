@@ -11,4 +11,8 @@ public interface StudentService {
     Student addStudent(Student student);
     StudentDetailResponse getStudentById(String id);
     List<StudentResponse> getAllStudents();
+
+    Student updateStudent(Student student);
+    void deleteStudent(String id);
+    
 }
