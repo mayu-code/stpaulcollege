@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.stpaul.constants.Result;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,14 +20,13 @@ public class StudentAcademics {
     @Id
     private String studentAcademicsId;
 
-    private String collegeName;
-    private String lastStudentId;
+    private String collegeName="S.T. Paul College";
     private String rollNo;
-    private String uid;
     private String examination;
     private String examMonth;
     private int marksObtained;
-    private String result;
+    private String stdClass;
+    private Result result=Result.ON_GOING;
     private boolean isAlumni;
     private LocalDate promotionDate;
     private String status;
@@ -46,4 +46,11 @@ public class StudentAcademics {
 
     @OneToOne(mappedBy = "studentAcademics")
     private PaymentDetail paymentDetail;
+
+
+    @OneToOne(mappedBy = "academics")
+    private Stream stream;
+
+    @OneToOne(mappedBy = "academics")
+    private BiofocalSubject biofocalSubject;
 }

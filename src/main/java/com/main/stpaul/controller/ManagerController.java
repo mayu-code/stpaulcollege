@@ -15,28 +15,41 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.AdmissionFormRequest;
 import com.main.stpaul.dto.request.BankDetailRequest;
+import com.main.stpaul.dto.request.BioFocalSubjectRequest;
 import com.main.stpaul.dto.request.GuardianInfoRequest;
 import com.main.stpaul.dto.request.LastSchoolRequest;
+import com.main.stpaul.dto.request.StreamRequest;
 import com.main.stpaul.dto.request.StudentRequest;
 import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
+import com.main.stpaul.entities.BiofocalSubject;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.entities.LastSchool;
+import com.main.stpaul.entities.Stream;
 import com.main.stpaul.entities.Student;
+import com.main.stpaul.entities.StudentAcademics;
+import com.main.stpaul.entities.Subject;
 import com.main.stpaul.mapper.AdmissionFromMapper;
 import com.main.stpaul.mapper.BankDetailMapper;
 import com.main.stpaul.mapper.GuardianInfoMapper;
 import com.main.stpaul.mapper.LastSchoolMapper;
 import com.main.stpaul.mapper.StudentMapper;
+import com.main.stpaul.repository.BioFocalSubjectRepo;
 import com.main.stpaul.services.impl.AdmissionFormServiceImpl;
 import com.main.stpaul.services.impl.BankDetailServiceImpl;
+import com.main.stpaul.services.impl.BioFocalSubjectServiceImpl;
 import com.main.stpaul.services.impl.GuardianInfoServiceImpl;
 import com.main.stpaul.services.impl.LastSchoolServiceImpl;
+import com.main.stpaul.services.impl.StreamServiceImpl;
+import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
+import com.main.stpaul.services.impl.SubjectServiceImpl;
 
 @RequestMapping("/api/manager")
 @RestController
 public class ManagerController {
+
+    private final BioFocalSubjectRepo bioFocalSubjectRepo;
 
 
     @Autowired
@@ -55,6 +68,18 @@ public class ManagerController {
     private AdmissionFormServiceImpl admissionFormServiceImpl;
 
     @Autowired
+    private StudentAcademicsServiceImpl studentAcademicsServiceImpl;
+
+    @Autowired
+    private SubjectServiceImpl subjectServiceImpl;
+
+    @Autowired
+    private StreamServiceImpl streamServiceImpl;
+
+    @Autowired
+    private BioFocalSubjectServiceImpl bioFocalSubjectServiceImpl;
+
+    @Autowired
     private StudentMapper studentMapper;
 
     @Autowired
@@ -70,12 +95,19 @@ public class ManagerController {
     private AdmissionFromMapper admissionFromMapper;
 
 
+    ManagerController(BioFocalSubjectRepo bioFocalSubjectRepo) {
+        this.bioFocalSubjectRepo = bioFocalSubjectRepo;
+    }
+
+
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestPart("admissionForm")AdmissionFormRequest admissionFormRequest,
                                             @RequestPart("student")StudentRequest studentRequest,
                                             @RequestPart("lastSchool")LastSchoolRequest lastSchoolRequest,
                                             @RequestPart("bankDetail")BankDetailRequest bankDetailRequest,
-                                            @RequestPart("guardianInfo")GuardianInfoRequest guardianInfoRequest)throws Exception{
+                                            @RequestPart("guardianInfo")GuardianInfoRequest guardianInfoRequest,
+                                            @RequestPart("subject")StreamRequest streamRequest,
+                                            @RequestPart("bioFocalSubject")BioFocalSubjectRequest bioFocalSubjectRequest)throws Exception{
 
         try {
 
@@ -96,6 +128,30 @@ public class ManagerController {
             GuardianInfo guardianInfo = this.guardianInfoMapper.toGuardianInfo(guardianInfoRequest);
             guardianInfo.setStudent(student);
             this.guardianInfoServiceImpl.addGuardianInfo(guardianInfo);
+
+            StudentAcademics studentAcademics = new StudentAcademics();
+            studentAcademics.setStdClass(admissionForm.getStdClass());
+            this.studentAcademicsServiceImpl.addStudentAcademics(studentAcademics);
+
+            Stream stream = new Stream();
+            stream.setAcademics(studentAcademics);
+            stream.setMedium(streamRequest.getMedium());
+            stream.setStream(streamRequest.getStream());
+            stream.setSubStream(streamRequest.getSubStream());
+            stream = this.streamServiceImpl.addStream(stream);
+            for(String subject:streamRequest.getSubjects()){
+                Subject sb = new Subject();
+                sb.setName(subject);
+                sb.setStream(stream);
+                this.subjectServiceImpl.addSubject(sb);
+            }
+
+            BiofocalSubject biofocalSubject = new BiofocalSubject();
+            biofocalSubject.setMedium(bioFocalSubjectRequest.getMedium());
+            biofocalSubject.setAcademics(studentAcademics);
+            biofocalSubject.setSubStream(bioFocalSubjectRequest.getSubStream());
+            biofocalSubject.setSubject(bioFocalSubjectRequest.getSubject());
+            this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
 
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student Register Successfully !");
             return ResponseEntity.status(HttpStatus.OK).body(response);

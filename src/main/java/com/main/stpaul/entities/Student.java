@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -38,14 +39,9 @@ public class Student {
     private boolean isDelete = false;
     private boolean isActive = true;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date addDate = new Date();
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedDate = new Date();
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date deleteDate;
+    private LocalDateTime addDate = LocalDateTime.now();
+    private LocalDateTime updatedDate = LocalDateTime.now();
+    private LocalDateTime deleteDate;
 
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
