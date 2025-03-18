@@ -143,7 +143,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/send-opt/{email}")
+    @PostMapping("/send-otp/{email}")
     public ResponseEntity<?> sendOpt(@PathVariable("email") String email) throws Exception {
         User user = this.userServiceImpl.getUserByEmail(email);
         if (user == null) {
@@ -161,7 +161,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/varify-otp")
+    @PostMapping("/verify-otp")
     public ResponseEntity<?> varifyOtp(@RequestBody VarifyOpt request) throws Exception {
         User user = this.userServiceImpl.getUserByEmail(request.getEmail());
         if (user == null) {

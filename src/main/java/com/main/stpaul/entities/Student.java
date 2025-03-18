@@ -16,11 +16,19 @@ public class Student {
     private String studentId;
 
     private String firstName;
-    private String lastName;
+    private String fatherName;
+    private String motherName;
+    private String surname;
     private String email;
-    private String phoneNumber;
-    private Date dateOfBirth;
+    private String phoneNo;
+    private LocalDate dateOfBirth;
     private String gender;
+
+    private String adharNo;
+    private String bloodGroup;
+    private String caste;
+    private String category;
+    private String scholarshipCategory;
 
     private LocalDate admissionDate;
     private String session;

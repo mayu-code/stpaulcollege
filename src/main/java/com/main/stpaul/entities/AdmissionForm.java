@@ -2,10 +2,12 @@ package com.main.stpaul.entities;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
+@Entity
 public class AdmissionForm {
 
     @Id

@@ -21,7 +21,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.main.stpaul.constants.Role;
 import com.main.stpaul.jwtSecurity.CustomerUserDetail;
-import com.main.stpaul.jwtSecurity.JwtConstants;
 import com.main.stpaul.jwtSecurity.JwtValidator;
 import com.main.stpaul.services.impl.SessionServiceImpl;
 

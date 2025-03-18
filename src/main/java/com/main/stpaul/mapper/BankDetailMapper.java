@@ -1,0 +1,21 @@
+package com.main.stpaul.mapper;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+
+import com.main.stpaul.dto.request.BankDetailRequest;
+import com.main.stpaul.entities.BankDetail;
+
+@Component
+public class BankDetailMapper {
+    
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public BankDetail toBankDetail(BankDetailRequest bankDetail){
+        return this.modelMapper.map(bankDetail, BankDetail.class);
+    }
+}

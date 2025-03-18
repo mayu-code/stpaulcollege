@@ -11,5 +11,6 @@ public interface OtpEntryRepo extends JpaRepository<OtpEntry,Long>{
 
     @Transactional
     void deleteByEmail(String email);
+    
     OtpEntry findByEmail(String email);
 }
