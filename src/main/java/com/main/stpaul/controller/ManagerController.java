@@ -53,6 +53,7 @@ import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.SubjectServiceImpl;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.persistence.EntityNotFoundException;
 
 @RequestMapping("/api/manager")
@@ -238,11 +239,28 @@ public class ManagerController {
                 document.setStudent(this.studentMapper.toStudent(student));
                 this.documentServiceImpl.addDocuments(document);
             } catch (IOException e) {
-                throw new RuntimeException(e.getMessage());  
+                throw new RuntimeException(e.getMessage());
             }
         });
 
         SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Documents Added Successfully !");
         return ResponseEntity.status(HttpStatus.OK).body(response);  
+    }
+
+    @PutMapping("/students/{studentId}/bank-detail/{bkId}")
+    public ResponseEntity<?> updateBankDetail(@PathVariable("studentId")String studentId,@PathVariable("bkId")String bkId,
+                                                @RequestBody BankDetailRequest bankDetail)throws Exception{
+        try {
+            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            if(student ==null){
+                throw new EntityNotFoundException("Student not present !");
+            } 
+            this.bankDetailServiceImpl.updateBankDetail(bankDetail, bkId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"bank detail updated Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
     }
 }

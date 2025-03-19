@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
+import org.springframework.data.repository.query.Param;
 import com.main.stpaul.dto.response.BankDetailResponse;
 import com.main.stpaul.entities.BankDetail;
 
@@ -20,4 +20,14 @@ public interface BankDetailRepo extends JpaRepository<BankDetail,String>{
     @Modifying
     @Query("UPDATE BankDetail b SET b.isDelete=true AND b.deleteDate=now WHERE b.bankDetailId=:id")
     void delteBankDetail(long id);
-}
+
+    @Modifying
+    @Query("UPDATE BankDetail b SET b.bankName = :bankName, b.branchName = :branchName, b.accountNo = :accountNo, b.ifscCode = :ifscCode WHERE b.bankDetailId = :id")
+    void updateBankDetail(
+        @Param("bankName") String bankName,
+        @Param("branchName") String branchName,
+        @Param("accountNo") String accountNo,
+        @Param("ifscCode") String ifscCode,
+        @Param("id") String id
+    );
+    }

@@ -1,5 +1,4 @@
 package com.main.stpaul.Exceptions;
-
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +9,7 @@ import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<SuccessResponse> handleEntityNotFoundException(EntityNotFoundException e){
@@ -27,6 +27,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<SuccessResponse> handleUnauthorizeException(UnauthorizeException e){
         SuccessResponse response = new SuccessResponse(HttpStatus.UNAUTHORIZED,401,e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<SuccessResponse> handleRuntimeException(RuntimeException e){
+        SuccessResponse response = new SuccessResponse(HttpStatus.INTERNAL_SERVER_ERROR,500,e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @ExceptionHandler(BadRequestException.class)

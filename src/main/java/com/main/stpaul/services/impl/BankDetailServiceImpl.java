@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.request.BankDetailRequest;
 import com.main.stpaul.dto.response.BankDetailResponse;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.repository.BankDetailRepo;
@@ -32,6 +33,11 @@ public class BankDetailServiceImpl implements BankDetailService{
     @Override
     public BankDetailResponse getBankDetailByStudent(String studentId) {
         return this.bankDetailRepo.findByStudentId(studentId).orElse(null);
+    }
+
+    @Override
+    public void updateBankDetail(BankDetailRequest bankDetail,String id) {
+        this.bankDetailRepo.updateBankDetail(bankDetail.getBankName(),bankDetail.getBranchName(),bankDetail.getAccountNo(),bankDetail.getIfscCode(),id);
     }
     
 }
