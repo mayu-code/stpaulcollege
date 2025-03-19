@@ -19,7 +19,8 @@ public class BankDetailServiceImpl implements BankDetailService{
 
     @Override
     public BankDetail addBankDetail(BankDetail bankDetail) {
-        String id = UUID.randomUUID().toString();
+        String id = UUID.randomUUID().toString().replaceAll("-", "");
+       // String bankId = id.replaceAll("-", "");
         bankDetail.setBankDetailId(id);
         return this.bankDetailRepo.save(bankDetail);
     }
@@ -38,6 +39,11 @@ public class BankDetailServiceImpl implements BankDetailService{
     @Override
     public void updateBankDetail(BankDetailRequest bankDetail,String id) {
         this.bankDetailRepo.updateBankDetail(bankDetail.getBankName(),bankDetail.getBranchName(),bankDetail.getAccountNo(),bankDetail.getIfscCode(),id);
+    }
+
+    @Override
+    public void deleteBankDetail(String id) {
+        this.bankDetailRepo.deleteBankDetail(id);
     }
     
 }

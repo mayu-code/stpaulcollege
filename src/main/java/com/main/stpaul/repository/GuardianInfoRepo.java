@@ -17,5 +17,5 @@ public interface GuardianInfoRepo extends JpaRepository<GuardianInfo,String>{
 
     @Modifying
     @Query("UPDATE GuardianInfo g SET g.isDelete=true AND g.deleteDate=now WHERE g.giId=:id")
-    void deleteGuardianInfo(long id);
+    void deleteGuardianInfo(String id);
 }

@@ -19,13 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
-import com.main.stpaul.dto.request.AdmissionFormRequest;
 import com.main.stpaul.dto.request.BankDetailRequest;
-import com.main.stpaul.dto.request.BioFocalSubjectRequest;
-import com.main.stpaul.dto.request.GuardianInfoRequest;
-import com.main.stpaul.dto.request.LastSchoolRequest;
-import com.main.stpaul.dto.request.StreamRequest;
-import com.main.stpaul.dto.request.StudentRequest;
+import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
@@ -56,8 +51,8 @@ import com.main.stpaul.services.impl.SubjectServiceImpl;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.persistence.EntityNotFoundException;
 
-@RequestMapping("/api/manager")
 @RestController
+@RequestMapping("/api/manager")
 public class ManagerController {
 
     @Autowired
@@ -105,36 +100,29 @@ public class ManagerController {
     @Autowired
     private AdmissionFromMapper admissionFromMapper;
 
-
     @PostMapping("/student")
-    public ResponseEntity<?> registerStudent(@RequestPart("admissionForm")AdmissionFormRequest admissionFormRequest,
-                                            @RequestPart("student")StudentRequest studentRequest,
-                                            @RequestPart("lastSchool")LastSchoolRequest lastSchoolRequest,
-                                            @RequestPart("bankDetail")BankDetailRequest bankDetailRequest,
-                                            @RequestPart("guardianInfo")GuardianInfoRequest guardianInfoRequest,
-                                            @RequestPart("subject")StreamRequest streamRequest,
-                                            @RequestPart("bioFocalSubject")BioFocalSubjectRequest bioFocalSubjectRequest)throws Exception{
+    public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request)throws Exception{
 
         try {
-            Student student=this.studentMapper.toStudent(studentRequest);
-            student.setSession(admissionFormRequest.getSession());
-            student.setAdmissionDate(admissionFormRequest.getAdmissionDate());
-            student.setStdClass(admissionFormRequest.getStdClass());
+            Student student=this.studentMapper.toStudent(request.getStudent());
+            student.setSession(request.getAdmissionForm().getSession());
+            student.setAdmissionDate(request.getAdmissionForm().getAdmissionDate());
+            student.setStdClass(request.getAdmissionForm().getStdClass());
             student=this.studentServiceImpl.addStudent(student);
 
-            AdmissionForm admissionForm = this.admissionFromMapper.toAdmissionForm(admissionFormRequest);
+            AdmissionForm admissionForm = this.admissionFromMapper.toAdmissionForm(request.getAdmissionForm());
             admissionForm.setStudent(student);
             this.admissionFormServiceImpl.addAdmissionForm(admissionForm);
 
-            BankDetail bankDetail = this.bankDetailMapper.toBankDetail(bankDetailRequest);
+            BankDetail bankDetail = this.bankDetailMapper.toBankDetail(request.getBankDetail());
             bankDetail.setStudent(student);
             this.bankDetailServiceImpl.addBankDetail(bankDetail);
 
-            LastSchool lastSchool = this.lastSchoolMapper.toLastSchool(lastSchoolRequest);
+            LastSchool lastSchool = this.lastSchoolMapper.toLastSchool(request.getLastSchool());
             lastSchool.setStudent(student);
             this.lastSchoolServiceImpl.addLastSchool(lastSchool);
 
-            GuardianInfo guardianInfo = this.guardianInfoMapper.toGuardianInfo(guardianInfoRequest);
+            GuardianInfo guardianInfo = this.guardianInfoMapper.toGuardianInfo(request.getGuardianInfo());
             guardianInfo.setStudent(student);
             this.guardianInfoServiceImpl.addGuardianInfo(guardianInfo);
 
@@ -145,11 +133,11 @@ public class ManagerController {
 
             Stream stream = new Stream();
             stream.setAcademics(studentAcademics);
-            stream.setMedium(streamRequest.getMedium());
-            stream.setStream(streamRequest.getStream());
-            stream.setSubStream(streamRequest.getSubStream());
+            stream.setMedium(request.getSubject().getMedium());
+            stream.setStream(request.getSubject().getStream());
+            stream.setSubStream(request.getSubject().getSubStream());
             stream = this.streamServiceImpl.addStream(stream);
-            for(String subject:streamRequest.getSubjects()){
+            for(String subject:request.getSubject().getSubjects()){
                 Subject sb = new Subject();
                 sb.setName(subject);
                 sb.setStream(stream);
@@ -157,10 +145,10 @@ public class ManagerController {
             }
 
             BiofocalSubject biofocalSubject = new BiofocalSubject();
-            biofocalSubject.setMedium(bioFocalSubjectRequest.getMedium());
+            biofocalSubject.setMedium(request.getBioFocalSubject().getMedium());
             biofocalSubject.setAcademics(studentAcademics);
-            biofocalSubject.setSubStream(bioFocalSubjectRequest.getSubStream());
-            biofocalSubject.setSubject(bioFocalSubjectRequest.getSubject());
+            biofocalSubject.setSubStream(request.getBioFocalSubject().getSubStream());
+            biofocalSubject.setSubject(request.getBioFocalSubject().getSubject());
             this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
 
             DataResponse response = DataResponse.builder()
@@ -173,6 +161,31 @@ public class ManagerController {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @PostMapping("/students/{id}/documents")
+    public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
+                                            @RequestParam Map<String, MultipartFile> files)throws Exception{
+
+        StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
+        if(student ==null){
+            throw new EntityNotFoundException("Student not present !");
+        }                                         
+
+        files.forEach((docName,file)->{
+            try{
+                Documents document = new Documents();
+                document.setDocumentType(docName);
+                document.setDocument(file.getBytes());
+                document.setStudent(this.studentMapper.toStudent(student));
+                this.documentServiceImpl.addDocuments(document);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        });
+
+        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Documents Added Successfully !");
+        return ResponseEntity.status(HttpStatus.OK).body(response);  
     }
     
     @GetMapping("/students")
@@ -216,42 +229,6 @@ public class ManagerController {
         return null;
     }
 
-    @DeleteMapping("/students/{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable("id")String id)throws Exception{
-        try {
-            this.studentServiceImpl.deleteStudent(id);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    @PostMapping("/students/{id}/documents")
-    public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
-                                            @RequestParam Map<String, MultipartFile> files)throws Exception{
-
-        StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
-        if(student ==null){
-            throw new EntityNotFoundException("Student not present !");
-        }                                         
-
-        files.forEach((docName,file)->{
-            try{
-                Documents document = new Documents();
-                document.setDocumentType(docName);
-                document.setDocument(file.getBytes());
-                document.setStudent(this.studentMapper.toStudent(student));
-                this.documentServiceImpl.addDocuments(document);
-            } catch (IOException e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        });
-
-        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Documents Added Successfully !");
-        return ResponseEntity.status(HttpStatus.OK).body(response);  
-    }
-
     @PutMapping("/students/{studentId}/bank-detail/{bkId}")
     public ResponseEntity<?> updateBankDetail(@PathVariable("studentId")String studentId,@PathVariable("bkId")String bkId,
                                                 @RequestBody BankDetailRequest bankDetail)throws Exception{
@@ -290,4 +267,47 @@ public class ManagerController {
         }
     }
 
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable("id")String id)throws Exception{
+        try {
+            this.studentServiceImpl.deleteStudent(id);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/students/bank-detail/{bkId}")
+    public ResponseEntity<?> deleteBankDetail(@PathVariable("bkId")String bkId)throws Exception{
+        try {
+        
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/students/guardian-info/{giId}")
+    public ResponseEntity<?> deleteGuardianInfo(@PathVariable("giId")String giId)throws Exception{
+        try {
+            
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/students/last-school/{lsId}")
+    public ResponseEntity<?> deleteLastSchool(@PathVariable("lsId")String lsId)throws Exception{
+        try {
+            
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }

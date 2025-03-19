@@ -11,4 +11,5 @@ public interface BankDetailService {
     BankDetailResponse getBankDetailByStudent(String studentId);
 
     void updateBankDetail(BankDetailRequest bankDetail,String id);
+    void deleteBankDetail(String id);
 }

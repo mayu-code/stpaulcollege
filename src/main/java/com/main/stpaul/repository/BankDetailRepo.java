@@ -19,7 +19,7 @@ public interface BankDetailRepo extends JpaRepository<BankDetail,String>{
 
     @Modifying
     @Query("UPDATE BankDetail b SET b.isDelete=true AND b.deleteDate=now WHERE b.bankDetailId=:id")
-    void delteBankDetail(long id);
+    void deleteBankDetail(String id);
 
     @Modifying
     @Query("UPDATE BankDetail b SET b.bankName = :bankName, b.branchName = :branchName, b.accountNo = :accountNo, b.ifscCode = :ifscCode WHERE b.bankDetailId = :id")
