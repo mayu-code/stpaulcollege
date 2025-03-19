@@ -162,9 +162,9 @@ public class ManagerController {
             biofocalSubject.setSubStream(bioFocalSubjectRequest.getSubStream());
             biofocalSubject.setSubject(bioFocalSubjectRequest.getSubject());
             this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
-            
+
             DataResponse response = DataResponse.builder()
-                                                .data(student)
+                                                .data(student.getStudentId())
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .message("Student Register Successfully !")
