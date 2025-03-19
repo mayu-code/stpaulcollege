@@ -44,6 +44,7 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
                             @Param("id")long id
                             );
 
+    @Transactional
     @Modifying
     @Query("""
         UPDATE CollegeFees c Set c.isDelete=true ,c.deleteDate=now
