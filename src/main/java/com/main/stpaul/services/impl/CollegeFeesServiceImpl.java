@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.request.CollegeFeesRequest;
 import com.main.stpaul.dto.response.CollegeFeesResponse;
 import com.main.stpaul.entities.CollegeFees;
 import com.main.stpaul.repository.CollegeFeesRepo;
@@ -32,16 +33,17 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
         return this.collegeFeesRepo.findCollegeFeesById(id).orElse(null);
     }
 
-    @Override
-    public void updateCollegeFees(CollegeFees collegeFees) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCollegeFees'");
-    }
-
+  
     @Override
     public void deleteCollegeFees(long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteCollegeFees'");
+    }
+
+
+    @Override
+    public void updateCollegeFees(CollegeFeesRequest collegeFees, long id) {
+        this.collegeFeesRepo.updateCollegeFees(collegeFees.getStdClass(),collegeFees.getTotalFees(),collegeFees.getInstallmentGap(),collegeFees.getInstallmentsAmount(),id);
     }
     
 }

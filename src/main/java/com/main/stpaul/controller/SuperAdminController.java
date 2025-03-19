@@ -12,12 +12,16 @@ import com.main.stpaul.dto.request.CollegeFeesRequest;
 import com.main.stpaul.mapper.CollegeFeesMappler;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/superadmin")
 public class SuperAdminController {
@@ -52,6 +56,20 @@ public class SuperAdminController {
                                                 .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @PutMapping("/college/fees/{id}")    
+    public ResponseEntity<?> updateCollegeFees(@PathVariable("id")long id ,@RequestBody CollegeFeesRequest request)throws Exception{
+        try {
+            log.info("College fees Updating ....");
+            this.collegeFeesServiceImpl.updateCollegeFees(request, id);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"College fees Updated Successfully !");
+            log.info("College Fees Updated Successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error while updating the college fees : {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

@@ -50,7 +50,9 @@ import com.main.stpaul.services.impl.SubjectServiceImpl;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/manager")
 public class ManagerController {
@@ -109,27 +111,33 @@ public class ManagerController {
             student.setAdmissionDate(request.getAdmissionForm().getAdmissionDate());
             student.setStdClass(request.getAdmissionForm().getStdClass());
             student=this.studentServiceImpl.addStudent(student);
+            log.info("Student Added Successfully ");
 
             AdmissionForm admissionForm = this.admissionFromMapper.toAdmissionForm(request.getAdmissionForm());
             admissionForm.setStudent(student);
             this.admissionFormServiceImpl.addAdmissionForm(admissionForm);
+            log.info("admission form Added Successfully ");
 
             BankDetail bankDetail = this.bankDetailMapper.toBankDetail(request.getBankDetail());
             bankDetail.setStudent(student);
             this.bankDetailServiceImpl.addBankDetail(bankDetail);
+            log.info("Bank Detail Added Successfully ");
 
             LastSchool lastSchool = this.lastSchoolMapper.toLastSchool(request.getLastSchool());
             lastSchool.setStudent(student);
             this.lastSchoolServiceImpl.addLastSchool(lastSchool);
+            log.info("Last School Detail Added Successfully ");
 
             GuardianInfo guardianInfo = this.guardianInfoMapper.toGuardianInfo(request.getGuardianInfo());
             guardianInfo.setStudent(student);
             this.guardianInfoServiceImpl.addGuardianInfo(guardianInfo);
+            log.info("Guardian Into Added Successfully ");
 
             StudentAcademics studentAcademics = new StudentAcademics();
             studentAcademics.setStdClass(admissionForm.getStdClass());
             studentAcademics.setStudent(student);
             this.studentAcademicsServiceImpl.addStudentAcademics(studentAcademics);
+            log.info("Academic Detail Added Successfully ");
 
             Stream stream = new Stream();
             stream.setAcademics(studentAcademics);
@@ -143,6 +151,7 @@ public class ManagerController {
                 sb.setStream(stream);
                 this.subjectServiceImpl.addSubject(sb);
             }
+            log.info("Subjects Added Successfully ");
 
             BiofocalSubject biofocalSubject = new BiofocalSubject();
             biofocalSubject.setMedium(request.getBioFocalSubject().getMedium());
@@ -150,6 +159,7 @@ public class ManagerController {
             biofocalSubject.setSubStream(request.getBioFocalSubject().getSubStream());
             biofocalSubject.setSubject(request.getBioFocalSubject().getSubject());
             this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
+            log.info("Bio Focal Subject Added Successfully ");
 
             DataResponse response = DataResponse.builder()
                                                 .data(student.getStudentId())
@@ -157,8 +167,10 @@ public class ManagerController {
                                                 .statusCode(200)
                                                 .message("Student Register Successfully !")
                                                 .build();
+            log.info("Student Admission Successfully ");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error Occured While addmision of Student");
             throw new Exception(e.getMessage());
         }
     }
@@ -167,8 +179,10 @@ public class ManagerController {
     public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
                                             @RequestParam Map<String, MultipartFile> files)throws Exception{
 
+        log.info("Uploading Student Documents");
         StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
         if(student ==null){
+            log.warn("student not found for id : {}",id);
             throw new EntityNotFoundException("Student not present !");
         }                                         
 
