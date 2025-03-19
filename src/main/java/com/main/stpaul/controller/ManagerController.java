@@ -1,5 +1,8 @@
 package com.main.stpaul.controller;
 
+import java.io.IOException;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
@@ -25,6 +30,7 @@ import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.BiofocalSubject;
+import com.main.stpaul.entities.Documents;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.entities.LastSchool;
 import com.main.stpaul.entities.Stream;
@@ -39,12 +45,15 @@ import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.AdmissionFormServiceImpl;
 import com.main.stpaul.services.impl.BankDetailServiceImpl;
 import com.main.stpaul.services.impl.BioFocalSubjectServiceImpl;
+import com.main.stpaul.services.impl.DocumentServiceImpl;
 import com.main.stpaul.services.impl.GuardianInfoServiceImpl;
 import com.main.stpaul.services.impl.LastSchoolServiceImpl;
 import com.main.stpaul.services.impl.StreamServiceImpl;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.SubjectServiceImpl;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @RequestMapping("/api/manager")
 @RestController
@@ -73,6 +82,9 @@ public class ManagerController {
 
     @Autowired
     private StreamServiceImpl streamServiceImpl;
+
+    @Autowired
+    private DocumentServiceImpl documentServiceImpl;
 
     @Autowired
     private BioFocalSubjectServiceImpl bioFocalSubjectServiceImpl;
@@ -207,5 +219,30 @@ public class ManagerController {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @PostMapping("/student/{id}/documents")
+    public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
+                                            @RequestParam Map<String, MultipartFile> files)throws Exception{
+
+        StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
+        if(student ==null){
+            throw new EntityNotFoundException("Student not present !");
+        }                                         
+
+        files.forEach((docName,file)->{
+            try{
+                Documents document = new Documents();
+                document.setDocumentType(docName);
+                document.setDocument(file.getBytes());
+                document.setStudent(this.studentMapper.toStudent(student));
+                this.documentServiceImpl.addDocuments(document);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());  
+            }
+        });
+
+        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Documents Added Successfully !");
+        return ResponseEntity.status(HttpStatus.OK).body(response);  
     }
 }
