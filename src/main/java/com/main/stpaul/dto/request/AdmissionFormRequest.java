@@ -1,5 +1,7 @@
 package com.main.stpaul.dto.request;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdmissionFormRequest {
-    private String admissionDate;
+    private LocalDate admissionDate;
     private String session;
     private String formNo;
     private String stdClass;

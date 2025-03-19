@@ -20,7 +20,7 @@ public class BiofocalSubject {
 
     private String subStream;
     private String subject;
-    private String medium;
+    private String medium="English";
 
     @JsonIgnore
     @OneToOne

@@ -103,10 +103,14 @@ public class ManagerController {
                                             @RequestPart("bioFocalSubject")BioFocalSubjectRequest bioFocalSubjectRequest)throws Exception{
 
         try {
-            Student student=this.studentServiceImpl.addStudent(this.studentMapper.toStudent(studentRequest));
+            Student student=this.studentMapper.toStudent(studentRequest);
+            student.setSession(admissionFormRequest.getSession());
+            student.setAdmissionDate(admissionFormRequest.getAdmissionDate());
+            student.setStdClass(admissionFormRequest.getStdClass());
+            student=this.studentServiceImpl.addStudent(student);
 
             AdmissionForm admissionForm = this.admissionFromMapper.toAdmissionForm(admissionFormRequest);
-            // admissionForm.
+            admissionForm.setStudent(student);
             this.admissionFormServiceImpl.addAdmissionForm(admissionForm);
 
             BankDetail bankDetail = this.bankDetailMapper.toBankDetail(bankDetailRequest);

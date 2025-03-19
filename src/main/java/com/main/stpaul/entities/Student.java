@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @Entity
 @Table(name = "Student")
@@ -60,4 +62,8 @@ public class Student {
 
     @OneToOne(mappedBy = "student")
     private LastSchool lastSchool;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "student")
+    private AdmissionForm admissionForm;
 }
