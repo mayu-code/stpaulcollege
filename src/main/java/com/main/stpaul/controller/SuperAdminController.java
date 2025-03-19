@@ -11,11 +11,11 @@ import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.CollegeFeesRequest;
 import com.main.stpaul.mapper.CollegeFeesMappler;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController

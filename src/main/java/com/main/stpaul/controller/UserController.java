@@ -48,13 +48,14 @@ public class UserController {
             log.info("Profile fetched successfully for user: {}", user.getUsername());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.info("Error to fetch profile : {}",e.getMessage());
+            log.error("Error to fetch profile : {}",e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @GetMapping("/college/fees")
     public ResponseEntity<?> getAllCollegeFees()throws Exception{
+        log.info("Fetching College fees");
         try {
             DataResponse response = DataResponse.builder()
                                                 .data(this.collegeFeesServiceImpl.getAllCollegeFees())
@@ -62,8 +63,10 @@ public class UserController {
                                                 .statusCode(200)
                                                 .message("get All Fees successfully !")
                                                 .build();
+            log.info("Fetch College fees Successfully ");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error to fetch College fees", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
