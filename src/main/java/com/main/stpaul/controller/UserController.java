@@ -18,7 +18,7 @@ import com.main.stpaul.services.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/user")
 @CrossOrigin(origins = { "http://localhost:5173/", "http://localhost:5174/" })
 public class UserController {
     
