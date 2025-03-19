@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -27,6 +28,7 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
         """)
     Optional<CollegeFeesResponse> findCollegeFeesById(Long id);
 
+    @Modifying
     @Query("""
         UPDATE CollegeFees c Set c.stdClass=:stdClass,c.totalFees=:totalFees,c.installmentGap=:installmentGap,
         c.installmentsAmount=:installmentsAmount
@@ -38,5 +40,12 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
                             @Param("installmentsAmount")double installmentsAmount,
                             @Param("id")long id
                             );
+
+    @Modifying
+    @Query("""
+        UPDATE CollegeFees c Set c.isDelete=true ,c.deleteDate=now
+        WHERE c.id=:id            
+            """)
+    void deleteCollegeFees(@Param("id")long id);
 
 }

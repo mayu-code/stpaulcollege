@@ -36,8 +36,7 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
   
     @Override
     public void deleteCollegeFees(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteCollegeFees'");
+        this.collegeFeesRepo.deleteCollegeFees(id);
     }
 
 
