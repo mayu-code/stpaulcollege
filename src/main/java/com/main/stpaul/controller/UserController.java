@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
-import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.entities.User;
 import com.main.stpaul.mapper.UserMapper;
+import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.UserServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,25 +26,40 @@ public class UserController {
     private UserServiceImpl userServiceImpl;
 
     @Autowired
+    private CollegeFeesServiceImpl collegeFeesServiceImpl;
+
+    @Autowired
     private UserMapper userMapper;
 
     @GetMapping("/getProfile")
     @Operation(summary = "Get user by JwtToken", description = "Fetches user details by JwtToken")
-    public ResponseEntity<?> getProfile(@RequestHeader("Authorization")String jwt){
+    public ResponseEntity<?> getProfile(@RequestHeader("Authorization")String jwt)throws Exception{
         try {
             User user = this.userServiceImpl.getUserByJwt(jwt);
-            DataResponse response = new DataResponse();
-            response.setStatus(HttpStatus.OK);
-            response.setMessage("Profile get successfully !");
-            response.setStatusCode(200);
-            response.setData(userMapper.toUserResponse(user));
+            DataResponse response = DataResponse.builder()
+                                                .data(userMapper.toUserResponse(user))
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("get Profile successfully !")
+                                                .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            SuccessResponse response = new SuccessResponse();
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            response.setMessage(e.getMessage());
-            response.setStatusCode(500);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @GetMapping("/college/fees")
+    public ResponseEntity<?> getAllCollegeFees()throws Exception{
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .data(this.collegeFeesServiceImpl.getAllCollegeFees())
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("get All Fees successfully !")
+                                                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 }

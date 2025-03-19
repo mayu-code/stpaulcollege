@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.main.stpaul.dto.request.CollegeFeesRequest;
+import com.main.stpaul.dto.response.CollegeFeesResponse;
 import com.main.stpaul.entities.CollegeFees;
 import com.main.stpaul.repository.CollegeFeesRepo;
 import com.main.stpaul.services.serviceInterface.CollegeFeesService;
@@ -21,17 +21,15 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
         return this.collegeFeesRepo.save(collegeFees);
     }
 
-    
+
     @Override
-    public List<CollegeFees> getAllCollegeFees() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllCollegeFees'");
+    public List<CollegeFeesResponse> getAllCollegeFees() {
+        return this.collegeFeesRepo.getAllCollegeFees();
     }
 
     @Override
-    public CollegeFees getCollegeFees(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCollegeFees'");
+    public CollegeFeesResponse getCollegeFees(long id) {
+        return this.collegeFeesRepo.findCollegeFeesById(id).orElse(null);
     }
 
     @Override
