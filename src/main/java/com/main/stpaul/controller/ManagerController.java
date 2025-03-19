@@ -221,7 +221,7 @@ public class ManagerController {
         }
     }
 
-    @PostMapping("/student/{id}/documents")
+    @PostMapping("/students/{id}/documents")
     public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
                                             @RequestParam Map<String, MultipartFile> files)throws Exception{
 
