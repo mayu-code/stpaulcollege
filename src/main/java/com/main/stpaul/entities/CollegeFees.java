@@ -20,7 +20,10 @@ public class CollegeFees {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String stdClass;
-    private double fees;
+    private double totalFees;
+    private int installmentGap;
+    private double installmentsAmount;
+
     
     private boolean isDelete = false;
     private boolean isActive = true;

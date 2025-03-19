@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.request.CollegeFeesRequest;
 import com.main.stpaul.entities.CollegeFees;
 import com.main.stpaul.repository.CollegeFeesRepo;
 import com.main.stpaul.services.serviceInterface.CollegeFeesService;
@@ -20,6 +21,7 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
         return this.collegeFeesRepo.save(collegeFees);
     }
 
+    
     @Override
     public List<CollegeFees> getAllCollegeFees() {
         // TODO Auto-generated method stub
