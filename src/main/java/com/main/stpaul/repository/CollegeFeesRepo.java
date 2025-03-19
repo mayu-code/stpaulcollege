@@ -33,7 +33,7 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
         WHERE c.id=:id            
             """)
     void updateCollegeFees(@Param("stdClass")String stdClass,
-                            @Param("tatalFees")double totalFees,
+                            @Param("totalFees")double totalFees,
                             @Param("installmentGap")int installmentGap,
                             @Param("installmentsAmount")double installmentsAmount,
                             @Param("id")long id
