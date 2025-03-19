@@ -16,7 +16,9 @@ import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.UserServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = { "http://localhost:5173/", "http://localhost:5174/" })
@@ -34,6 +36,7 @@ public class UserController {
     @GetMapping("/getProfile")
     @Operation(summary = "Get user by JwtToken", description = "Fetches user details by JwtToken")
     public ResponseEntity<?> getProfile(@RequestHeader("Authorization")String jwt)throws Exception{
+        log.info("Fetching profile Using JWT");
         try {
             User user = this.userServiceImpl.getUserByJwt(jwt);
             DataResponse response = DataResponse.builder()
@@ -42,8 +45,10 @@ public class UserController {
                                                 .statusCode(200)
                                                 .message("get Profile successfully !")
                                                 .build();
+            log.info("Profile fetched successfully for user: {}", user.getUsername());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.info("Error to fetch profile : {}",e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

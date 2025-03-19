@@ -12,15 +12,14 @@ import com.main.stpaul.entities.CollegeFees;
 public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     
     @Query("""
-        SELECT com.main.stpaul.dto.response.CollegeFeesResponse(
-        c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount) 
+        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount) 
         FROM CollegeFees c
         WHERE c.isDelete=false
         """)
     List<CollegeFeesResponse> getAllCollegeFees();
 
     @Query("""
-        SELECT com.main.stpaul.dto.response.CollegeFeesResponse(
+        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(
         c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount) 
         FROM CollegeFees c
         WHERE c.isDelete=false AND c.id=:id
