@@ -28,7 +28,6 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-
     @GetMapping("/getProfile")
     @Operation(summary = "Get user by JwtToken", description = "Fetches user details by JwtToken")
     public ResponseEntity<?> getProfile(@RequestHeader("Authorization")String jwt){

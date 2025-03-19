@@ -162,8 +162,13 @@ public class ManagerController {
             biofocalSubject.setSubStream(bioFocalSubjectRequest.getSubStream());
             biofocalSubject.setSubject(bioFocalSubjectRequest.getSubject());
             this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
-
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student Register Successfully !");
+            
+            DataResponse response = DataResponse.builder()
+                                                .data(student)
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("Student Register Successfully !")
+                                                .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -261,6 +266,28 @@ public class ManagerController {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-
     }
+
+    @PutMapping("/students/{studentId}/last-school/{lsId}")
+    public ResponseEntity<?> updateLastSchool()throws Exception{
+        try {
+            
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Last School Detail updated Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @PutMapping("/students/{studentId}/guardian-info/{lsId}")
+    public ResponseEntity<?> updateGuardianInfo()throws Exception{
+        try {
+            
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Guardian information updated Successfully !");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
 }
