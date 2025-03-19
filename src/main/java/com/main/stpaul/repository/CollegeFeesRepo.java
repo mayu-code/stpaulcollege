@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 import com.main.stpaul.dto.response.CollegeFeesResponse;
 import com.main.stpaul.entities.CollegeFees;
 
+import jakarta.transaction.Transactional;
+
 public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     
     @Query("""
@@ -28,6 +30,7 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
         """)
     Optional<CollegeFeesResponse> findCollegeFeesById(Long id);
 
+    @Transactional
     @Modifying
     @Query("""
         UPDATE CollegeFees c Set c.stdClass=:stdClass,c.totalFees=:totalFees,c.installmentGap=:installmentGap,
