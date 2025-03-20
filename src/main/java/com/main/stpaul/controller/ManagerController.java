@@ -302,13 +302,16 @@ public class ManagerController {
     @PutMapping("/students/{studentId}/last-school/{lsId}")
     public ResponseEntity<?> updateLastSchool(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
                                                 @RequestBody LastSchoolRequest lastSchool)throws Exception{
+        log.info("Updating Student Last School Detail for Student Id :{}",studentId);
         try {
             StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
+                log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
             }
             this.lastSchoolServiceImpl.updateLastSchool(lastSchool, lsId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Last School Detail updated Successfully !");
+            log.info("Updated Student Last School Detail for Student Id :{}",studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error While Fetching Students {}",e.getMessage());
@@ -319,15 +322,19 @@ public class ManagerController {
     @PutMapping("/students/{studentId}/guardian-info/{lsId}")
     public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
                                                 @RequestBody GuardianInfoRequest guardianInfo)throws Exception{
+        log.info("Updating Student Guardian Info for ID : {}",studentId);
         try {
             StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
+                log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
             }
             this.guardianInfoServiceImpl.updateGuardianInfo(guardianInfo,lsId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Guardian information updated Successfully !");
+            log.info("Updated Student Guardian Info for ID : {}",studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

@@ -48,7 +48,13 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
 
     @Override
     public double getTotalFeesByClass(String stdClass) {
-        return this.collegeFeesRepo.getFeesByCollege(stdClass).orElse(null);
+        return this.collegeFeesRepo.getFeesByClass(stdClass).orElse(null);
+    }
+
+
+    @Override
+    public CollegeFeesResponse getCollegeFeesByClass(String Class) {
+        return this.collegeFeesRepo.getCollegefeesFeesByClass(Class).orElse(null);
     }
     
 }

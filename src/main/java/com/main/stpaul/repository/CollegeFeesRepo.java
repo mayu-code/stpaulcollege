@@ -54,7 +54,15 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     void deleteCollegeFees(@Param("id")long id);
 
     @Query("SELECT c.totalFees FROM CollegeFees c WHERE c.stdClass=:stdClass and c.isDelete=false")
-    Optional<Double> getFeesByCollege(@Param("stdClass") String stdClass);
+    Optional<Double> getFeesByClass(@Param("stdClass") String stdClass);
+
+    @Query("""
+        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(
+        c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount,c.installments) 
+        FROM CollegeFees c
+        WHERE c.stdClass=:stdClass and c.isDelete=false
+        """)
+    Optional<CollegeFeesResponse> getCollegefeesFeesByClass(@Param("stdClass") String stdClass);
 
 
 }

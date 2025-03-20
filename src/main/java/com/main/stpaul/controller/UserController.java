@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,6 +65,24 @@ public class UserController {
                                                 .message("get All Fees successfully !")
                                                 .build();
             log.info("Fetch College fees Successfully ");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error to fetch College fees", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @GetMapping("/college/fees/{stdClass}")
+    public ResponseEntity<?> getAllCollegeFeesByClass(@PathVariable("stdClass")String stdClass)throws Exception{
+        log.info("Fetching College fees By Class : {}",stdClass);
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .data(this.collegeFeesServiceImpl.getCollegeFeesByClass(stdClass))
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("get All Fees successfully !")
+                                                .build();
+            log.info("Fetched College fees Successfully by Class : {}",stdClass);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error to fetch College fees", e.getMessage());

@@ -10,6 +10,7 @@ public interface CollegeFeesService {
     CollegeFees addCollegeFees(CollegeFees collegeFees);
     List<CollegeFeesResponse> getAllCollegeFees();
     CollegeFeesResponse getCollegeFees(long id);
+    CollegeFeesResponse getCollegeFeesByClass(String Class);
     void updateCollegeFees(CollegeFeesRequest collegeFees,long id);
     void deleteCollegeFees(long id);
     double getTotalFeesByClass(String stdClass);
