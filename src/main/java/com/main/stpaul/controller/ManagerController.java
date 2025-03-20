@@ -339,7 +339,7 @@ public class ManagerController {
         }
     }
 
-    @PostMapping("/students/academics{academicId}/payment-detail")
+    @PostMapping("/students/academics/{academicId}/payment-detail")
     public ResponseEntity<?> addPaymentDetail(@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
        try {
         StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
