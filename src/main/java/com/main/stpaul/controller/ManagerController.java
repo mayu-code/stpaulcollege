@@ -1,6 +1,8 @@
 package com.main.stpaul.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import com.main.stpaul.dto.request.GuardianInfoRequest;
 import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.PaymentDetailRequest;
 import com.main.stpaul.dto.request.StudentAddRequest;
+import com.main.stpaul.dto.request.StudentRequest;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.dto.response.UploadDocumentResponse;
@@ -295,14 +298,46 @@ public class ManagerController {
     // Put API's *************************************
 
     @PutMapping("/students/{id}")
-    public ResponseEntity<?> updateStudent(){
-        return null;
+    public ResponseEntity<?> updateStudent(@PathVariable("id")String id,@RequestBody StudentRequest request)throws Exception{
+        log.info("Updating Student Detail for Student ID : {}",id);
+        try {
+            Student student = this.studentServiceImpl.findById(id);
+            if(student ==null){
+                log.warn("student not found with id : {}", id);
+                throw new EntityNotFoundException("Student not present !");
+            } 
+            student.setFirstName(request.getFirstName());
+            student.setFatherName(request.getFatherName());
+            student.setMotherName(request.getMotherName());
+            student.setSurname(request.getSurname());
+            student.setEmail(request.getEmail());
+            student.setPhoneNo(request.getPhoneNo());
+            student.setDateOfBirth(request.getDateOfBirth());
+            student.setGender(request.getGender());
+            student.setAdharNo(request.getAdharNo());
+            student.setBloodGroup(request.getBloodGroup());
+            student.setCaste(request.getCaste());
+            student.setCategory(request.getCategory());
+            student.setScholarshipCategory(request.getScholarshipCategory());
+            student.setUpdatedDate(LocalDateTime.now());
+            this.studentServiceImpl.updateStudent(student);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"bank detail updated Successfully !");
+            log.info("Updated Student Detail for Student ID : {}",id);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
+            throw new Exception(e.getMessage());
+        }
     }
+
+//     private String caste;
+//     private String category;
+//     private String scholarshipCategory;
 
     @PutMapping("/students/{studentId}/bank-detail/{bkId}")
     public ResponseEntity<?> updateBankDetail(@PathVariable("studentId")String studentId,@PathVariable("bkId")String bkId,
                                                 @RequestBody BankDetailRequest bankDetail)throws Exception{
-        log.info("Updating Student Detail for Student ID : {}",studentId);
+        log.info("Updating Student bank Detail for Student ID : {}",studentId);
         try {
             StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
@@ -311,7 +346,7 @@ public class ManagerController {
             } 
             this.bankDetailServiceImpl.updateBankDetail(bankDetail, bkId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"bank detail updated Successfully !");
-            log.info("Updated Student Detail for Student ID : {}",studentId);
+            log.info("Updated Student bank Detail for Student ID : {}",studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error While Fetching Students {}",e.getMessage());

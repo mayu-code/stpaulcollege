@@ -9,6 +9,7 @@ import com.main.stpaul.entities.Student;
 public interface StudentService {
 
     Student addStudent(Student student);
+    Student findById(String id);
     StudentDetailResponse getStudentById(String id);
     List<StudentResponse> getAllStudents();
 
