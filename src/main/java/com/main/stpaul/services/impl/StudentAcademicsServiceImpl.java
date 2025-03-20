@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.repository.StudentAcademicsRepo;
@@ -32,6 +33,11 @@ public class StudentAcademicsServiceImpl implements StudentAcademicsService{
     @Override
     public StudentAcademicsResponse getAcademicsById(String id) {
         return this.studentAcademicsRepo.findAcademicsById(id).orElse(null);
+    }
+
+    @Override
+    public StudentAcademicsResponse getOngoingAcademicsByStudent(String studentId) {
+        return this.studentAcademicsRepo.findOngoingAcademicsByStudent(studentId, Status.Ongoing).orElse(null);
     }
     
 }

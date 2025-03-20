@@ -9,4 +9,5 @@ public interface StudentAcademicsService {
     StudentAcademics addStudentAcademics(StudentAcademics studentAcademics);
     List<StudentAcademicsResponse> getAcademicsByStudent(String studentId);
     StudentAcademicsResponse getAcademicsById(String id);
+    StudentAcademicsResponse getOngoingAcademicsByStudent(String studentId);
 }

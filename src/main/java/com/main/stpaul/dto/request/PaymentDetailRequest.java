@@ -14,5 +14,8 @@ public class PaymentDetailRequest {
     private int installmentGap;
     private int installments;
     private LocalDate dueDate;
-    private String stdClass;
 }
+
+
+
+

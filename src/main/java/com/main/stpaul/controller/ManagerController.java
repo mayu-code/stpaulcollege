@@ -212,7 +212,12 @@ public class ManagerController {
             }
         });
 
-        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Documents Added Successfully !");
+        DataResponse response = DataResponse.builder()
+                                            .data(this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id))
+                                            .message("documents uploded Successfully !")
+                                            .status(HttpStatus.OK)
+                                            .statusCode(200)
+                                            .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);  
     }
     

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.entities.StudentAcademics;
 
@@ -50,4 +51,17 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
         WHERE s.studentAcademicsId = :id AND s.isDelete = false
     """)
     Optional<StudentAcademicsResponse> findAcademicsById(String id);
+
+    @Query("""
+        SELECT new com.main.stpaul.dto.response.StudentAcademicsResponse(
+            s.studentAcademicsId, s.collegeName, s.rollNo, s.examination, s.examMonth, 
+            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,
+            NULL,
+            s.stream,
+            s.biofocalSubject
+        ) 
+        FROM StudentAcademics s
+        WHERE s.student.id = :studentId AND s.isDelete = false AND s.status=:status
+    """)
+    Optional<StudentAcademicsResponse> findOngoingAcademicsByStudent(@Param("studentId") String studentId,@Param("status")Status status);
 }

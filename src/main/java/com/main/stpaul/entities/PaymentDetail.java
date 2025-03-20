@@ -28,7 +28,6 @@ public class PaymentDetail {
     private int installmentGap;
     private int installments;
     private LocalDate dueDate;
-    private String stdClass;
 
     private boolean isDelete = false;
     private boolean isActive = true;

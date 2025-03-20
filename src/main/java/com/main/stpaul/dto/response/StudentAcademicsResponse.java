@@ -3,6 +3,7 @@ package com.main.stpaul.dto.response;
 import java.time.LocalDate;
 
 import com.main.stpaul.constants.Result;
+import com.main.stpaul.constants.Status;
 import com.main.stpaul.entities.BiofocalSubject;
 import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.entities.Stream;
@@ -26,7 +27,7 @@ public class StudentAcademicsResponse {
     private Result result;
     private boolean isAlumni;
     private LocalDate promotionDate;
-    private String status;
+    private Status status;
 
     private PaymentDetail paymentDetail;
     private Stream stream;

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.main.stpaul.constants.Result;
+import com.main.stpaul.constants.Status;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,7 +29,7 @@ public class StudentAcademics {
     private Result result=Result.ON_GOING;
     private boolean isAlumni;
     private LocalDate promotionDate;
-    private String status;
+    private Status status=Status.Ongoing;
 
     private boolean isDelete = false;
     private boolean isActive = true;
