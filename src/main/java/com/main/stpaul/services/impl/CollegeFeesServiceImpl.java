@@ -44,5 +44,11 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
     public void updateCollegeFees(CollegeFeesRequest collegeFees, long id) {
         this.collegeFeesRepo.updateCollegeFees(collegeFees.getStdClass(),collegeFees.getTotalFees(),collegeFees.getInstallmentGap(),collegeFees.getInstallmentsAmount(),collegeFees.getInstallments(),id);
     }
+
+
+    @Override
+    public double getTotalFeesByClass(String stdClass) {
+        return this.collegeFeesRepo.getFeesByCollege(stdClass).orElse(null);
+    }
     
 }

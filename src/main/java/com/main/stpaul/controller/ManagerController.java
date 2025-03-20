@@ -49,6 +49,7 @@ import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.AdmissionFormServiceImpl;
 import com.main.stpaul.services.impl.BankDetailServiceImpl;
 import com.main.stpaul.services.impl.BioFocalSubjectServiceImpl;
+import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.DocumentServiceImpl;
 import com.main.stpaul.services.impl.GuardianInfoServiceImpl;
 import com.main.stpaul.services.impl.LastSchoolServiceImpl;
@@ -95,6 +96,9 @@ public class ManagerController {
 
     @Autowired
     private PaymentDetailServiceImpl paymentDetailServiceImpl;
+
+    @Autowired
+    private CollegeFeesServiceImpl collegeFeesServiceImpl;
 
     @Autowired
     private BioFocalSubjectServiceImpl bioFocalSubjectServiceImpl;
@@ -216,7 +220,8 @@ public class ManagerController {
             }
         });
         StudentAcademicsResponse sar = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id);
-        UploadDocumentResponse ud = new UploadDocumentResponse(sar.getStudentAcademicsId(),0,sar.getStdClass());
+        UploadDocumentResponse ud = new UploadDocumentResponse(sar.getStudentAcademicsId(),this.collegeFeesServiceImpl.getTotalFeesByClass(sar.getStdClass()),sar.getStdClass());
+
         DataResponse response = DataResponse.builder()
                                             .data(ud)
                                             .message("documents uploded Successfully !")
