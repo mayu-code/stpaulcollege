@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.response.LastSchoolResponse;
 import com.main.stpaul.entities.LastSchool;
 import com.main.stpaul.repository.LastSchoolRepo;
@@ -32,6 +33,26 @@ public class LastSchoolServiceImpl implements LastSchoolService{
     @Override
     public LastSchoolResponse getLastSchoolByStudent(String studentId) {
         return this.lastSchoolRepo.findByStudent(studentId).orElse(null);
+    }
+
+    @Override
+    public void updateLastSchool(LastSchoolRequest lastSchool,String id) {
+        this.lastSchoolRepo.updateLastSchool(lastSchool.getCollegeName(),lastSchool.getLastStudentId(),lastSchool.getRollNo(),
+                                            lastSchool.getUid(),lastSchool.getExamination(),lastSchool.getExamMonth(),lastSchool.getMarksObtained(),lastSchool.getResult(),id);
+    }
+
+    // private String collegeName;
+    // private String lastStudentId;
+    // private String rollNo;
+    // private String uid;
+    // private String examination;
+    // private String examMonth;
+    // private int marksObtained;
+    // private String result;
+    @Override
+    public void deleteLastSchool(String lsId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteLastSchool'");
     }
     
 }

@@ -28,19 +28,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/superadmin")
 public class SuperAdminController {
 
-    private final AddressRepo addressRepo;
-
     
     @Autowired
     private CollegeFeesServiceImpl collegeFeesServiceImpl;
 
     @Autowired
     private CollegeFeesMappler collegeFeesMappler;
-
-
-    SuperAdminController(AddressRepo addressRepo) {
-        this.addressRepo = addressRepo;
-    }
 
     
     @PostMapping("/college/fees")    

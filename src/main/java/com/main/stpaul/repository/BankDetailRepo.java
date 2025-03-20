@@ -22,7 +22,11 @@ public interface BankDetailRepo extends JpaRepository<BankDetail,String>{
     void deleteBankDetail(String id);
 
     @Modifying
-    @Query("UPDATE BankDetail b SET b.bankName = :bankName, b.branchName = :branchName, b.accountNo = :accountNo, b.ifscCode = :ifscCode WHERE b.bankDetailId = :id")
+    @Query("""
+        UPDATE BankDetail b SET b.bankName = :bankName, b.branchName = :branchName, 
+        b.accountNo = :accountNo, b.ifscCode = :ifscCode, b.updatedDate=now
+        WHERE b.bankDetailId = :id
+        """)
     void updateBankDetail(
         @Param("bankName") String bankName,
         @Param("branchName") String branchName,

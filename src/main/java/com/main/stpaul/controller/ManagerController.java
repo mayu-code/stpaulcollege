@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.BankDetailRequest;
+import com.main.stpaul.dto.request.GuardianInfoRequest;
+import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.PaymentDetailRequest;
 import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.response.StudentDetailResponse;
@@ -279,9 +281,13 @@ public class ManagerController {
     }
 
     @PutMapping("/students/{studentId}/last-school/{lsId}")
-    public ResponseEntity<?> updateLastSchool()throws Exception{
+    public ResponseEntity<?> updateLastSchool(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
+                                                @RequestBody LastSchoolRequest lastSchool)throws Exception{
         try {
-            
+            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            if(student ==null){
+                throw new EntityNotFoundException("Student not present !");
+            }
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Last School Detail updated Successfully !");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -290,9 +296,14 @@ public class ManagerController {
     }
 
     @PutMapping("/students/{studentId}/guardian-info/{lsId}")
-    public ResponseEntity<?> updateGuardianInfo()throws Exception{
+    public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
+                                                @RequestBody GuardianInfoRequest guardianInfo)throws Exception{
         try {
-            
+            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            if(student ==null){
+                throw new EntityNotFoundException("Student not present !");
+            }
+            this.guardianInfoServiceImpl.updateGuardianInfo(guardianInfo,lsId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Guardian information updated Successfully !");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -325,7 +336,7 @@ public class ManagerController {
     @DeleteMapping("/students/guardian-info/{giId}")
     public ResponseEntity<?> deleteGuardianInfo(@PathVariable("giId")String giId)throws Exception{
         try {
-            
+            this.guardianInfoServiceImpl.deleteGuardianInfo(giId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.request.GuardianInfoRequest;
 import com.main.stpaul.dto.response.GuardianInfoResponse;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.repository.GuardianInfoRepo;
@@ -33,6 +34,20 @@ public class GuardianInfoServiceImpl implements GuardianInfoService{
     @Override
     public GuardianInfoResponse getGuardianInfoByStudent(String studentId) {
         return this.guardianInfoRepo.findByStudentId(studentId).orElse(null);
+    }
+
+    @Override
+    public boolean updateGuardianInfo(GuardianInfoRequest guardianInfoRequest,String id) {
+        this.guardianInfoRepo.updateGuardianInfo(guardianInfoRequest.getName(),guardianInfoRequest.getPhone(),guardianInfoRequest.getOccupation(),guardianInfoRequest.getRelation(),guardianInfoRequest.getIncome(),id);
+        return true;
+    }
+
+    @Override
+    public boolean deleteGuardianInfo(String id) {
+       
+        this.guardianInfoRepo.deleteGuardianInfo(id);
+        return true;
+        
     }
     
 }
