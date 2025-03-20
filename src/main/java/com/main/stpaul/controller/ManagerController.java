@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -55,7 +56,6 @@ import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.SubjectServiceImpl;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -220,11 +220,13 @@ public class ManagerController {
                                             .status(HttpStatus.OK)
                                             .statusCode(200)
                                             .build();
+        log.info("document uploaded Successfully ");
         return ResponseEntity.status(HttpStatus.OK).body(response);  
     }
     
     @GetMapping("/students")
     public ResponseEntity<?> allStudents()throws Exception{
+        log.info("Fetching Students .....");
         try {
             DataResponse response = DataResponse.builder()
                                                 .status(HttpStatus.OK)
@@ -232,6 +234,7 @@ public class ManagerController {
                                                 .message("Get All Users Successfully !")
                                                 .data(this.studentServiceImpl.getAllStudents())
                                                 .build();
+            
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -288,6 +291,7 @@ public class ManagerController {
             if(student ==null){
                 throw new EntityNotFoundException("Student not present !");
             }
+            this.lastSchoolServiceImpl.updateLastSchool(lastSchool, lsId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Last School Detail updated Successfully !");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -325,7 +329,7 @@ public class ManagerController {
     @DeleteMapping("/students/bank-detail/{bkId}")
     public ResponseEntity<?> deleteBankDetail(@PathVariable("bkId")String bkId)throws Exception{
         try {
-        
+            this.bankDetailServiceImpl.deleteBankDetail(bkId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -347,7 +351,7 @@ public class ManagerController {
     @DeleteMapping("/students/last-school/{lsId}")
     public ResponseEntity<?> deleteLastSchool(@PathVariable("lsId")String lsId)throws Exception{
         try {
-            
+            this.lastSchoolServiceImpl.deleteLastSchool(lsId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
