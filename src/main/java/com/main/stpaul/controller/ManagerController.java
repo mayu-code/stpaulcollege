@@ -251,7 +251,7 @@ public class ManagerController {
     // Get API's ***************************
 
     @GetMapping("/students")
-    public ResponseEntity<?> allStudents()throws Exception{
+    public ResponseEntity<?> allStudents() throws Exception{
         log.info("All Fetching Students .....");
         try {
             DataResponse response = DataResponse.builder()
@@ -339,8 +339,8 @@ public class ManagerController {
         }
     }
 
-    @PutMapping("/students/{studentId}/guardian-info/{lsId}")
-    public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
+    @PutMapping("/students/{studentId}/guardian-info/{giId}")
+    public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId")String studentId,@PathVariable("giId")String giId,
                                                 @RequestBody GuardianInfoRequest guardianInfo)throws Exception{
         log.info("Updating Student Guardian Info for ID : {}",studentId);
         try {
@@ -349,7 +349,7 @@ public class ManagerController {
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
             }
-            this.guardianInfoServiceImpl.updateGuardianInfo(guardianInfo,lsId);
+            this.guardianInfoServiceImpl.updateGuardianInfo(guardianInfo,giId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Guardian information updated Successfully !");
             log.info("Updated Student Guardian Info for ID : {}",studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
