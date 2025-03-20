@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
 public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     
     @Query("""
-        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount) 
+        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount,c.installments) 
         FROM CollegeFees c
         WHERE c.isDelete=false
         """)
@@ -24,7 +24,7 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
 
     @Query("""
         SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(
-        c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount) 
+        c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount,c.installments) 
         FROM CollegeFees c
         WHERE c.isDelete=false AND c.id=:id
         """)
@@ -34,13 +34,14 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     @Modifying
     @Query("""
         UPDATE CollegeFees c Set c.stdClass=:stdClass,c.totalFees=:totalFees,c.installmentGap=:installmentGap,
-        c.installmentsAmount=:installmentsAmount
+        c.installmentsAmount=:installmentsAmount,c.installments=:installments
         WHERE c.id=:id            
             """)
     void updateCollegeFees(@Param("stdClass")String stdClass,
                             @Param("totalFees")double totalFees,
                             @Param("installmentGap")int installmentGap,
                             @Param("installmentsAmount")double installmentsAmount,
+                            @Param("installments")long installments,
                             @Param("id")long id
                             );
 

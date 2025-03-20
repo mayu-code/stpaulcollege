@@ -23,6 +23,7 @@ public class CollegeFees {
     private double totalFees;
     private int installmentGap;
     private double installmentsAmount;
+    private long installments;
 
     
     private boolean isDelete = false;

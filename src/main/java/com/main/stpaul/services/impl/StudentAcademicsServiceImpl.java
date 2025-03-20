@@ -30,9 +30,8 @@ public class StudentAcademicsServiceImpl implements StudentAcademicsService{
     }
 
     @Override
-    public StudentAcademics getAcademicsById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAcademicsById'");
+    public StudentAcademicsResponse getAcademicsById(String id) {
+        return this.studentAcademicsRepo.findAcademicsById(id).orElse(null);
     }
     
 }

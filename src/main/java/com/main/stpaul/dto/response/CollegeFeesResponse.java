@@ -13,4 +13,5 @@ public class CollegeFeesResponse {
     private double totalFees;
     private int installmentGap;
     private double installmentsAmount; 
+    private long installments;
 }

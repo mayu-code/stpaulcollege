@@ -37,4 +37,17 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
         ORDER BY s.addDate DESC
     """)
     List<StudentAcademicsResponse> findByStudentId(@Param("studentId") String studentId);
+
+    @Query("""
+        SELECT new com.main.stpaul.dto.response.StudentAcademicsResponse(
+            s.studentAcademicsId, s.collegeName, s.rollNo, s.examination, s.examMonth, 
+            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,
+            NULL,
+            s.stream,
+            s.biofocalSubject
+        ) 
+        FROM StudentAcademics s
+        WHERE s.studentAcademicsId = :id AND s.isDelete = false
+    """)
+    Optional<StudentAcademicsResponse> findAcademicsById(String id);
 }

@@ -8,4 +8,5 @@ public class CollegeFeesRequest {
     private double totalFees;
     private int installmentGap;
     private double installmentsAmount;
+    private long installments;
 }

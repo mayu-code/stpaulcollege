@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.BankDetailRequest;
+import com.main.stpaul.dto.request.PaymentDetailRequest;
 import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.AdmissionForm;
@@ -28,6 +29,7 @@ import com.main.stpaul.entities.BiofocalSubject;
 import com.main.stpaul.entities.Documents;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.entities.LastSchool;
+import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.entities.Stream;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
@@ -36,6 +38,8 @@ import com.main.stpaul.mapper.AdmissionFromMapper;
 import com.main.stpaul.mapper.BankDetailMapper;
 import com.main.stpaul.mapper.GuardianInfoMapper;
 import com.main.stpaul.mapper.LastSchoolMapper;
+import com.main.stpaul.mapper.PaymentDetailMapper;
+import com.main.stpaul.mapper.StudentAcademicsMapper;
 import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.AdmissionFormServiceImpl;
 import com.main.stpaul.services.impl.BankDetailServiceImpl;
@@ -43,6 +47,7 @@ import com.main.stpaul.services.impl.BioFocalSubjectServiceImpl;
 import com.main.stpaul.services.impl.DocumentServiceImpl;
 import com.main.stpaul.services.impl.GuardianInfoServiceImpl;
 import com.main.stpaul.services.impl.LastSchoolServiceImpl;
+import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
 import com.main.stpaul.services.impl.StreamServiceImpl;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
@@ -85,6 +90,9 @@ public class ManagerController {
     private DocumentServiceImpl documentServiceImpl;
 
     @Autowired
+    private PaymentDetailServiceImpl paymentDetailServiceImpl;
+
+    @Autowired
     private BioFocalSubjectServiceImpl bioFocalSubjectServiceImpl;
 
     @Autowired
@@ -101,6 +109,12 @@ public class ManagerController {
 
     @Autowired
     private AdmissionFromMapper admissionFromMapper;
+
+    @Autowired
+    private PaymentDetailMapper paymentDetailMapper;
+
+    @Autowired
+    private StudentAcademicsMapper studentAcademicsMapper;
 
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request)throws Exception{
@@ -323,5 +337,19 @@ public class ManagerController {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @PostMapping("/students/academics{academicId}/payment-detail")
+    public ResponseEntity<?> addPaymentDetail(@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
+       try {
+        StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
+        PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
+        paymentDetail2.setStudentAcademics(academics);
+        this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
+        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Payment Detail Added Successfully !");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+       } catch (Exception e) {
+            throw new Exception(e.getMessage());
+       }
     }
 }

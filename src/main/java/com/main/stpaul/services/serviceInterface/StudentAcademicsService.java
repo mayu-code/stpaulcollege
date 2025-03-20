@@ -8,5 +8,5 @@ import com.main.stpaul.entities.StudentAcademics;
 public interface StudentAcademicsService {
     StudentAcademics addStudentAcademics(StudentAcademics studentAcademics);
     List<StudentAcademicsResponse> getAcademicsByStudent(String studentId);
-    StudentAcademics getAcademicsById(String id);
+    StudentAcademicsResponse getAcademicsById(String id);
 }
