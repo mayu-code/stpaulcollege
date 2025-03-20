@@ -124,6 +124,8 @@ public class ManagerController {
     @Autowired
     private StudentAcademicsMapper studentAcademicsMapper;
 
+    // Post Apis *********************
+
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request)throws Exception{
 
@@ -232,6 +234,22 @@ public class ManagerController {
         return ResponseEntity.status(HttpStatus.OK).body(response);  
     }
     
+    @PostMapping("/students/academics/{academicId}/payment-detail")
+    public ResponseEntity<?> addPaymentDetail(@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
+       try {
+        StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
+        PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
+        paymentDetail2.setStudentAcademics(academics);
+        this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
+        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Payment Detail Added Successfully !");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+       } catch (Exception e) {
+            throw new Exception(e.getMessage());
+       }
+    }
+
+    // Get API's ***************************
+
     @GetMapping("/students")
     public ResponseEntity<?> allStudents()throws Exception{
         log.info("All Fetching Students .....");
@@ -273,6 +291,8 @@ public class ManagerController {
             throw new Exception(e.getMessage());
         }
     }
+
+    // Put API's *************************************
 
     @PutMapping("/students/{id}")
     public ResponseEntity<?> updateStudent(){
@@ -339,6 +359,8 @@ public class ManagerController {
         }
     }
 
+    // Delete API's ********************************
+
     @DeleteMapping("/students/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable("id")String id)throws Exception{
         try {
@@ -383,17 +405,4 @@ public class ManagerController {
         }
     }
 
-    @PostMapping("/students/academics/{academicId}/payment-detail")
-    public ResponseEntity<?> addPaymentDetail(@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
-       try {
-        StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
-        PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
-        paymentDetail2.setStudentAcademics(academics);
-        this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
-        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Payment Detail Added Successfully !");
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-       } catch (Exception e) {
-            throw new Exception(e.getMessage());
-       }
-    }
 }

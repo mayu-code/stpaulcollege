@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.main.stpaul.entities.Address;
 
+import jakarta.transaction.Transactional;
+
 public interface AddressRepo extends JpaRepository<Address,String>{
     
     @Query("SELECT a FROM Address a Where a.student.id=:id AND a.isDelete=false")
@@ -17,6 +19,7 @@ public interface AddressRepo extends JpaRepository<Address,String>{
     @Query("SELECT a FROM Address a Where a.addressId=:id AND a.isDelete=false ")
     Optional<Address> findById(long id);
     
+    @Transactional
     @Modifying
     @Query("UPDATE Address a SET a.isDelete=true AND a.deleteDate=now WHERE a.addressId=:id")
     void deleteAddress(long id);

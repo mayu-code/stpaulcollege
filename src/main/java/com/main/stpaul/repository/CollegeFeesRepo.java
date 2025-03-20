@@ -65,4 +65,8 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     Optional<CollegeFeesResponse> getCollegefeesFeesByClass(@Param("stdClass") String stdClass);
 
 
+    @Query("SELECT DISTINCT c.stdClass From CollegeFees c WHERE c.isDelete = false")
+    List<String> distinctClasses();
+
+
 }

@@ -56,5 +56,11 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
     public CollegeFeesResponse getCollegeFeesByClass(String Class) {
         return this.collegeFeesRepo.getCollegefeesFeesByClass(Class).orElse(null);
     }
+
+
+    @Override
+    public List<String> distinctClasses() {
+        return this.collegeFeesRepo.distinctClasses();
+    }
     
 }

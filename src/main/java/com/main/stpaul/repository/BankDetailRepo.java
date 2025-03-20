@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import com.main.stpaul.dto.response.BankDetailResponse;
 import com.main.stpaul.entities.BankDetail;
 
+import jakarta.transaction.Transactional;
+
 public interface BankDetailRepo extends JpaRepository<BankDetail,String>{
     
 
@@ -17,10 +19,12 @@ public interface BankDetailRepo extends JpaRepository<BankDetail,String>{
     Optional<BankDetailResponse> findByStudentId(String studentId);
 
 
+    @Transactional
     @Modifying
     @Query("UPDATE BankDetail b SET b.isDelete=true AND b.deleteDate=now WHERE b.bankDetailId=:id")
     void deleteBankDetail(String id);
 
+    @Transactional
     @Modifying
     @Query("""
         UPDATE BankDetail b SET b.bankName = :bankName, b.branchName = :branchName, 

@@ -89,4 +89,20 @@ public class UserController {
             throw new Exception(e.getMessage());
         }
     }
+
+    @GetMapping("/college/classes")
+    public ResponseEntity<?> getDistinctClasses()throws Exception{
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .data(this.collegeFeesServiceImpl.distinctClasses())
+                                                .message("Get All Distinct Classes")
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
 }

@@ -14,4 +14,5 @@ public interface CollegeFeesService {
     void updateCollegeFees(CollegeFeesRequest collegeFees,long id);
     void deleteCollegeFees(long id);
     double getTotalFeesByClass(String stdClass);
+    List<String> distinctClasses();
 }

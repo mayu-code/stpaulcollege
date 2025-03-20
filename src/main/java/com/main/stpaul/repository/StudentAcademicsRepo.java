@@ -12,6 +12,8 @@ import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.entities.StudentAcademics;
 
+import jakarta.transaction.Transactional;
+
 public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,String> {
     
     
@@ -21,6 +23,7 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
     @Query("SELECT s FROM StudentAcademics s WHERE s.studentAcademicsId=:id AND s.isDelete=false")
     Optional<StudentAcademics> findById(long id);
 
+    @Transactional
     @Modifying
     @Query("UPDATE StudentAcademics s SET s.isDelete=true AND s.deleteDate=now WHERE s.studentAcademicsId=:id")
     void deleteStudentAcademics(long id);
