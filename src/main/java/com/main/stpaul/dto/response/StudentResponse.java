@@ -20,6 +20,7 @@ public class StudentResponse {
     private String phoneNo;
     private LocalDate dateOfBirth;
     private String gender;
+    private byte[] image;
 
     private String adharNo;
     private String bloodGroup;

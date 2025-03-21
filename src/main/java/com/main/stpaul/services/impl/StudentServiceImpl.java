@@ -63,7 +63,8 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public StudentDetailResponse getData(String id) {
-        return this.studentRepo.findByStudentID(id).orElse(null);
+        // return this.studentRepo.findByStudentID(id).orElse(null);
+        return null;
     }
     
 }
