@@ -21,6 +21,7 @@ import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
+import com.main.stpaul.services.impl.ReceiptServiceImpl;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.UserServiceImpl;
@@ -48,6 +49,9 @@ public class UserController {
 
     @Autowired
     private PaymentDetailServiceImpl paymentDetailServiceImpl;
+
+    @Autowired
+    private ReceiptServiceImpl receiptServiceImpl;
 
     @Autowired
     private UserMapper userMapper;
@@ -178,6 +182,7 @@ public class UserController {
             java.util.List<StudentAcademicsResponse> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
             for(StudentAcademicsResponse st:students){
                 st.setPaymentDetail(this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId()));
+                st.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
             }
             DataResponse response = DataResponse.builder()
                                                 .data(students)

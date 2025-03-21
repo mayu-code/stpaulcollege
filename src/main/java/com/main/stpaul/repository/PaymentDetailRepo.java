@@ -14,7 +14,7 @@ public interface PaymentDetailRepo extends JpaRepository<PaymentDetail,String>{
 
     @Query("""
         SELECT new com.main.stpaul.dto.response.PaymentDetailResponse(p.paymentDetailId,p.totalFees,p.balanceAmount,
-        p.paidAmount,p.paymentType,p.installmentAmount,p.installmentGap,p.installments,p.dueDate)
+        p.paidAmount,p.paymentType,p.installmentAmount,p.installmentGap,p.installments,p.dueDate,null)
         From PaymentDetail p
         WHERE p.studentAcademics.studentAcademicsId=:academicsId AND p.isDelete=false
         ORDER BY p.addDate

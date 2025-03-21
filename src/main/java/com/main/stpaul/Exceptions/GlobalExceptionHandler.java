@@ -46,4 +46,10 @@ public class GlobalExceptionHandler {
         SuccessResponse response = new SuccessResponse(HttpStatus.INTERNAL_SERVER_ERROR,500,e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+    
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<SuccessResponse> handleUnsupportedOperationException(UnsupportedOperationException e){
+        SuccessResponse response = new SuccessResponse(HttpStatus.INTERNAL_SERVER_ERROR,500,e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
 }
