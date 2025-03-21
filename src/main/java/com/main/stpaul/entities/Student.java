@@ -33,6 +33,7 @@ public class Student {
     private String scholarshipCategory;
 
     @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] image;
 
     private LocalDate admissionDate;
