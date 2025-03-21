@@ -136,7 +136,7 @@ public class ManagerController {
     // Post Apis *********************
 
     @PostMapping("/student")
-    public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request,@RequestPart("image")MultipartFile image)throws Exception{
+    public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request,@RequestPart(value = "image",required = false)MultipartFile image)throws Exception{
 
         try {
             
