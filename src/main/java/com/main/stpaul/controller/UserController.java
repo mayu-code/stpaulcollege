@@ -1,6 +1,7 @@
 package com.main.stpaul.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.User;
+import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
@@ -128,6 +130,17 @@ public class UserController {
             log.error("Error While Fetching Students {}",e.getMessage());
             throw new Exception(e.getMessage());
         }
+    }
+
+    @GetMapping("/generate")
+    public ResponseEntity<byte[]> generateReceipt() {
+        byte[] pdfBytes = PdfGenerator.generateReceiptPdf();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=receipt.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 
 }

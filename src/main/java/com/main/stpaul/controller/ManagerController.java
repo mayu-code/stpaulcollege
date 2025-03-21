@@ -42,6 +42,7 @@ import com.main.stpaul.entities.Stream;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.entities.Subject;
+import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.AdmissionFromMapper;
 import com.main.stpaul.mapper.BankDetailMapper;
 import com.main.stpaul.mapper.GuardianInfoMapper;
@@ -250,7 +251,13 @@ public class ManagerController {
         PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
         paymentDetail2.setStudentAcademics(academics);
         this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
-        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Payment Detail Added Successfully !");
+        byte[] pdfBytes = PdfGenerator.generateReceiptPdf();
+        DataResponse response = DataResponse.builder()
+                                            .data(pdfBytes)
+                                            .message("payment detail added Successfully")
+                                            .status(HttpStatus.OK)
+                                            .statusCode(200)
+                                            .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
        } catch (Exception e) {
             throw new Exception(e.getMessage());
