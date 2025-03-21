@@ -262,9 +262,9 @@ public class ManagerController {
         receipt.setPaymentMode(PaymetMode.valueOf(paymentDetail2.getPaymentType()));
         receipt.setPaymentDate(LocalDateTime.now());
         receipt.setPaymentDetail(paymentDetail2);
-        this.receiptServiceImpl.addReceipt(receipt);
+        receipt = this.receiptServiceImpl.addReceipt(receipt);
 
-        byte[] pdfBytes = PdfGenerator.generateReceiptPdf();
+        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(null,null);
         DataResponse response = DataResponse.builder()
                                             .data(pdfBytes)
                                             .message("payment detail added Successfully")

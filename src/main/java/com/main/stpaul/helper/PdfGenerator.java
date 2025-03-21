@@ -10,13 +10,15 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
+import com.main.stpaul.dto.response.ReceiptResponse;
+import com.main.stpaul.dto.response.StudentDetailResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class PdfGenerator {
 
-    public static byte[] generateReceiptPdf() {
+    public static byte[] generateReceiptPdf(StudentDetailResponse student,ReceiptResponse receipt) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             PdfWriter writer = new PdfWriter(byteArrayOutputStream);
             PdfDocument pdfDocument = new PdfDocument(writer);
@@ -48,19 +50,19 @@ public class PdfGenerator {
             detailsTable.addCell(getBorderedCell("25/11/2024", regularFont));
 
             detailsTable.addCell(getBorderedCell("Name:", boldFont));
-            detailsTable.addCell(getBorderedCell("Ku. Parindhi Ranjit Bokade", regularFont));
+            detailsTable.addCell(getBorderedCell(student.getFirstName()+" "+student.getFatherName()+" "+student.getSurname(), regularFont));
             detailsTable.addCell(getBorderedCell("", boldFont));
             detailsTable.addCell(getBorderedCell("", regularFont));
 
             detailsTable.addCell(getBorderedCell("Std:", boldFont));
-            detailsTable.addCell(getBorderedCell("Vth", regularFont));
+            detailsTable.addCell(getBorderedCell(student.getStdClass(), regularFont));
             detailsTable.addCell(getBorderedCell("Section:", boldFont));
-            detailsTable.addCell(getBorderedCell("C", regularFont));
+            detailsTable.addCell(getBorderedCell(student.getSession(), regularFont));
 
             detailsTable.addCell(getBorderedCell("Admission No:", boldFont));
             detailsTable.addCell(getBorderedCell("2166", regularFont));
             detailsTable.addCell(getBorderedCell("Academic Session:", boldFont));
-            detailsTable.addCell(getBorderedCell("2024-2025", regularFont));
+            detailsTable.addCell(getBorderedCell(student.getSession(), regularFont));
 
             detailsTable.addCell(getBorderedCell("Installment:", boldFont));
             detailsTable.addCell(getBorderedCell("3 Installment", regularFont));
@@ -98,12 +100,11 @@ public class PdfGenerator {
 
             feeTable.addCell(getBorderedCell("", regularFont));
             feeTable.addCell(getBorderedCell("Grand Total", boldFont));
-            feeTable.addCell(getBorderedCell("9,000.00", boldFont));
+            feeTable.addCell(getBorderedCell(String.valueOf(receipt.getAmountPaid()), boldFont));
             feeTable.addCell(getBorderedCell("", regularFont));
 
             outerTable.addCell(new Cell().add(feeTable).setBorder(new SolidBorder(ColorConstants.BLACK, 1f)));
 
-            // **Amount in Words**
             outerTable.addCell(new Cell().add(new Paragraph("Amount (In word)  NINE THOUSAND ONLY").setFont(boldFont))
                     .setBorder(new SolidBorder(ColorConstants.BLACK, 1f)));
 
@@ -118,7 +119,7 @@ public class PdfGenerator {
             document.add(outerTable);
             document.close();
 
-            return byteArrayOutputStream.toByteArray(); // Return generated PDF bytes
+            return byteArrayOutputStream.toByteArray();
 
         } catch (Exception e) {
             e.printStackTrace();

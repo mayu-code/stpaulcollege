@@ -1,5 +1,6 @@
 package com.main.stpaul.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,20 +9,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
+import com.main.stpaul.dto.response.ReceiptResponse;
+import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.helper.PdfGenerator;
+import com.main.stpaul.services.impl.ReceiptServiceImpl;
+import com.main.stpaul.services.impl.StudentServiceImpl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/accountant")
 public class AccountantController {
+
+    @Autowired
+    private StudentServiceImpl studentServiceImpl;
+
+    @Autowired
+    private ReceiptServiceImpl receiptServiceImpl;
     
-    @GetMapping("/student/payment/receipt/{receiptId}")
-    public ResponseEntity<?> downloadPdf(@PathVariable("receiptId")String receiptId)throws Exception{
+    @GetMapping("/student/{studentId}/payment/receipt/{receiptId}")
+    public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")String receiptId)throws Exception{
         try {
+            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            if(student ==null){
+                throw new EntityNotFoundException("Student not found !");
+            }
+            ReceiptResponse receipt = this.receiptServiceImpl.getReceiptById(receiptId);
+
             DataResponse response = DataResponse.builder()
-                                                .data(PdfGenerator.generateReceiptPdf())
+                                                .data(PdfGenerator.generateReceiptPdf(student,receipt))
                                                 .message("payment Receipt get Successfully !")
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)

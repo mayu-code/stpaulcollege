@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
+import com.main.stpaul.dto.response.ReceiptResponse;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.User;
@@ -149,7 +150,7 @@ public class UserController {
 
     @GetMapping("/generate")
     public ResponseEntity<byte[]> generateReceipt() {
-        byte[] pdfBytes = PdfGenerator.generateReceiptPdf();
+        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(new StudentDetailResponse(),new ReceiptResponse());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=receipt.pdf");
 
