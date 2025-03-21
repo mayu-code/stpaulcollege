@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.response.DocumentReponse;
 import com.main.stpaul.entities.Documents;
 import com.main.stpaul.repository.DocumentRepo;
 import com.main.stpaul.services.serviceInterface.DocumentsService;
@@ -21,9 +22,14 @@ public class DocumentServiceImpl implements DocumentsService{
     }
 
     @Override
-    public List<Documents> getStudentDocuments(String studentid) {
+    public List<DocumentReponse> getStudentDocuments(String studentid) {
+        return this.documentRepo.findAlldocuments(studentid);
+    }
+
+    @Override
+    public void deleteDocument(long id) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStudentDocuments'");
+        throw new UnsupportedOperationException("Unimplemented method 'deleteDocument'");
     }
     
 }

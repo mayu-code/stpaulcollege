@@ -32,6 +32,9 @@ public class Student {
     private String category;
     private String scholarshipCategory;
 
+    @Lob
+    private byte[] image;
+
     private LocalDate admissionDate;
     private String session;
     private String stdClass;

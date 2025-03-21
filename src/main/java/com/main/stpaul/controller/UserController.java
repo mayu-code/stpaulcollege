@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
+import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.User;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
+import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.UserServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +32,9 @@ public class UserController {
 
     @Autowired
     private CollegeFeesServiceImpl collegeFeesServiceImpl;
+
+    @Autowired
+    private StudentServiceImpl studentServiceImpl;
 
     @Autowired
     private UserMapper userMapper;
@@ -101,6 +106,26 @@ public class UserController {
                                                 .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @GetMapping("/students/{id}")
+    public ResponseEntity<?> studentById(@PathVariable("id")String id)throws Exception{
+        log.info("Student Detail Fetching for Id : {}",id);
+        try {
+                StudentDetailResponse student = this.studentServiceImpl.getData(id);
+
+            DataResponse response = DataResponse.builder()
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("Get All Users Successfully !")
+                                                .data(student)
+                                                .build();
+            log.info("Student Detail Fetched for Id : {}",id);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

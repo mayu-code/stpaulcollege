@@ -60,5 +60,10 @@ public class StudentServiceImpl implements StudentService{
     public Student findById(String id) {
         return this.studentRepo.findById(id).get();
     }
+
+    @Override
+    public StudentDetailResponse getData(String id) {
+        return this.studentRepo.findByStudentID(id).orElse(null);
+    }
     
 }

@@ -29,7 +29,6 @@ public class StudentAcademicsResponse {
     private LocalDate promotionDate;
     private Status status;
 
-    private PaymentDetail paymentDetail;
     private Stream stream;
     private BiofocalSubject biofocalSubject;
 }

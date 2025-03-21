@@ -130,13 +130,19 @@ public class ManagerController {
     // Post Apis *********************
 
     @PostMapping("/student")
-    public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request)throws Exception{
+    public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request,@RequestPart("image")MultipartFile image)throws Exception{
 
         try {
+            
             Student student=this.studentMapper.toStudent(request.getStudent());
             student.setSession(request.getAdmissionForm().getSession());
             student.setAdmissionDate(request.getAdmissionForm().getAdmissionDate());
             student.setStdClass(request.getAdmissionForm().getStdClass());
+            try {
+                student.setImage(image.getBytes());
+            } catch (Exception e) {
+                student.setImage(null);
+            }
             student=this.studentServiceImpl.addStudent(student);
             log.info("Student Added Successfully ");
 
@@ -280,6 +286,7 @@ public class ManagerController {
                 student.setGuardianInfo(this.guardianInfoServiceImpl.getGuardianInfoByStudent(id));
                 student.setBankDetail(this.bankDetailServiceImpl.getBankDetailByStudent(id));
                 student.setLastSchool(this.lastSchoolServiceImpl.getLastSchoolByStudent(id));
+                student.setDocuments(this.documentServiceImpl.getStudentDocuments(id));
 
             DataResponse response = DataResponse.builder()
                                                 .status(HttpStatus.OK)
@@ -321,7 +328,7 @@ public class ManagerController {
             student.setScholarshipCategory(request.getScholarshipCategory());
             student.setUpdatedDate(LocalDateTime.now());
             this.studentServiceImpl.updateStudent(student);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"bank detail updated Successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student detail updated Successfully !");
             log.info("Updated Student Detail for Student ID : {}",id);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -329,10 +336,6 @@ public class ManagerController {
             throw new Exception(e.getMessage());
         }
     }
-
-//     private String caste;
-//     private String category;
-//     private String scholarshipCategory;
 
     @PutMapping("/students/{studentId}/bank-detail/{bkId}")
     public ResponseEntity<?> updateBankDetail(@PathVariable("studentId")String studentId,@PathVariable("bkId")String bkId,

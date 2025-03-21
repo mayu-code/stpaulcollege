@@ -40,7 +40,7 @@ public class StudentDetailResponse {
 
     private List<Address> addresses;
 
-    private List<Documents> documents;
+    private List<DocumentReponse> documents;
     
     private GuardianInfoResponse guardianInfo;
 
