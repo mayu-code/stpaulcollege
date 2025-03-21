@@ -17,6 +17,7 @@ import com.main.stpaul.entities.User;
 import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
+import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.UserServiceImpl;
 
@@ -31,6 +32,9 @@ public class UserController {
     
     @Autowired
     private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private StudentAcademicsServiceImpl studentAcademicsServiceImpl;
 
     @Autowired
     private CollegeFeesServiceImpl collegeFeesServiceImpl;
@@ -141,6 +145,39 @@ public class UserController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(pdfBytes);
+    }
+
+    @GetMapping("/students")
+    public ResponseEntity<?> allStudents() throws Exception{
+        log.info("All Fetching Students .....");
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("Get All Users Successfully !")
+                                                .data(this.studentServiceImpl.getAllStudents())
+                                                .build();
+            log.info("All Students Fetched Successfully ");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @GetMapping("/students/{studentId}/academics")
+    public ResponseEntity<?> getAcademicsDetail(@PathVariable("studentId")String studentId)throws Exception{
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .data(this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId))
+                                                .message("Get All Academics Successfully !")
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
 }

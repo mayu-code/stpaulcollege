@@ -266,24 +266,6 @@ public class ManagerController {
 
     // Get API's ***************************
 
-    @GetMapping("/students")
-    public ResponseEntity<?> allStudents() throws Exception{
-        log.info("All Fetching Students .....");
-        try {
-            DataResponse response = DataResponse.builder()
-                                                .status(HttpStatus.OK)
-                                                .statusCode(200)
-                                                .message("Get All Users Successfully !")
-                                                .data(this.studentServiceImpl.getAllStudents())
-                                                .build();
-            log.info("All Students Fetched Successfully ");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
-            throw new Exception(e.getMessage());
-        }
-    }
-
     @GetMapping("/students/{id}")
     public ResponseEntity<?> studentById(@PathVariable("id")String id)throws Exception{
         log.info("Student Detail Fetching for Id : {}",id);
