@@ -31,7 +31,7 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
     @Query("""
         SELECT new com.main.stpaul.dto.response.StudentAcademicsResponse(
             s.studentAcademicsId, s.collegeName, s.rollNo, s.examination, s.examMonth, 
-            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,
+            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,null,
             s.stream,
             s.biofocalSubject
         ) 
@@ -44,7 +44,7 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
     @Query("""
         SELECT new com.main.stpaul.dto.response.StudentAcademicsResponse(
             s.studentAcademicsId, s.collegeName, s.rollNo, s.examination, s.examMonth, 
-            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,
+            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,null,
             s.stream,
             s.biofocalSubject
         ) 
@@ -56,7 +56,7 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
     @Query("""
         SELECT new com.main.stpaul.dto.response.StudentAcademicsResponse(
             s.studentAcademicsId, s.collegeName, s.rollNo, s.examination, s.examMonth, 
-            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,
+            s.marksObtained, s.stdClass, s.result, s.isAlumni, s.promotionDate, s.status,null,
             s.stream,
             s.biofocalSubject
         ) 

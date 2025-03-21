@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
 

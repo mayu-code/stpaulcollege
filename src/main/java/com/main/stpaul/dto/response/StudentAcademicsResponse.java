@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.entities.BiofocalSubject;
-import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.entities.Stream;
 
 import lombok.AllArgsConstructor;
@@ -29,6 +28,7 @@ public class StudentAcademicsResponse {
     private LocalDate promotionDate;
     private Status status;
 
+    private PaymentDetailResponse paymentDetail;
     private Stream stream;
     private BiofocalSubject biofocalSubject;
 }

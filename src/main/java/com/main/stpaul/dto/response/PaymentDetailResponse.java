@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-
 @NoArgsConstructor
 public class PaymentDetailResponse {
     private String paymentDetailId;
@@ -21,5 +20,4 @@ public class PaymentDetailResponse {
     private int installmentGap;
     private int installments;
     private LocalDate dueDate;
-    private String stdClass;
 }

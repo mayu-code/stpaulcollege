@@ -1,5 +1,7 @@
 package com.main.stpaul.controller;
 
+import java.awt.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
+import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.User;
 import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
+import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.UserServiceImpl;
@@ -41,6 +45,9 @@ public class UserController {
 
     @Autowired
     private StudentServiceImpl studentServiceImpl;
+
+    @Autowired
+    private PaymentDetailServiceImpl paymentDetailServiceImpl;
 
     @Autowired
     private UserMapper userMapper;
@@ -168,8 +175,12 @@ public class UserController {
     @GetMapping("/students/{studentId}/academics")
     public ResponseEntity<?> getAcademicsDetail(@PathVariable("studentId")String studentId)throws Exception{
         try {
+            java.util.List<StudentAcademicsResponse> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
+            for(StudentAcademicsResponse st:students){
+                st.setPaymentDetail(this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId()));
+            }
             DataResponse response = DataResponse.builder()
-                                                .data(this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId))
+                                                .data(students)
                                                 .message("Get All Academics Successfully !")
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)

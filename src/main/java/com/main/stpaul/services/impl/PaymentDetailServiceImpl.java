@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.dto.response.PaymentDetailResponse;
 import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.repository.PaymentDetailRepo;
 import com.main.stpaul.services.serviceInterface.PaymentDetailService;
@@ -23,9 +24,8 @@ public class PaymentDetailServiceImpl implements PaymentDetailService{
     }
 
     @Override
-    public PaymentDetail getPaymentDetailByStudent(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPaymentDetailByStudent'");
+    public PaymentDetailResponse getPaymentDetailByStudent(String id) {
+        return this.paymentDetailRepo.findByStudentAcademics(id).orElse(null);
     }
 
     @Override
