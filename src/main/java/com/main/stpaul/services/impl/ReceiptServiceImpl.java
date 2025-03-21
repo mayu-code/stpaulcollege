@@ -1,6 +1,7 @@
 package com.main.stpaul.services.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class ReceiptServiceImpl implements ReceiptService{
 
     @Override
     public Receipt addReceipt(Receipt receipt) {
+        String id = UUID.randomUUID().toString();
+        receipt.setReceiptId(id);
         return this.receiptRepo.save(receipt);
     }
 

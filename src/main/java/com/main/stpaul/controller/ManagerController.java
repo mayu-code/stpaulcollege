@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.main.stpaul.constants.PaymetMode;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.BankDetailRequest;
@@ -37,6 +38,7 @@ import com.main.stpaul.entities.Documents;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.entities.LastSchool;
 import com.main.stpaul.entities.PaymentDetail;
+import com.main.stpaul.entities.Receipt;
 import com.main.stpaul.entities.Stream;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
@@ -57,6 +59,7 @@ import com.main.stpaul.services.impl.DocumentServiceImpl;
 import com.main.stpaul.services.impl.GuardianInfoServiceImpl;
 import com.main.stpaul.services.impl.LastSchoolServiceImpl;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
+import com.main.stpaul.services.impl.ReceiptServiceImpl;
 import com.main.stpaul.services.impl.StreamServiceImpl;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
@@ -90,6 +93,9 @@ public class ManagerController {
 
     @Autowired
     private SubjectServiceImpl subjectServiceImpl;
+
+    @Autowired
+    private ReceiptServiceImpl receiptServiceImpl;
 
     @Autowired
     private StreamServiceImpl streamServiceImpl;
@@ -249,7 +255,15 @@ public class ManagerController {
         StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
         PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
         paymentDetail2.setStudentAcademics(academics);
-        this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
+        paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
+        Receipt receipt = new Receipt();
+        receipt.setAmountPaid(paymentDetail2.getPaidAmount());
+        receipt.setTransactionId(null);
+        receipt.setPaymentMode(PaymetMode.valueOf(paymentDetail2.getPaymentType()));
+        receipt.setPaymentDate(LocalDateTime.now());
+        receipt.setPaymentDetail(paymentDetail2);
+        this.receiptServiceImpl.addReceipt(receipt);
+
         byte[] pdfBytes = PdfGenerator.generateReceiptPdf();
         DataResponse response = DataResponse.builder()
                                             .data(pdfBytes)
