@@ -35,7 +35,6 @@ public class Receipt {
     private LocalDateTime deleteDate;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "payment_detail_id")
     private PaymentDetail paymentDetail;
 }

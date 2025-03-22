@@ -30,6 +30,10 @@ public class ReceiptServiceImpl implements ReceiptService{
         throw new UnsupportedOperationException("Unimplemented method 'getReceiptById'");
     }
 
+    public Receipt findByid(String id){
+        return this.receiptRepo.findById(id).get();
+    }
+
     @Override
     public List<ReceiptResponse> getReceiptByPaymentDetail(String id) {
         return this.receiptRepo.findByPaymentDetail(id);
