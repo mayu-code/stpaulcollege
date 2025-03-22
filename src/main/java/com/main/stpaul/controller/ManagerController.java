@@ -49,6 +49,7 @@ import com.main.stpaul.mapper.BankDetailMapper;
 import com.main.stpaul.mapper.GuardianInfoMapper;
 import com.main.stpaul.mapper.LastSchoolMapper;
 import com.main.stpaul.mapper.PaymentDetailMapper;
+import com.main.stpaul.mapper.ReceiptMapper;
 import com.main.stpaul.mapper.StudentAcademicsMapper;
 import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.AdmissionFormServiceImpl;
@@ -133,13 +134,15 @@ public class ManagerController {
     @Autowired
     private StudentAcademicsMapper studentAcademicsMapper;
 
+    @Autowired
+    private ReceiptMapper receiptMapper;
+
     // Post Apis *********************
 
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request,@RequestPart(value = "image",required = false)MultipartFile image)throws Exception{
 
         try {
-            
             Student student=this.studentMapper.toStudent(request.getStudent());
             student.setSession(request.getAdmissionForm().getSession());
             student.setAdmissionDate(request.getAdmissionForm().getAdmissionDate());
@@ -255,18 +258,18 @@ public class ManagerController {
         StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
         PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
         paymentDetail2.setStudentAcademics(academics);
-        paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
         Receipt receipt = new Receipt();
         receipt.setAmountPaid(paymentDetail2.getPaidAmount());
         receipt.setTransactionId(null);
         receipt.setPaymentMode(PaymetMode.valueOf(paymentDetail2.getPaymentType()));
         receipt.setPaymentDate(LocalDateTime.now());
+        paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
         receipt.setPaymentDetail(paymentDetail2);
         receipt = this.receiptServiceImpl.addReceipt(receipt);
 
-        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(null,null);
+        // byte[] pdfBytes = PdfGenerator.generateReceiptPdf(null,receiptMapper.toReceiptResponse(receipt));
         DataResponse response = DataResponse.builder()
-                                            .data(pdfBytes)
+                                            // .data(pdfBytes)
                                             .message("payment detail added Successfully")
                                             .status(HttpStatus.OK)
                                             .statusCode(200)

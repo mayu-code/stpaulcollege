@@ -1,9 +1,6 @@
 package com.main.stpaul.controller;
 
-import java.awt.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,11 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
-import com.main.stpaul.dto.response.ReceiptResponse;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
-import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.User;
-import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
@@ -126,37 +120,6 @@ public class UserController {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-    }
-
-    @GetMapping("/students/{id}")
-    public ResponseEntity<?> studentById(@PathVariable("id")String id)throws Exception{
-        log.info("Student Detail Fetching for Id : {}",id);
-        try {
-                StudentDetailResponse student = this.studentServiceImpl.getData(id);
-
-            DataResponse response = DataResponse.builder()
-                                                .status(HttpStatus.OK)
-                                                .statusCode(200)
-                                                .message("Get All Users Successfully !")
-                                                .data(student)
-                                                .build();
-            log.info("Student Detail Fetched for Id : {}",id);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    @GetMapping("/generate")
-    public ResponseEntity<byte[]> generateReceipt() {
-        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(new StudentDetailResponse(),new ReceiptResponse());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=receipt.pdf");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(pdfBytes);
     }
 
     @GetMapping("/students")
