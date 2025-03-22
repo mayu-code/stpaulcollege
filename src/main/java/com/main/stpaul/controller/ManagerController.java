@@ -252,13 +252,14 @@ public class ManagerController {
         return ResponseEntity.status(HttpStatus.OK).body(response);  
     }
     
-    @PostMapping("/students/academics/{academicId}/payment-detail")
-    public ResponseEntity<?> addPaymentDetail(@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
+    @PostMapping("/students/{studentId}/academics/{academicId}/payment-detail")
+    public ResponseEntity<?> addPaymentDetail(@PathVariable("studentId")String studentId,@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
        try {
         StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
         PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
         paymentDetail2.setStudentAcademics(academics);
         Receipt receipt = new Receipt();
+
         receipt.setAmountPaid(paymentDetail2.getPaidAmount());
         receipt.setTransactionId(null);
         receipt.setPaymentMode(PaymetMode.valueOf(paymentDetail2.getPaymentType()));
@@ -266,10 +267,9 @@ public class ManagerController {
         paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
         receipt.setPaymentDetail(paymentDetail2);
         receipt = this.receiptServiceImpl.addReceipt(receipt);
-
-        // byte[] pdfBytes = PdfGenerator.generateReceiptPdf(null,receiptMapper.toReceiptResponse(receipt));
+        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),receiptMapper.toReceiptResponse(receipt),paymentDetailMapper.toPaymentDetailResponse(paymentDetail2));
         DataResponse response = DataResponse.builder()
-                                            // .data(pdfBytes)
+                                            .data(pdfBytes)
                                             .message("payment detail added Successfully")
                                             .status(HttpStatus.OK)
                                             .statusCode(200)

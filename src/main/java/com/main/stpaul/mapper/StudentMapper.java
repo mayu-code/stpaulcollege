@@ -22,6 +22,10 @@ public class StudentMapper {
         return this.modelMapper.map(studentResponse, StudentDetailResponse.class);
     }
 
+    public StudentDetailResponse toStudentDetailResponse(Student studentResponse){
+        return this.modelMapper.map(studentResponse, StudentDetailResponse.class);
+    }
+
     public Student toStudent(StudentDetailResponse response){
         return this.modelMapper.map(response, Student.class);
     }

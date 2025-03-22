@@ -10,6 +10,7 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
+import com.main.stpaul.dto.response.PaymentDetailResponse;
 import com.main.stpaul.dto.response.ReceiptResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 
@@ -18,7 +19,7 @@ import java.io.IOException;
 
 public class PdfGenerator {
 
-    public static byte[] generateReceiptPdf(StudentDetailResponse student,ReceiptResponse receipt) {
+    public static byte[] generateReceiptPdf(StudentDetailResponse student,ReceiptResponse receipt,PaymentDetailResponse payment) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             PdfWriter writer = new PdfWriter(byteArrayOutputStream);
             PdfDocument pdfDocument = new PdfDocument(writer);
@@ -45,29 +46,29 @@ public class PdfGenerator {
             // **Receipt Details Table**
             Table detailsTable = new Table(new float[]{3, 5, 3, 5}).useAllAvailableWidth();
             detailsTable.addCell(getBorderedCell("Receipt No:", boldFont));
-            detailsTable.addCell(getBorderedCell("62,297", regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(receipt.getReceiptNo()), regularFont));
             detailsTable.addCell(getBorderedCell("Date:", boldFont));
-            detailsTable.addCell(getBorderedCell("25/11/2024", regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(receipt.getPaymentDate()), regularFont));
 
             detailsTable.addCell(getBorderedCell("Name:", boldFont));
-            detailsTable.addCell(getBorderedCell(student.getFirstName()+" "+student.getFatherName()+" "+student.getSurname(), regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getFirstName()+" "+student.getFatherName()+" "+student.getSurname()), regularFont));
             detailsTable.addCell(getBorderedCell("", boldFont));
             detailsTable.addCell(getBorderedCell("", regularFont));
 
             detailsTable.addCell(getBorderedCell("Std:", boldFont));
-            detailsTable.addCell(getBorderedCell(student.getStdClass(), regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getStdClass()), regularFont));
             detailsTable.addCell(getBorderedCell("Section:", boldFont));
-            detailsTable.addCell(getBorderedCell(student.getSession(), regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getSession()), regularFont));
 
             detailsTable.addCell(getBorderedCell("Admission No:", boldFont));
             detailsTable.addCell(getBorderedCell("2166", regularFont));
             detailsTable.addCell(getBorderedCell("Academic Session:", boldFont));
-            detailsTable.addCell(getBorderedCell(student.getSession(), regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getSession()), regularFont));
 
             detailsTable.addCell(getBorderedCell("Installment:", boldFont));
-            detailsTable.addCell(getBorderedCell("3 Installment", regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(payment.getInstallments()+" Installments"), regularFont));
             detailsTable.addCell(getBorderedCell("Due Date:", boldFont));
-            detailsTable.addCell(getBorderedCell("", regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(payment.getDueDate()), regularFont));
 
             outerTable.addCell(new Cell().add(detailsTable).setBorder(new SolidBorder(ColorConstants.BLACK, 1f)));
 
@@ -83,14 +84,14 @@ public class PdfGenerator {
             // **Fee Data**
             addFeeRow(feeTable, "1.", "Admission Fee", "");
             addFeeRow(feeTable, "2.", "Prospectus Fee", "");
-            addFeeRow(feeTable, "3.", "Tuition Fee", "9000.00");
+            addFeeRow(feeTable, "3.", "Tuition Fee", String.valueOf(receipt.getAmountPaid()));
             addFeeRow(feeTable, "4.", "Previous Dues", "");
             addFeeRow(feeTable, "5.", "Other Fee", "");
 
             // **Total Calculation**
             feeTable.addCell(getBorderedCell("", regularFont));
             feeTable.addCell(getBorderedCell("Total", boldFont));
-            feeTable.addCell(getBorderedCell("9,000.00", boldFont));
+            feeTable.addCell(getBorderedCell(getValueOrDefault(receipt.getAmountPaid()), boldFont));
             feeTable.addCell(getBorderedCell("", regularFont));
 
             feeTable.addCell(getBorderedCell("", regularFont));
@@ -100,7 +101,7 @@ public class PdfGenerator {
 
             feeTable.addCell(getBorderedCell("", regularFont));
             feeTable.addCell(getBorderedCell("Grand Total", boldFont));
-            feeTable.addCell(getBorderedCell(String.valueOf(receipt.getAmountPaid()), boldFont));
+            feeTable.addCell(getBorderedCell(getValueOrDefault(receipt.getAmountPaid()), boldFont));
             feeTable.addCell(getBorderedCell("", regularFont));
 
             outerTable.addCell(new Cell().add(feeTable).setBorder(new SolidBorder(ColorConstants.BLACK, 1f)));
@@ -125,6 +126,10 @@ public class PdfGenerator {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static String getValueOrDefault(Object value) {
+        return (value == null || value.toString().trim().isEmpty()) ? "-" : value.toString();
     }
 
     // Helper method for bordered cells (for "Particulars" table)

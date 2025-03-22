@@ -39,7 +39,7 @@ public class AccountantController {
             ReceiptResponse receipt = this.receiptServiceImpl.getReceiptById(receiptId);
 
             DataResponse response = DataResponse.builder()
-                                                .data(PdfGenerator.generateReceiptPdf(student,receipt))
+                                                // .data(PdfGenerator.generateReceiptPdf(student,receipt))
                                                 .message("payment Receipt get Successfully !")
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
