@@ -20,6 +20,15 @@ public interface PaymentDetailRepo extends JpaRepository<PaymentDetail,String>{
         ORDER BY p.addDate
         """)
     Optional<PaymentDetailResponse> findByStudentAcademics(String academicsId);
+
+    @Query("""
+        SELECT new com.main.stpaul.dto.response.PaymentDetailResponse(p.paymentDetailId,p.totalFees,p.balanceAmount,
+        p.paidAmount,p.paymentType,p.installmentAmount,p.installmentGap,p.installments,p.dueDate,null)
+        From PaymentDetail p
+        WHERE p.paymentDetailId=:id AND p.isDelete=false
+        ORDER BY p.addDate
+        """)
+    Optional<PaymentDetailResponse> findByPaymentId(String id);
     // private String paymentDetailId;
     
     // private double totalFees;

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
-import com.main.stpaul.dto.response.ReceiptResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.Receipt;
 import com.main.stpaul.helper.PdfGenerator;
@@ -36,7 +35,7 @@ public class AccountantController {
     private PaymentDetailServiceImpl paymentDetailServiceImpl;
 
     @Autowired
-    private ReceiptMapper receiptMapper ;
+    private ReceiptMapper receiptMapper;
     
     @GetMapping("/student/{studentId}/payment/receipt/{receiptId}")
     public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")String receiptId)throws Exception{
@@ -48,8 +47,10 @@ public class AccountantController {
             Receipt receipt = this.receiptServiceImpl.findByid(receiptId);
             String id = receipt.getPaymentDetail().getPaymentDetailId();
 
+            byte[] pdf = PdfGenerator.generateReceiptPdf(student,this.receiptMapper.toReceiptResponse(receipt),this.paymentDetailServiceImpl.getPaymentById(id));
+
             DataResponse response = DataResponse.builder()
-                                                .data(PdfGenerator.generateReceiptPdf(student,this.receiptMapper.toReceiptResponse(receipt),this.paymentDetailServiceImpl.getPaymentDetailByStudent(id)))
+                                                .data(pdf)
                                                 .message("payment Receipt get Successfully !")
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)

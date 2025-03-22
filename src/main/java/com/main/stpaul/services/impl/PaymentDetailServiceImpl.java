@@ -29,9 +29,8 @@ public class PaymentDetailServiceImpl implements PaymentDetailService{
     }
 
     @Override
-    public PaymentDetail getPaymentById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPaymentById'");
+    public PaymentDetailResponse getPaymentById(String id) {
+        return this.paymentDetailRepo.findByPaymentId(id).orElse(null);
     }
 
     @Override
