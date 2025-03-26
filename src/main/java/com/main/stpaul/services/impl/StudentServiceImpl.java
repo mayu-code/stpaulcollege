@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.constants.Status;
+import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
@@ -65,6 +67,11 @@ public class StudentServiceImpl implements StudentService{
     public StudentDetailResponse getData(String id) {
         // return this.studentRepo.findByStudentID(id).orElse(null);
         return null;
+    }
+
+    @Override
+    public List<PendingStudents> getPendingStudents() {
+        return this.studentRepo.findByStatus(Status.Pending);
     }
     
 }

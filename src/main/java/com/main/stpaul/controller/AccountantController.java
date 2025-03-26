@@ -62,4 +62,19 @@ public class AccountantController {
             throw new Exception(e.getMessage());
         }
     }
+
+    @GetMapping("/student/pending")
+    public ResponseEntity<?> getPendingStudents()throws Exception{
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .data(this.studentServiceImpl.getPendingStudents())
+                                                .message("get All Pending Students successfully !")
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }
