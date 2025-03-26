@@ -1,8 +1,6 @@
 package com.main.stpaul.entities;
 
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.stpaul.constants.PaymetMode;
 
 import jakarta.persistence.Entity;

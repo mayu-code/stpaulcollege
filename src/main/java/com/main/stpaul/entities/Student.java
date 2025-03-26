@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main.stpaul.constants.Status;
 
 @Data
 @Entity
@@ -39,7 +40,9 @@ public class Student {
     private LocalDate admissionDate;
     private String session;
     private String stdClass;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.Pending;
 
     private boolean isDelete = false;
     private boolean isActive = true;

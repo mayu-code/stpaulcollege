@@ -2,6 +2,8 @@ package com.main.stpaul.dto.response;
 
 import java.time.LocalDate;
 
+import com.main.stpaul.constants.Status;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,5 +33,5 @@ public class StudentResponse {
     private LocalDate admissionDate;
     private String session;
     private String stdClass;
-    private String status;
+    private Status status;
 }

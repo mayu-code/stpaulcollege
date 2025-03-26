@@ -2,6 +2,7 @@ package com.main.stpaul.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.main.stpaul.constants.PaymetMode;
+import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.BankDetailRequest;
@@ -30,7 +34,6 @@ import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.request.StudentRequest;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
-import com.main.stpaul.dto.response.UploadDocumentResponse;
 import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.BiofocalSubject;
@@ -239,15 +242,7 @@ public class ManagerController {
                 throw new RuntimeException(e.getMessage());
             }
         });
-        StudentAcademicsResponse sar = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id);
-        UploadDocumentResponse ud = new UploadDocumentResponse(sar.getStudentAcademicsId(),this.collegeFeesServiceImpl.getTotalFeesByClass(sar.getStdClass()),sar.getStdClass());
-
-        DataResponse response = DataResponse.builder()
-                                            .data(ud)
-                                            .message("documents uploded Successfully !")
-                                            .status(HttpStatus.OK)
-                                            .statusCode(200)
-                                            .build();
+        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"document uploaded Successfully !");   
         log.info("document uploaded Successfully ");
         return ResponseEntity.status(HttpStatus.OK).body(response);  
     }
@@ -264,9 +259,14 @@ public class ManagerController {
         receipt.setTransactionId(null);
         receipt.setPaymentMode(PaymetMode.valueOf(paymentDetail2.getPaymentType()));
         receipt.setPaymentDate(LocalDateTime.now());
+        
         paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
         receipt.setPaymentDetail(paymentDetail2);
         receipt = this.receiptServiceImpl.addReceipt(receipt);
+        StudentDetailResponse student =  this.studentServiceImpl.getStudentById(studentId);
+        Student student2 = this.studentMapper.toStudent(student);
+        student2.setStatus(Status.Ongoing);
+        this.studentServiceImpl.updateStudent(student2);
         byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),receiptMapper.toReceiptResponse(receipt),paymentDetailMapper.toPaymentDetailResponse(paymentDetail2));
         DataResponse response = DataResponse.builder()
                                             .data(pdfBytes)
@@ -402,6 +402,25 @@ public class ManagerController {
         }
     }
 
+    @PutMapping("/students/{studentId}/image")
+    public ResponseEntity<?> updateImage(@PathVariable("studentId")String studentId,@RequestPart("image")MultipartFile image)throws Exception{
+        log.info("Updating Student Image for ID : {}",studentId);
+        try {
+            Student student = this.studentServiceImpl.findById(studentId);
+            if(student ==null){
+                log.warn("student not found with id : {}", studentId);
+                throw new EntityNotFoundException("Student not present !");
+            }
+            student.setImage(image.getBytes());
+            this.studentServiceImpl.updateStudent(student);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Image updated Successfully !");
+            log.info("Updated Student Image for ID : {}",studentId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
     // Delete API's ********************************
 
     @DeleteMapping("/students/{id}")

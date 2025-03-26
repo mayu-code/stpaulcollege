@@ -3,13 +3,16 @@ package com.main.stpaul.dto.response;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.main.stpaul.constants.Status;
 import com.main.stpaul.entities.Address;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentDetailResponse {
@@ -34,7 +37,7 @@ public class StudentDetailResponse {
     private LocalDate admissionDate;
     private String session;
     private String stdClass;
-    private String status;
+    private Status status;
 
     private List<StudentAcademicsResponse> studentAcademics;
 

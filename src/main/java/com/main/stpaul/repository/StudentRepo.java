@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.main.stpaul.constants.Status;
+import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
 
@@ -34,6 +36,18 @@ public interface StudentRepo extends JpaRepository<Student,String>{
         ORDER BY s.addDate DESC
        """)
     Optional<StudentResponse> findByStudentId(@Param("id")String id);
+
+    @Query("""
+            SELECT new com.main.stpaul.dto.response.PendingStudents(s.studentId, s.firstName, s.fatherName, s.surname,
+            s.email, s.phoneNo, s.dateOfBirth, s.admissionDate,  sa.studentAcademicsId,
+            s.session, s.stdClass, s.status,0.0)
+            FROM Student s 
+            LEFT JOIN studentAcademics sa
+            ON s.studentId=sa.student.studentId AND sa.isDelete = false
+            WHERE s.status = :status 
+            AND s.isDelete = false
+            """)
+    List<PendingStudents> findByStatus(Status status);
 
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END FROM Student s WHERE s.email = :email AND s.isDelete = false")
     boolean existsByEmail(@Param("email") String email);
