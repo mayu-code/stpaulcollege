@@ -11,13 +11,13 @@ public interface StudentService {
 
     Student addStudent(Student student);
     Student findById(String id);
-    StudentDetailResponse getStudentById(String id);
-    List<StudentResponse> getAllStudents();
+    Student getStudentById(String id);
+    List<Student> getAllStudents();
 
     Student updateStudent(Student student);
     void deleteStudent(String id);
 
-    StudentDetailResponse getData(String id);
+    Student getData(String id);
 
     List<PendingStudents> getPendingStudents();
 

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.PendingStudents;
-import com.main.stpaul.dto.response.StudentDetailResponse;
-import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.repository.StudentRepo;
@@ -33,17 +31,13 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public StudentDetailResponse getStudentById(String id) {
-        StudentResponse response = this.studentRepo.findByStudentId(id).orElse(null);
-        if(response==null){
-            return null;
-        }
-        StudentDetailResponse student = this.studentMapper.toStudentDetailResponse(response);
-        return student;
+    public Student getStudentById(String id) {
+        Student response = this.studentRepo.findByStudentId(id).orElse(null);
+        return response;
     }
 
     @Override
-    public List<StudentResponse> getAllStudents() {
+    public List<Student> getAllStudents() {
         return this.studentRepo.findAllStudents();
     }
 
@@ -64,7 +58,7 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public StudentDetailResponse getData(String id) {
+    public Student getData(String id) {
         // return this.studentRepo.findByStudentID(id).orElse(null);
         return null;
     }

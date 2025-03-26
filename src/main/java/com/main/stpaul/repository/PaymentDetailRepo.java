@@ -9,7 +9,6 @@ import com.main.stpaul.dto.response.PaymentDetailResponse;
 import com.main.stpaul.entities.PaymentDetail;
 
 public interface PaymentDetailRepo extends JpaRepository<PaymentDetail,String>{
-    
 
     @Query("""
         SELECT new com.main.stpaul.dto.response.PaymentDetailResponse(p.paymentDetailId,p.totalFees,p.balanceAmount,
@@ -28,15 +27,4 @@ public interface PaymentDetailRepo extends JpaRepository<PaymentDetail,String>{
         ORDER BY p.addDate
         """)
     Optional<PaymentDetailResponse> findByPaymentId(String id);
-    // private String paymentDetailId;
-    
-    // private double totalFees;
-    // private double balanceAmount;
-    // private double paidAmount;
-    // private String paymentType;
-    // private double installmentAmount;
-    // private int installmentGap;
-    // private int installments;
-    // private LocalDate dueDate;
-    // private String stdClass;
 }

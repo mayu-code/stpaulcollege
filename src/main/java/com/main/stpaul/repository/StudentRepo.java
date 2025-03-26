@@ -10,32 +10,25 @@ import org.springframework.data.repository.query.Param;
 
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.PendingStudents;
-import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
 
 public interface StudentRepo extends JpaRepository<Student,String>{
     
     @Query("""
-        SELECT new com.main.stpaul.dto.response.StudentResponse(
-        s.studentId, s.firstName, s.fatherName, s.motherName, s.surname, s.email, s.phoneNo, s.dateOfBirth, s.gender, s.image,
-        s.adharNo, s.bloodGroup, s.caste, s.category, s.scholarshipCategory,
-        s.admissionDate, s.session, s.stdClass, s.status) 
+        SELECT s 
         FROM Student s WHERE s.isDelete = false
         ORDER BY s.addDate DESC
        """)
-    List<StudentResponse> findAllStudents();
+    List<Student> findAllStudents();
 
 
     @Query("""
-        SELECT new com.main.stpaul.dto.response.StudentResponse(
-        s.studentId, s.firstName, s.fatherName, s.motherName, s.surname, s.email, s.phoneNo, s.dateOfBirth, s.gender, s.image,
-        s.adharNo, s.bloodGroup, s.caste, s.category, s.scholarshipCategory,
-        s.admissionDate, s.session, s.stdClass, s.status) 
+        SELECT s 
         FROM Student s WHERE s.studentId=:id
         AND s.isDelete = false
         ORDER BY s.addDate DESC
        """)
-    Optional<StudentResponse> findByStudentId(@Param("id")String id);
+    Optional<Student> findByStudentId(@Param("id")String id);
 
     @Query("""
             SELECT new com.main.stpaul.dto.response.PendingStudents(s.studentId, s.firstName, s.fatherName, s.surname,

@@ -3,6 +3,7 @@ package com.main.stpaul.entities;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 
@@ -45,6 +46,7 @@ public class StudentAcademics {
     private LocalDateTime updatedDate = LocalDateTime.now();
     private LocalDateTime deleteDate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.Receipt;
+import com.main.stpaul.entities.Student;
 import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.ReceiptMapper;
+import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
 import com.main.stpaul.services.impl.ReceiptServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
@@ -38,12 +40,15 @@ public class AccountantController {
 
     @Autowired
     private ReceiptMapper receiptMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
     
     @GetMapping("/student/{studentId}/payment/receipt/{receiptId}")
     public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")String receiptId)throws Exception{
         log.info("Starting downloadPdf method with studentId: {} and receiptId: {}", studentId, receiptId);
         try {
-            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            Student student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
                 log.error("Student not found with ID: {}", studentId);
                 throw new EntityNotFoundException("Student not found !");
@@ -51,7 +56,7 @@ public class AccountantController {
             Receipt receipt = this.receiptServiceImpl.findByid(receiptId);
             String id = receipt.getPaymentDetail().getPaymentDetailId();
 
-            byte[] pdf = PdfGenerator.generateReceiptPdf(student,this.receiptMapper.toReceiptResponse(receipt),this.paymentDetailServiceImpl.getPaymentById(id));
+            byte[] pdf = PdfGenerator.generateReceiptPdf(this.studentMapper.toStudentDetailResponse(student),this.receiptMapper.toReceiptResponse(receipt),this.paymentDetailServiceImpl.getPaymentById(id));
 
             DataResponse response = DataResponse.builder()
                                                 .data(pdf)

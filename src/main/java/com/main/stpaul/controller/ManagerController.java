@@ -231,7 +231,7 @@ public class ManagerController {
                                             @RequestParam Map<String, MultipartFile> files)throws Exception{
         log.info("Starting uploadDoucuments method with studentId: {}", id);
         log.info("Uploading Student Documents");
-        StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
+        Student student = this.studentServiceImpl.getStudentById(id);
         if(student ==null){
             log.warn("student not found for id : {}",id);
             throw new EntityNotFoundException("Student not present !");
@@ -242,7 +242,7 @@ public class ManagerController {
                 Documents document = new Documents();
                 document.setDocumentType(docName);
                 document.setDocument(file.getBytes());
-                document.setStudent(this.studentMapper.toStudent(student));
+                document.setStudent(student);
                 this.documentServiceImpl.addDocuments(document);
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage());
@@ -271,13 +271,13 @@ public class ManagerController {
         paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
         receipt.setPaymentDetail(paymentDetail2);
         receipt = this.receiptServiceImpl.addReceipt(receipt);
-        StudentDetailResponse student =  this.studentServiceImpl.getStudentById(studentId);
-        Student student2 = this.studentMapper.toStudent(student);
-        student2.setStatus(Status.Ongoing);
-        this.studentServiceImpl.updateStudent(student2);
-        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),receiptMapper.toReceiptResponse(receipt),paymentDetailMapper.toPaymentDetailResponse(paymentDetail2));
+
+        Student student =  this.studentServiceImpl.getStudentById(studentId);
+        student.setStatus(Status.Ongoing);
+        this.studentServiceImpl.updateStudent(student);
+        // byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),receiptMapper.toReceiptResponse(receipt),paymentDetailMapper.toPaymentDetailResponse(paymentDetail2));
         DataResponse response = DataResponse.builder()
-                                            .data(pdfBytes)
+                                            // .data(pdfBytes)
                                             .message("payment detail added Successfully")
                                             .status(HttpStatus.OK)
                                             .statusCode(200)
@@ -298,18 +298,19 @@ public class ManagerController {
         log.info("Starting studentById method with studentId: {}", id);
         log.info("Student Detail Fetching for Id : {}",id);
         try {
-                StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
-                student.setStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsByStudent(id));
-                student.setGuardianInfo(this.guardianInfoServiceImpl.getGuardianInfoByStudent(id));
-                student.setBankDetail(this.bankDetailServiceImpl.getBankDetailByStudent(id));
-                student.setLastSchool(this.lastSchoolServiceImpl.getLastSchoolByStudent(id));
-                student.setDocuments(this.documentServiceImpl.getStudentDocuments(id));
+                Student student1 = this.studentServiceImpl.getStudentById(id);
+                // StudentDetailResponse student = this.studentMapper.toStudentDetailResponse(student1);
+                // student.setStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsByStudent(id));
+                // student.setGuardianInfo(this.guardianInfoServiceImpl.getGuardianInfoByStudent(id));
+                // student.setBankDetail(this.bankDetailServiceImpl.getBankDetailByStudent(id));
+                // student.setLastSchool(this.lastSchoolServiceImpl.getLastSchoolByStudent(id));
+                // student.setDocuments(this.documentServiceImpl.getStudentDocuments(id));
 
             DataResponse response = DataResponse.builder()
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .message("Get All Users Successfully !")
-                                                .data(student)
+                                                .data(student1)
                                                 .build();
             log.info("Student Detail Fetched for Id : {}",id);
             return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -364,7 +365,7 @@ public class ManagerController {
         log.info("Starting updateBankDetail method with studentId: {} and bankDetailId: {}", studentId, bkId);
         log.info("Updating Student bank Detail for Student ID : {}",studentId);
         try {
-            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            Student student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
@@ -386,7 +387,7 @@ public class ManagerController {
         log.info("Starting updateLastSchool method with studentId: {} and lastSchoolId: {}", studentId, lsId);
         log.info("Updating Student Last School Detail for Student Id :{}",studentId);
         try {
-            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            Student student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
@@ -408,7 +409,7 @@ public class ManagerController {
         log.info("Starting updateGuardianInfo method with studentId: {} and guardianInfoId: {}", studentId, giId);
         log.info("Updating Student Guardian Info for ID : {}",studentId);
         try {
-            StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
+            Student student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
