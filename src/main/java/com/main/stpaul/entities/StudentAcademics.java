@@ -7,6 +7,8 @@ import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -27,9 +29,13 @@ public class StudentAcademics {
     private int marksObtained;
     private String stdClass;
     private String session;
+
+    @Enumerated(EnumType.STRING)
     private Result result=Result.ON_GOING;
     private boolean isAlumni;
     private LocalDate promotionDate;
+
+    @Enumerated(EnumType.STRING)
     private Status status=Status.Ongoing;
 
     private boolean isDelete = false;

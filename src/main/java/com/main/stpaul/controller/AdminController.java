@@ -65,13 +65,16 @@ public class AdminController {
 
                 log.info("Promoted student with ID: {}", id);
 
-                StudentAcademicsResponse studentAcademics = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id);
-                if(studentAcademics ==null){
+                StudentAcademicsResponse studentAcademics = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(student1.getStudentId());
+                if(studentAcademics == null){
+                    log.warn("No ongoing academics found for student ID: {}", id);
+                }else{
                     StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(studentAcademics);
                     academics.setStatus(Status.Completed);
                     academics.setUpdatedDate(LocalDateTime.now());
                     academics.setResult(Result.PASS);
                     academics.setPromotionDate(LocalDate.now());
+                    academics.setStudent(student1);
                     this.studentAcademicsServiceImpl.updateStudentAcademics(academics);
                 }
 
@@ -85,7 +88,7 @@ public class AdminController {
 
                 log.info("Added new student academics for student ID: {}", id);
             }
-            log.info("Successfully promoted students: {}", studentIds);
+            log.info("Successfully promoted students: {}", studentIds.toString());
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200, "Student promoted successfully !");
             return ResponseEntity.status(200).body(response);
         } catch (Exception e) {

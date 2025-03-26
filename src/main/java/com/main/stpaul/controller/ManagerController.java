@@ -319,9 +319,6 @@ public class ManagerController {
         }
     }
 
-   
-
-  
 
     // Put API's *************************************
 

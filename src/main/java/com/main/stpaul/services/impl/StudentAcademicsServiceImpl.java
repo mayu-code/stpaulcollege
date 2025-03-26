@@ -41,13 +41,9 @@ public class StudentAcademicsServiceImpl implements StudentAcademicsService{
     }
 
     @Override
-    public void updateStudentAcademics(StudentAcademics studentAcademics)throws Exception {
-        try {
-            this.studentAcademicsRepo.save(studentAcademics);
-            return;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
+    public void updateStudentAcademics(StudentAcademics studentAcademics){
+        this.studentAcademicsRepo.save(studentAcademics);
+        return ;
     }
     
 }
