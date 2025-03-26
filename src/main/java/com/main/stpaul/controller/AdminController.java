@@ -64,12 +64,14 @@ public class AdminController {
                 log.info("Promoted student with ID: {}", id);
 
                 StudentAcademicsResponse studentAcademics = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id);
-                StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(studentAcademics);
-                academics.setStatus(Status.Completed);
-                academics.setUpdatedDate(LocalDateTime.now());
-                academics.setResult(Result.PASS);
-                academics.setPromotionDate(LocalDate.now());
-                this.studentAcademicsServiceImpl.updateStudentAcademics(academics);
+                if(studentAcademics ==null){
+                    StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(studentAcademics);
+                    academics.setStatus(Status.Completed);
+                    academics.setUpdatedDate(LocalDateTime.now());
+                    academics.setResult(Result.PASS);
+                    academics.setPromotionDate(LocalDate.now());
+                    this.studentAcademicsServiceImpl.updateStudentAcademics(academics);
+                }
 
                 log.info("Updated student academics for student ID: {}", id);
 

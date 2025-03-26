@@ -73,6 +73,7 @@ import com.main.stpaul.services.impl.SubjectServiceImpl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import io.swagger.v3.oas.annotations.Operation;
 
 @Slf4j
 @RestController
@@ -146,6 +147,7 @@ public class ManagerController {
     // Post Apis *********************
 
     @PostMapping("/student")
+    @Operation(summary = "Register a new student", description = "Registers a new student with the provided details and optional image")
     public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request,@RequestPart(value = "image",required = false)MultipartFile image)throws Exception{
         log.info("Starting registerStudent method");
         try {
@@ -224,6 +226,7 @@ public class ManagerController {
     }
 
     @PostMapping("/students/{id}/documents")
+    @Operation(summary = "Upload student documents", description = "Uploads documents for a specific student by their ID")
     public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
                                             @RequestParam Map<String, MultipartFile> files)throws Exception{
         log.info("Starting uploadDoucuments method with studentId: {}", id);
@@ -251,6 +254,7 @@ public class ManagerController {
     }
     
     @PostMapping("/students/{studentId}/academics/{academicId}/payment-detail")
+    @Operation(summary = "Add payment detail", description = "Adds payment details for a specific student and academic record")
     public ResponseEntity<?> addPaymentDetail(@PathVariable("studentId")String studentId,@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
         log.info("Starting addPaymentDetail method with studentId: {} and academicId: {}", studentId, academicId);
        try {
@@ -289,6 +293,7 @@ public class ManagerController {
     // Get API's ***************************
 
     @GetMapping("/students/{id}")
+    @Operation(summary = "Get student by ID", description = "Fetches details of a specific student by their ID")
     public ResponseEntity<?> studentById(@PathVariable("id")String id)throws Exception{
         log.info("Starting studentById method with studentId: {}", id);
         log.info("Student Detail Fetching for Id : {}",id);
@@ -321,6 +326,7 @@ public class ManagerController {
     // Put API's *************************************
 
     @PutMapping("/students/{id}")
+    @Operation(summary = "Update student details", description = "Updates the details of a specific student by their ID")
     public ResponseEntity<?> updateStudent(@PathVariable("id")String id,@RequestBody StudentRequest request)throws Exception{
         log.info("Starting updateStudent method with studentId: {}", id);
         log.info("Updating Student Detail for Student ID : {}",id);
@@ -355,6 +361,7 @@ public class ManagerController {
     }
 
     @PutMapping("/students/{studentId}/bank-detail/{bkId}")
+    @Operation(summary = "Update bank details", description = "Updates the bank details of a specific student by their ID and bank detail ID")
     public ResponseEntity<?> updateBankDetail(@PathVariable("studentId")String studentId,@PathVariable("bkId")String bkId,
                                                 @RequestBody BankDetailRequest bankDetail)throws Exception{
         log.info("Starting updateBankDetail method with studentId: {} and bankDetailId: {}", studentId, bkId);
@@ -376,6 +383,7 @@ public class ManagerController {
     }
 
     @PutMapping("/students/{studentId}/last-school/{lsId}")
+    @Operation(summary = "Update last school details", description = "Updates the last school details of a specific student by their ID and last school ID")
     public ResponseEntity<?> updateLastSchool(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
                                                 @RequestBody LastSchoolRequest lastSchool)throws Exception{
         log.info("Starting updateLastSchool method with studentId: {} and lastSchoolId: {}", studentId, lsId);
@@ -397,6 +405,7 @@ public class ManagerController {
     }
 
     @PutMapping("/students/{studentId}/guardian-info/{giId}")
+    @Operation(summary = "Update guardian info", description = "Updates the guardian information of a specific student by their ID and guardian info ID")
     public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId")String studentId,@PathVariable("giId")String giId,
                                                 @RequestBody GuardianInfoRequest guardianInfo)throws Exception{
         log.info("Starting updateGuardianInfo method with studentId: {} and guardianInfoId: {}", studentId, giId);
@@ -418,6 +427,7 @@ public class ManagerController {
     }
 
     @PutMapping("/students/{studentId}/image")
+    @Operation(summary = "Update student image", description = "Updates the image of a specific student by their ID")
     public ResponseEntity<?> updateImage(@PathVariable("studentId")String studentId,@RequestPart("image")MultipartFile image)throws Exception{
         log.info("Starting updateImage method with studentId: {}", studentId);
         log.info("Updating Student Image for ID : {}",studentId);
@@ -440,6 +450,7 @@ public class ManagerController {
     // Delete API's ********************************
 
     @DeleteMapping("/students/{id}")
+    @Operation(summary = "Delete student", description = "Deletes a specific student by their ID")
     public ResponseEntity<?> deleteStudent(@PathVariable("id")String id)throws Exception{
         log.info("Starting deleteStudent method with studentId: {}", id);
         try {
@@ -454,6 +465,7 @@ public class ManagerController {
     }
 
     @DeleteMapping("/students/bank-detail/{bkId}")
+    @Operation(summary = "Delete bank detail", description = "Deletes the bank detail of a specific student by the bank detail ID")
     public ResponseEntity<?> deleteBankDetail(@PathVariable("bkId")String bkId)throws Exception{
         log.info("Starting deleteBankDetail method with bankDetailId: {}", bkId);
         try {
@@ -468,6 +480,7 @@ public class ManagerController {
     }
 
     @DeleteMapping("/students/guardian-info/{giId}")
+    @Operation(summary = "Delete guardian info", description = "Deletes the guardian information of a specific student by the guardian info ID")
     public ResponseEntity<?> deleteGuardianInfo(@PathVariable("giId")String giId)throws Exception{
         log.info("Starting deleteGuardianInfo method with guardianInfoId: {}", giId);
         try {
@@ -482,6 +495,7 @@ public class ManagerController {
     }
 
     @DeleteMapping("/students/last-school/{lsId}")
+    @Operation(summary = "Delete last school detail", description = "Deletes the last school detail of a specific student by the last school ID")
     public ResponseEntity<?> deleteLastSchool(@PathVariable("lsId")String lsId)throws Exception{
         log.info("Starting deleteLastSchool method with lastSchoolId: {}", lsId);
         try {
