@@ -26,6 +26,7 @@ public class StudentAcademics {
     private String examMonth;
     private int marksObtained;
     private String stdClass;
+    private String session;
     private Result result=Result.ON_GOING;
     private boolean isAlumni;
     private LocalDate promotionDate;

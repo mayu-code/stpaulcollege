@@ -10,4 +10,5 @@ public interface StudentAcademicsService {
     List<StudentAcademicsResponse> getAcademicsByStudent(String studentId);
     StudentAcademicsResponse getAcademicsById(String id);
     StudentAcademicsResponse getOngoingAcademicsByStudent(String studentId);
+    void updateStudentAcademics(StudentAcademics studentAcademics) throws Exception;
 }

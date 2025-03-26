@@ -20,5 +20,7 @@ public interface StudentService {
     StudentDetailResponse getData(String id);
 
     List<PendingStudents> getPendingStudents();
+
+    Student promoteStudent(Student student);
     
 }

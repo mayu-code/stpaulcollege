@@ -73,5 +73,11 @@ public class StudentServiceImpl implements StudentService{
     public List<PendingStudents> getPendingStudents() {
         return this.studentRepo.findByStatus(Status.Pending);
     }
+
+    @Override
+    public Student promoteStudent(Student student) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'promoteStudent'");
+    }
     
 }

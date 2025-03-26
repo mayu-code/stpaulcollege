@@ -39,5 +39,15 @@ public class StudentAcademicsServiceImpl implements StudentAcademicsService{
     public StudentAcademicsResponse getOngoingAcademicsByStudent(String studentId) {
         return this.studentAcademicsRepo.findOngoingAcademicsByStudent(studentId, Status.Ongoing).orElse(null);
     }
+
+    @Override
+    public void updateStudentAcademics(StudentAcademics studentAcademics)throws Exception {
+        try {
+            this.studentAcademicsRepo.save(studentAcademics);
+            return;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
     
 }
