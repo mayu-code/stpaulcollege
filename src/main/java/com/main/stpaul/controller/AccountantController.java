@@ -41,9 +41,11 @@ public class AccountantController {
     
     @GetMapping("/student/{studentId}/payment/receipt/{receiptId}")
     public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")String receiptId)throws Exception{
+        log.info("Starting downloadPdf method with studentId: {} and receiptId: {}", studentId, receiptId);
         try {
             StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
             if(student ==null){
+                log.error("Student not found with ID: {}", studentId);
                 throw new EntityNotFoundException("Student not found !");
             }
             Receipt receipt = this.receiptServiceImpl.findByid(receiptId);
@@ -57,14 +59,17 @@ public class AccountantController {
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .build();
+            log.info("Successfully generated PDF for studentId: {} and receiptId: {}", studentId, receiptId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error generating PDF for studentId: {} and receiptId: {}: {}", studentId, receiptId, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @GetMapping("/student/pending")
     public ResponseEntity<?> getPendingStudents()throws Exception{
+        log.info("Starting getPendingStudents method");
         try {
             DataResponse response = DataResponse.builder()
                                                 .data(this.studentServiceImpl.getPendingStudents())
@@ -72,8 +77,10 @@ public class AccountantController {
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .build();
+            log.info("Successfully retrieved pending students");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error retrieving pending students: {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

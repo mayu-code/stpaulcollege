@@ -3,6 +3,7 @@ package com.main.stpaul.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,11 +142,12 @@ public class ManagerController {
     @Autowired
     private ReceiptMapper receiptMapper;
 
+
     // Post Apis *********************
 
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request,@RequestPart(value = "image",required = false)MultipartFile image)throws Exception{
-
+        log.info("Starting registerStudent method");
         try {
             Student student=this.studentMapper.toStudent(request.getStudent());
             student.setSession(request.getAdmissionForm().getSession());
@@ -224,7 +226,7 @@ public class ManagerController {
     @PostMapping("/students/{id}/documents")
     public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
                                             @RequestParam Map<String, MultipartFile> files)throws Exception{
-
+        log.info("Starting uploadDoucuments method with studentId: {}", id);
         log.info("Uploading Student Documents");
         StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
         if(student ==null){
@@ -250,6 +252,7 @@ public class ManagerController {
     
     @PostMapping("/students/{studentId}/academics/{academicId}/payment-detail")
     public ResponseEntity<?> addPaymentDetail(@PathVariable("studentId")String studentId,@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
+        log.info("Starting addPaymentDetail method with studentId: {} and academicId: {}", studentId, academicId);
        try {
         StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
         PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
@@ -275,8 +278,10 @@ public class ManagerController {
                                             .status(HttpStatus.OK)
                                             .statusCode(200)
                                             .build();
+        log.info("Successfully added payment detail for studentId: {} and academicId: {}", studentId, academicId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
        } catch (Exception e) {
+            log.error("Error adding payment detail for studentId: {} and academicId: {}: {}", studentId, academicId, e.getMessage());
             throw new Exception(e.getMessage());
        }
     }
@@ -285,6 +290,7 @@ public class ManagerController {
 
     @GetMapping("/students/{id}")
     public ResponseEntity<?> studentById(@PathVariable("id")String id)throws Exception{
+        log.info("Starting studentById method with studentId: {}", id);
         log.info("Student Detail Fetching for Id : {}",id);
         try {
                 StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
@@ -308,10 +314,15 @@ public class ManagerController {
         }
     }
 
+   
+
+  
+
     // Put API's *************************************
 
     @PutMapping("/students/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable("id")String id,@RequestBody StudentRequest request)throws Exception{
+        log.info("Starting updateStudent method with studentId: {}", id);
         log.info("Updating Student Detail for Student ID : {}",id);
         try {
             Student student = this.studentServiceImpl.findById(id);
@@ -346,6 +357,7 @@ public class ManagerController {
     @PutMapping("/students/{studentId}/bank-detail/{bkId}")
     public ResponseEntity<?> updateBankDetail(@PathVariable("studentId")String studentId,@PathVariable("bkId")String bkId,
                                                 @RequestBody BankDetailRequest bankDetail)throws Exception{
+        log.info("Starting updateBankDetail method with studentId: {} and bankDetailId: {}", studentId, bkId);
         log.info("Updating Student bank Detail for Student ID : {}",studentId);
         try {
             StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
@@ -366,6 +378,7 @@ public class ManagerController {
     @PutMapping("/students/{studentId}/last-school/{lsId}")
     public ResponseEntity<?> updateLastSchool(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
                                                 @RequestBody LastSchoolRequest lastSchool)throws Exception{
+        log.info("Starting updateLastSchool method with studentId: {} and lastSchoolId: {}", studentId, lsId);
         log.info("Updating Student Last School Detail for Student Id :{}",studentId);
         try {
             StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
@@ -386,6 +399,7 @@ public class ManagerController {
     @PutMapping("/students/{studentId}/guardian-info/{giId}")
     public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId")String studentId,@PathVariable("giId")String giId,
                                                 @RequestBody GuardianInfoRequest guardianInfo)throws Exception{
+        log.info("Starting updateGuardianInfo method with studentId: {} and guardianInfoId: {}", studentId, giId);
         log.info("Updating Student Guardian Info for ID : {}",studentId);
         try {
             StudentDetailResponse student = this.studentServiceImpl.getStudentById(studentId);
@@ -405,6 +419,7 @@ public class ManagerController {
 
     @PutMapping("/students/{studentId}/image")
     public ResponseEntity<?> updateImage(@PathVariable("studentId")String studentId,@RequestPart("image")MultipartFile image)throws Exception{
+        log.info("Starting updateImage method with studentId: {}", studentId);
         log.info("Updating Student Image for ID : {}",studentId);
         try {
             Student student = this.studentServiceImpl.findById(studentId);
@@ -426,44 +441,56 @@ public class ManagerController {
 
     @DeleteMapping("/students/{id}")
     public ResponseEntity<?> deleteStudent(@PathVariable("id")String id)throws Exception{
+        log.info("Starting deleteStudent method with studentId: {}", id);
         try {
             this.studentServiceImpl.deleteStudent(id);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            log.info("Successfully deleted student with ID: {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error deleting student with ID: {}: {}", id, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @DeleteMapping("/students/bank-detail/{bkId}")
     public ResponseEntity<?> deleteBankDetail(@PathVariable("bkId")String bkId)throws Exception{
+        log.info("Starting deleteBankDetail method with bankDetailId: {}", bkId);
         try {
             this.bankDetailServiceImpl.deleteBankDetail(bkId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            log.info("Successfully deleted bank detail with ID: {}", bkId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error deleting bank detail with ID: {}: {}", bkId, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @DeleteMapping("/students/guardian-info/{giId}")
     public ResponseEntity<?> deleteGuardianInfo(@PathVariable("giId")String giId)throws Exception{
+        log.info("Starting deleteGuardianInfo method with guardianInfoId: {}", giId);
         try {
             this.guardianInfoServiceImpl.deleteGuardianInfo(giId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            log.info("Successfully deleted guardian info with ID: {}", giId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error deleting guardian info with ID: {}: {}", giId, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @DeleteMapping("/students/last-school/{lsId}")
     public ResponseEntity<?> deleteLastSchool(@PathVariable("lsId")String lsId)throws Exception{
+        log.info("Starting deleteLastSchool method with lastSchoolId: {}", lsId);
         try {
             this.lastSchoolServiceImpl.deleteLastSchool(lsId);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            log.info("Successfully deleted last school with ID: {}", lsId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error deleting last school with ID: {}: {}", lsId, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

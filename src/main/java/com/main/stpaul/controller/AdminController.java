@@ -46,17 +46,22 @@ public class AdminController {
     
     @PostMapping("/student/promote")
     public ResponseEntity<?> promoteStudent(@RequestBody List<String> studentIds)throws Exception{
+        log.info("Starting promoteStudent method with studentIds: {}", studentIds);
         try {
             for(String id:studentIds){
+                log.info("Processing student with ID: {}", id);
                 StudentDetailResponse student = this.studentServiceImpl.getStudentById(id);
                 if(student==null){
+                    log.error("Student not found with ID: {}", id);
                     throw new EntityNotFoundException("Student not found !");
                 }
                 Student student1 = this.studentMapper.toStudent(student);
                 student1.setStatus(Status.Ongoing);
                 student1.setStdClass(String.valueOf(Integer.parseInt(student1.getStdClass())+1));
                 student1.setSession(StudentHelper.sessionIncrementer(student1.getSession()));
-                this.studentServiceImpl.promoteStudent(student1);
+                this.studentServiceImpl.updateStudent(student1);
+
+                log.info("Promoted student with ID: {}", id);
 
                 StudentAcademicsResponse studentAcademics = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id);
                 StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(studentAcademics);
@@ -66,16 +71,21 @@ public class AdminController {
                 academics.setPromotionDate(LocalDate.now());
                 this.studentAcademicsServiceImpl.updateStudentAcademics(academics);
 
+                log.info("Updated student academics for student ID: {}", id);
+
                 StudentAcademics newAcademics = new StudentAcademics();
                 newAcademics.setStdClass(student1.getStdClass());
                 newAcademics.setSession(student1.getSession());
                 newAcademics.setStudent(student1);
                 this.studentAcademicsServiceImpl.addStudentAcademics(newAcademics);
-                
+
+                log.info("Added new student academics for student ID: {}", id);
             }
+            log.info("Successfully promoted students: {}", studentIds);
             return ResponseEntity.status(200).body("Student promoted successfully !");
         } catch (Exception e) {
-           throw new Exception(e.getMessage());
+            log.error("Error promoting students: {}", e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
 }

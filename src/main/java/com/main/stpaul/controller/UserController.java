@@ -54,7 +54,7 @@ public class UserController {
     @GetMapping("/getProfile")
     @Operation(summary = "Get user by JwtToken", description = "Fetches user details by JwtToken")
     public ResponseEntity<?> getProfile(@RequestHeader("Authorization")String jwt)throws Exception{
-        log.info("Fetching profile Using JWT");
+        log.info("Starting getProfile method with JWT");
         try {
             User user = this.userServiceImpl.getUserByJwt(jwt);
             DataResponse response = DataResponse.builder()
@@ -72,8 +72,9 @@ public class UserController {
     }
 
     @GetMapping("/college/fees")
+    @Operation(summary = "Get all college fees", description = "Fetches all college fees details")
     public ResponseEntity<?> getAllCollegeFees()throws Exception{
-        log.info("Fetching College fees");
+        log.info("Starting getAllCollegeFees method");
         try {
             DataResponse response = DataResponse.builder()
                                                 .data(this.collegeFeesServiceImpl.getAllCollegeFees())
@@ -90,8 +91,9 @@ public class UserController {
     }
 
     @GetMapping("/college/fees/{stdClass}")
+    @Operation(summary = "Get college fees by class", description = "Fetches college fees details for a specific class")
     public ResponseEntity<?> getAllCollegeFeesByClass(@PathVariable("stdClass")String stdClass)throws Exception{
-        log.info("Fetching College fees By Class : {}",stdClass);
+        log.info("Starting getAllCollegeFeesByClass method with stdClass: {}", stdClass);
         try {
             DataResponse response = DataResponse.builder()
                                                 .data(this.collegeFeesServiceImpl.getCollegeFeesByClass(stdClass))
@@ -108,7 +110,9 @@ public class UserController {
     }
 
     @GetMapping("/college/classes")
+    @Operation(summary = "Get distinct classes", description = "Fetches all distinct classes available in the college")
     public ResponseEntity<?> getDistinctClasses()throws Exception{
+        log.info("Starting getDistinctClasses method");
         try {
             DataResponse response = DataResponse.builder()
                                                 .data(this.collegeFeesServiceImpl.distinctClasses())
@@ -116,15 +120,18 @@ public class UserController {
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .build();
+            log.info("Successfully retrieved distinct classes");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error retrieving distinct classes: {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @GetMapping("/students")
+    @Operation(summary = "Get all students", description = "Fetches details of all students")
     public ResponseEntity<?> allStudents() throws Exception{
-        log.info("All Fetching Students .....");
+        log.info("Starting allStudents method");
         try {
             DataResponse response = DataResponse.builder()
                                                 .status(HttpStatus.OK)
@@ -141,7 +148,9 @@ public class UserController {
     }
 
     @GetMapping("/students/{studentId}/academics")
+    @Operation(summary = "Get academics details by student ID", description = "Fetches academic details for a specific student by their ID")
     public ResponseEntity<?> getAcademicsDetail(@PathVariable("studentId")String studentId)throws Exception{
+        log.info("Starting getAcademicsDetail method with studentId: {}", studentId);
         try {
             java.util.List<StudentAcademicsResponse> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
             for(StudentAcademicsResponse st:students){
@@ -154,8 +163,10 @@ public class UserController {
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .build();
+            log.info("Successfully retrieved academics details for studentId: {}", studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            log.error("Error retrieving academics details for studentId: {}: {}", studentId, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
