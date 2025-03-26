@@ -71,6 +71,7 @@ public class AdminController {
                 newAcademics.setSession(student1.getSession());
                 newAcademics.setStudent(student1);
                 this.studentAcademicsServiceImpl.addStudentAcademics(newAcademics);
+                
             }
             return ResponseEntity.status(200).body("Student promoted successfully !");
         } catch (Exception e) {
