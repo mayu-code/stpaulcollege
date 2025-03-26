@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
+import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.Student;
@@ -84,7 +86,8 @@ public class AdminController {
                 log.info("Added new student academics for student ID: {}", id);
             }
             log.info("Successfully promoted students: {}", studentIds);
-            return ResponseEntity.status(200).body("Student promoted successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200, "Student promoted successfully !");
+            return ResponseEntity.status(200).body(response);
         } catch (Exception e) {
             log.error("Error promoting students: {}", e.getMessage());
             throw new Exception(e.getMessage());
