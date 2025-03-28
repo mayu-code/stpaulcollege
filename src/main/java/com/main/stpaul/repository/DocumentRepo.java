@@ -1,6 +1,5 @@
 package com.main.stpaul.repository;
 
-import java.lang.annotation.Repeatable;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
