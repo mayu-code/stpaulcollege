@@ -10,7 +10,6 @@ import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.entities.Student;
-import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.repository.StudentRepo;
 import com.main.stpaul.services.serviceInterface.StudentService;
 
@@ -56,20 +55,8 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public Student getData(String id) {
-        // return this.studentRepo.findByStudentID(id).orElse(null);
-        return null;
-    }
-
-    @Override
     public List<PendingStudents> getPendingStudents(String query,String stdClass,String section,String session) {
         return this.studentRepo.findByStatus(query,stdClass,section,session,Status.Pending);
-    }
-
-    @Override
-    public Student promoteStudent(Student student) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'promoteStudent'");
     }
 
     @Override

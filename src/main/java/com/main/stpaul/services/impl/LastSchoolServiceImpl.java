@@ -40,18 +40,9 @@ public class LastSchoolServiceImpl implements LastSchoolService{
                                             lastSchool.getUid(),lastSchool.getExamination(),lastSchool.getExamMonth(),lastSchool.getMarksObtained(),lastSchool.getResult(),id);
     }
 
-    // private String collegeName;
-    // private String lastStudentId;
-    // private String rollNo;
-    // private String uid;
-    // private String examination;
-    // private String examMonth;
-    // private int marksObtained;
-    // private String result;
     @Override
     public void deleteLastSchool(String lsId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteLastSchool'");
+        this.lastSchoolRepo.deleteLastSchool(lsId);   
     }
     
 }

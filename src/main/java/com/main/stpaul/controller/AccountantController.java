@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,6 +95,24 @@ public class AccountantController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error retrieving pending students: {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/student/payment-detail/{paymentDetailId}")
+    public ResponseEntity<?> deletePaymentDetail(@PathVariable("paymentDetailId")String paymentDetailId)throws Exception{
+        log.info("Starting deletePaymentDetail method with paymentDetailId: {}", paymentDetailId);
+        try {
+            this.paymentDetailServiceImpl.deletePaymentDetail(paymentDetailId);
+            DataResponse response = DataResponse.builder()
+                                                .message("Payment Detail deleted successfully !")
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .build();
+            log.info("Successfully deleted payment detail with ID: {}", paymentDetailId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error deleting payment detail with ID: {}: {}", paymentDetailId, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

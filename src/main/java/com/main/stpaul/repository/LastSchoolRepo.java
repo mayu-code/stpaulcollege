@@ -19,7 +19,7 @@ public interface LastSchoolRepo extends JpaRepository<LastSchool,String> {
     @Transactional
     @Modifying
     @Query("UPDATE LastSchool l SET l.isDelete=true AND l.deleteDate=now WHERE l.lsId=:id")
-    void deleteLastSchool(long id);
+    void deleteLastSchool(String id);
 
     @Transactional
     @Modifying

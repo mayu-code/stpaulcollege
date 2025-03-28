@@ -40,8 +40,8 @@ public class PaymentDetailServiceImpl implements PaymentDetailService{
 
     @Override
     public boolean deletePaymentDetail(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deletePaymentDetail'");
+        this.paymentDetailRepo.deletePaymentDetail(id);
+        return true;
     }
     
 }
