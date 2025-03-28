@@ -16,7 +16,7 @@ public interface StudentRepo extends JpaRepository<Student,String>{
     
     @Query("""
         SELECT s 
-        FROM Student s WHERE s.isDelete = false AND s.studentAcademics Is Not Null
+        FROM Student s WHERE s.isDelete = false 
         ORDER BY s.addDate DESC
        """)
     List<Student> findAllStudents();

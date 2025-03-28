@@ -170,7 +170,6 @@ public class UserController {
             for(StudentAcademics st:students){
                 StudentAcademicsResponse studentAcademicsResponse = studentAcademicsMapper.toStudentAcademicsResponse(st);  
                 PaymentDetail paymentDetail = this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId());
-                System.out.println("ok");
                 if(paymentDetail == null){
                     studentAcademicsResponse.setPaymentDetail(null);
                 } else {
