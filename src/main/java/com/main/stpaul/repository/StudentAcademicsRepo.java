@@ -8,9 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
-import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
 
 import jakarta.transaction.Transactional;
@@ -18,7 +16,7 @@ import jakarta.transaction.Transactional;
 public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,String> {
     
     
-    @Query("SELECT s FROM StudentAcademics s WHERE s.student.id=:id AND s.isDelete=false")
+    @Query("SELECT s FROM StudentAcademics s WHERE s.student.id=:id AND s.isDelete=false ORDER BY s.addDate ASC")
     List<StudentAcademics> findByStudent(long id);
 
     @Query("SELECT s FROM StudentAcademics s WHERE s.studentAcademicsId=:id AND s.isDelete=false")
@@ -33,7 +31,7 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
         SELECT s
         FROM StudentAcademics s
         WHERE s.student.id = :studentId AND s.isDelete = false
-        ORDER BY s.addDate DESC
+        ORDER BY s.addDate ASC
     """)
     List<StudentAcademics> findByStudentId(@Param("studentId") String studentId);
 
