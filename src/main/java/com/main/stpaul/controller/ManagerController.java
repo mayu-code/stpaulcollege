@@ -2,6 +2,7 @@ package com.main.stpaul.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.PaymentDetailRequest;
 import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.request.StudentRequest;
+import com.main.stpaul.dto.response.DocumentReponse;
+import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.BiofocalSubject;
@@ -292,13 +295,17 @@ public class ManagerController {
         log.info("Starting studentById method with studentId: {}", id);
         log.info("Student Detail Fetching for Id : {}",id);
         try {
-                Student student1 = this.studentServiceImpl.getStudentById(id);
-                // StudentDetailResponse student = this.studentMapper.toStudentDetailResponse(student1);
-                // student.setStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsByStudent(id));
-                // student.setGuardianInfo(this.guardianInfoServiceImpl.getGuardianInfoByStudent(id));
-                // student.setBankDetail(this.bankDetailServiceImpl.getBankDetailByStudent(id));
-                // student.setLastSchool(this.lastSchoolServiceImpl.getLastSchoolByStudent(id));
-                // student.setDocuments(this.documentServiceImpl.getStudentDocuments(id));
+                StudentDetailResponse student1 = this.studentMapper.toStudentDetailResponse(this.studentServiceImpl.getStudentById(id));
+                List<StudentAcademics> academics = this.studentAcademicsServiceImpl.getAcademicsByStudent(id);
+                student1.setStudentAcademics(academics==null?null:this.studentAcademicsMapper.toStudentAcademicsResponseList(academics));
+                GuardianInfo guardianInfo = this.guardianInfoServiceImpl.getGuardianInfoByStudent(id);
+                student1.setGuardianInfo(guardianInfo==null?null:this.guardianInfoMapper.toGuardianInfoResponse(guardianInfo));
+                BankDetail bankDetail = this.bankDetailServiceImpl.getBankDetailByStudent(id);
+                student1.setBankDetail(bankDetail==null?null:this.bankDetailMapper.toBankDetailResponse(bankDetail));
+                LastSchool lastSchool = this.lastSchoolServiceImpl.getLastSchoolByStudent(id);
+                student1.setLastSchool(lastSchool==null?null:this.lastSchoolMapper.toLastSchoolResponse(lastSchool));
+                List<DocumentReponse> documents = this.documentServiceImpl.getStudentDocuments(id);
+                student1.setDocuments(documents);
 
             DataResponse response = DataResponse.builder()
                                                 .status(HttpStatus.OK)
