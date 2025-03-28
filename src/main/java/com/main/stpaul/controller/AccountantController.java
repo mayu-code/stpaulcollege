@@ -17,7 +17,6 @@ import com.main.stpaul.entities.Receipt;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.ReceiptMapper;
-import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
 import com.main.stpaul.services.impl.ReceiptServiceImpl;
@@ -45,9 +44,6 @@ public class AccountantController {
 
     @Autowired
     private CollegeFeesServiceImpl collegeFeesServiceImpl;
-
-    @Autowired
-    private StudentMapper studentMapper;
     
     @GetMapping("/student/{studentId}/payment/receipt/{receiptId}")
     public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")String receiptId)throws Exception{
@@ -78,10 +74,10 @@ public class AccountantController {
     }
 
     @GetMapping("/student/pending")
-    public ResponseEntity<?> getPendingStudents(@RequestParam String query,
-                                                @RequestParam String stdClass,
-                                                @RequestParam String section,
-                                                @RequestParam String session)throws Exception{
+    public ResponseEntity<?> getPendingStudents(@RequestParam(required = false) String query,
+                                                @RequestParam(required = false) String stdClass,
+                                                @RequestParam(required = false) String section,
+                                                @RequestParam(required = false) String session)throws Exception{
         log.info("Starting getPendingStudents method");
         try {
             List<PendingStudents> students = this.studentServiceImpl.getPendingStudents(query, stdClass, section, session); 

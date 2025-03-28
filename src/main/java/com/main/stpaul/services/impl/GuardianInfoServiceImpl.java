@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.main.stpaul.dto.request.GuardianInfoRequest;
-import com.main.stpaul.dto.response.GuardianInfoResponse;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.repository.GuardianInfoRepo;
 import com.main.stpaul.services.serviceInterface.GuardianInfoService;

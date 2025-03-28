@@ -2,10 +2,7 @@ package com.main.stpaul.services.serviceInterface;
 
 import java.util.List;
 
-import com.main.stpaul.constants.Result;
 import com.main.stpaul.dto.response.PendingStudents;
-import com.main.stpaul.dto.response.StudentDetailResponse;
-import com.main.stpaul.dto.response.StudentResponse;
 import com.main.stpaul.entities.Student;
 
 public interface StudentService {

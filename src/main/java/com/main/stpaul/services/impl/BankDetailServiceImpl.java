@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.main.stpaul.dto.request.BankDetailRequest;
-import com.main.stpaul.dto.response.BankDetailResponse;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.repository.BankDetailRepo;
 import com.main.stpaul.services.serviceInterface.BankDetailService;

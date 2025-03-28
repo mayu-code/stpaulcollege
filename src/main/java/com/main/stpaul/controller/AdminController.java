@@ -18,8 +18,6 @@ import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.helper.StudentHelper;
-import com.main.stpaul.mapper.StudentAcademicsMapper;
-import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 
@@ -36,12 +34,6 @@ public class AdminController {
 
     @Autowired
     private StudentAcademicsServiceImpl studentAcademicsServiceImpl;
-
-    @Autowired
-    private StudentMapper studentMapper;
-
-    @Autowired
-    private StudentAcademicsMapper studentAcademicsMapper;
 
     
     @PostMapping("/student/promote")

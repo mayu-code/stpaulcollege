@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.main.stpaul.dto.response.ReceiptResponse;
 import com.main.stpaul.entities.Receipt;
 import com.main.stpaul.repository.ReceiptRepo;
 import com.main.stpaul.services.serviceInterface.ReceiptService;

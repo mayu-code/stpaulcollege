@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.main.stpaul.dto.response.PaymentDetailResponse;
 import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.repository.PaymentDetailRepo;
 import com.main.stpaul.services.serviceInterface.PaymentDetailService;

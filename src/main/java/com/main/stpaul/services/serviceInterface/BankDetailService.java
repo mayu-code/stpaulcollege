@@ -1,7 +1,6 @@
 package com.main.stpaul.services.serviceInterface;
 
 import com.main.stpaul.dto.request.BankDetailRequest;
-import com.main.stpaul.dto.response.BankDetailResponse;
 import com.main.stpaul.entities.BankDetail;
 
 public interface BankDetailService {

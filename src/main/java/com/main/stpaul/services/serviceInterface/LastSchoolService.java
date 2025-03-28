@@ -1,7 +1,6 @@
 package com.main.stpaul.services.serviceInterface;
 
 import com.main.stpaul.dto.request.LastSchoolRequest;
-import com.main.stpaul.dto.response.LastSchoolResponse;
 import com.main.stpaul.entities.LastSchool;
 
 public interface LastSchoolService {

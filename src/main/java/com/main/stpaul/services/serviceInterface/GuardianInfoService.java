@@ -1,7 +1,6 @@
 package com.main.stpaul.services.serviceInterface;
 
 import com.main.stpaul.dto.request.GuardianInfoRequest;
-import com.main.stpaul.dto.response.GuardianInfoResponse;
 import com.main.stpaul.entities.GuardianInfo;
 
 public interface GuardianInfoService {

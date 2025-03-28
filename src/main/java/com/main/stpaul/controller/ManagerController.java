@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import javax.print.Doc;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +57,6 @@ import com.main.stpaul.mapper.StudentMapper;
 import com.main.stpaul.services.impl.AdmissionFormServiceImpl;
 import com.main.stpaul.services.impl.BankDetailServiceImpl;
 import com.main.stpaul.services.impl.BioFocalSubjectServiceImpl;
-import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.DocumentServiceImpl;
 import com.main.stpaul.services.impl.GuardianInfoServiceImpl;
 import com.main.stpaul.services.impl.LastSchoolServiceImpl;
@@ -111,9 +108,6 @@ public class ManagerController {
 
     @Autowired
     private PaymentDetailServiceImpl paymentDetailServiceImpl;
-
-    @Autowired
-    private CollegeFeesServiceImpl collegeFeesServiceImpl;
 
     @Autowired
     private BioFocalSubjectServiceImpl bioFocalSubjectServiceImpl;

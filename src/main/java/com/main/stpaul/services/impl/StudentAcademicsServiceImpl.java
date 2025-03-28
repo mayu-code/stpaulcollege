@@ -6,10 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
-import com.main.stpaul.dto.response.StudentAcademicsResponse;
-import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.repository.StudentAcademicsRepo;
 import com.main.stpaul.services.serviceInterface.StudentAcademicsService;
