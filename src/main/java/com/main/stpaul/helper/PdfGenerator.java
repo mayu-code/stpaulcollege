@@ -82,11 +82,11 @@ public class PdfGenerator {
             feeTable.addCell(getBorderedCell("Ps.", boldFont));
 
             // **Fee Data**
-            addFeeRow(feeTable, "1.", "Admission Fee", "");
-            addFeeRow(feeTable, "2.", "Prospectus Fee", "");
-            addFeeRow(feeTable, "3.", "Tuition Fee", String.valueOf(receipt.getAmountPaid()));
-            addFeeRow(feeTable, "4.", "Previous Dues", "");
-            addFeeRow(feeTable, "5.", "Other Fee", "");
+            addFeeRow1(feeTable, "1.", "Admission Fee", "");
+            addFeeRow1(feeTable, "2.", "Prospectus Fee", "");
+            addFeeRow1(feeTable, "3.", "Tuition Fee", String.valueOf(receipt.getAmountPaid()));
+            addFeeRow1(feeTable, "4.", "Previous Dues", "");
+            addFeeRow1(feeTable, "5.", "Other Fee", "");
 
             // **Total Calculation**
             feeTable.addCell(getBorderedCell("", regularFont));
@@ -135,6 +135,12 @@ public class PdfGenerator {
     // Helper method for bordered cells (for "Particulars" table)
     private static Cell getBorderedCell(String text, PdfFont font) {
         return new Cell().add(new Paragraph(text).setFont(font))
+                .setBorder(new SolidBorder(ColorConstants.BLACK, 1f))
+                .setPadding(5)
+                .setTextAlignment(TextAlignment.LEFT);
+    }
+    private static Cell getBorderedCell1(String text, PdfFont font) {
+        return new Cell().add(new Paragraph(text).setFont(font))
                 // .setBorder(new SolidBorder(ColorConstants.BLACK, 1f))
                 .setPadding(5)
                 .setTextAlignment(TextAlignment.LEFT);
@@ -147,6 +153,12 @@ public class PdfGenerator {
                 .setPadding(5);
     }
 
+    private static void addFeeRow1(Table table, String srNo, String particulars, String amount) throws IOException {
+        table.addCell(getBorderedCell1(srNo, PdfFontFactory.createFont(StandardFonts.HELVETICA)));
+        table.addCell(getBorderedCell1(particulars, PdfFontFactory.createFont(StandardFonts.HELVETICA)));
+        table.addCell(getBorderedCell1(amount, PdfFontFactory.createFont(StandardFonts.HELVETICA)));
+        table.addCell(getBorderedCell1("", PdfFontFactory.createFont(StandardFonts.HELVETICA)));
+    }
     // Helper method to add fee rows
     private static void addFeeRow(Table table, String srNo, String particulars, String amount) throws IOException {
         table.addCell(getBorderedCell(srNo, PdfFontFactory.createFont(StandardFonts.HELVETICA)));
