@@ -509,7 +509,7 @@ public class ManagerController {
 
     @DeleteMapping("/students/documents/{docId}")
     @Operation(summary = "Delete student document", description = "Deletes a specific document of a student by their ID and document ID")
-    public ResponseEntity<?> deleteDocument(@PathVariable("docId")Long docId)throws Exception{
+    public ResponseEntity<?> deleteDocument(@PathVariable("docId")long docId)throws Exception{
         log.info("Starting deleteDocument method");
         try {
             this.documentService.deleteDocument(docId);

@@ -20,7 +20,7 @@ import lombok.Data;
 public class Documents {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long documentId;
+    private long documentId;
     private String documentType;
 
     @Lob
