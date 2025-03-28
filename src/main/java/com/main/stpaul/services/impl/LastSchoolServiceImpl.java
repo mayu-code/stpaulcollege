@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.main.stpaul.dto.request.LastSchoolRequest;
-import com.main.stpaul.dto.response.LastSchoolResponse;
 import com.main.stpaul.entities.LastSchool;
 import com.main.stpaul.repository.LastSchoolRepo;
 import com.main.stpaul.services.serviceInterface.LastSchoolService;
@@ -26,12 +25,12 @@ public class LastSchoolServiceImpl implements LastSchoolService{
     }
 
     @Override
-    public LastSchoolResponse getLastSchoolById(String id) {
+    public LastSchool getLastSchoolById(String id) {
         throw new UnsupportedOperationException("Unimplemented method 'getLastSchoolById'");
     }
 
     @Override
-    public LastSchoolResponse getLastSchoolByStudent(String studentId) {
+    public LastSchool getLastSchoolByStudent(String studentId) {
         return this.lastSchoolRepo.findByStudent(studentId).orElse(null);
     }
 

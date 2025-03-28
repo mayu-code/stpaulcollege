@@ -24,12 +24,12 @@ public class PaymentDetailServiceImpl implements PaymentDetailService{
     }
 
     @Override
-    public PaymentDetailResponse getPaymentDetailByStudent(String id) {
+    public PaymentDetail getPaymentDetailByStudent(String id) {
         return this.paymentDetailRepo.findByStudentAcademics(id).orElse(null);
     }
 
     @Override
-    public PaymentDetailResponse getPaymentById(String id) {
+    public PaymentDetail getPaymentById(String id) {
         return this.paymentDetailRepo.findByPaymentId(id).orElse(null);
     }
 

@@ -1,5 +1,7 @@
 package com.main.stpaul.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
+import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.entities.User;
+import com.main.stpaul.mapper.PaymentDetailMapper;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
@@ -50,6 +54,9 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PaymentDetailMapper paymentDetailMapper;
 
     @GetMapping("/getProfile")
     @Operation(summary = "Get user by JwtToken", description = "Fetches user details by JwtToken")
@@ -152,10 +159,11 @@ public class UserController {
     public ResponseEntity<?> getAcademicsDetail(@PathVariable("studentId")String studentId)throws Exception{
         log.info("Starting getAcademicsDetail method with studentId: {}", studentId);
         try {
-            java.util.List<StudentAcademicsResponse> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
+            List<StudentAcademicsResponse> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
             for(StudentAcademicsResponse st:students){
-                st.setPaymentDetail(this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId()));
-                st.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
+                PaymentDetail paymentDetail = this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId());
+                st.setPaymentDetail(paymentDetailMapper.toPaymentDetailResponse(paymentDetail));
+                // st.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
             }
             DataResponse response = DataResponse.builder()
                                                 .data(students)

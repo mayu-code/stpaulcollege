@@ -26,13 +26,13 @@ public class BankDetailServiceImpl implements BankDetailService{
     }
 
     @Override
-    public BankDetailResponse getBankDetailById(String bdId) {
+    public BankDetail getBankDetailById(String bdId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getBankDetailById'");
     }
 
     @Override
-    public BankDetailResponse getBankDetailByStudent(String studentId) {
+    public BankDetail getBankDetailByStudent(String studentId) {
         return this.bankDetailRepo.findByStudentId(studentId).orElse(null);
     }
 

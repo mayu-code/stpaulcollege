@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.main.stpaul.dto.response.CollegeFeesResponse;
 import com.main.stpaul.entities.CollegeFees;
 
 import jakarta.transaction.Transactional;
@@ -16,19 +15,17 @@ import jakarta.transaction.Transactional;
 public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     
     @Query("""
-        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount,c.installments) 
-        FROM CollegeFees c
+        SELECT c FROM CollegeFees c
         WHERE c.isDelete=false
         """)
-    List<CollegeFeesResponse> getAllCollegeFees();
+    List<CollegeFees> getAllCollegeFees();
 
     @Query("""
-        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(
-        c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount,c.installments) 
+        SELECT c
         FROM CollegeFees c
         WHERE c.isDelete=false AND c.id=:id
         """)
-    Optional<CollegeFeesResponse> findCollegeFeesById(Long id);
+    Optional<CollegeFees> findCollegeFeesById(Long id);
 
     @Transactional
     @Modifying
@@ -57,12 +54,11 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
     Optional<Double> getFeesByClass(@Param("stdClass") String stdClass);
 
     @Query("""
-        SELECT new com.main.stpaul.dto.response.CollegeFeesResponse(
-        c.id,c.stdClass,c.totalFees,c.installmentGap,c.installmentsAmount,c.installments) 
+        SELECT c 
         FROM CollegeFees c
         WHERE c.stdClass=:stdClass and c.isDelete=false
         """)
-    Optional<CollegeFeesResponse> getCollegefeesFeesByClass(@Param("stdClass") String stdClass);
+    Optional<CollegeFees> getCollegefeesFeesByClass(@Param("stdClass") String stdClass);
 
 
     @Query("SELECT DISTINCT c.stdClass From CollegeFees c WHERE c.isDelete = false")

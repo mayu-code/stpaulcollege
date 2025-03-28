@@ -56,7 +56,7 @@ public class AccountantController {
             Receipt receipt = this.receiptServiceImpl.findByid(receiptId);
             String id = receipt.getPaymentDetail().getPaymentDetailId();
 
-            byte[] pdf = PdfGenerator.generateReceiptPdf(this.studentMapper.toStudentDetailResponse(student),this.receiptMapper.toReceiptResponse(receipt),this.paymentDetailServiceImpl.getPaymentById(id));
+            byte[] pdf = PdfGenerator.generateReceiptPdf(student,this.receiptMapper.toReceiptResponse(receipt),this.paymentDetailServiceImpl.getPaymentById(id));
 
             DataResponse response = DataResponse.builder()
                                                 .data(pdf)

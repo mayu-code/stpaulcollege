@@ -7,16 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.main.stpaul.dto.response.GuardianInfoResponse;
 import com.main.stpaul.entities.GuardianInfo;
 
 import jakarta.transaction.Transactional;
 
 public interface GuardianInfoRepo extends JpaRepository<GuardianInfo,String>{
     
-    @Query("SELECT new com.main.stpaul.dto.response.GuardianInfoResponse(g.giId, g.name, g.phone, g.occupation, g.relation, g.income) " +
-           "FROM GuardianInfo g WHERE g.student.id = :studentId AND g.isDelete = false")
-    Optional<GuardianInfoResponse> findByStudentId(String studentId);
+    @Query("SELECT g FROM GuardianInfo g WHERE g.student.id = :studentId AND g.isDelete = false")
+    Optional<GuardianInfo> findByStudentId(String studentId);
 
     @Transactional
     @Modifying

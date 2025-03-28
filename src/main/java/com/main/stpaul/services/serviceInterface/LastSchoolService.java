@@ -7,8 +7,8 @@ import com.main.stpaul.entities.LastSchool;
 public interface LastSchoolService {
 
     LastSchool addLastSchool(LastSchool lastSchool);
-    LastSchoolResponse getLastSchoolById(String id);
-    LastSchoolResponse getLastSchoolByStudent(String studentId);
+    LastSchool getLastSchoolById(String id);
+    LastSchool getLastSchoolByStudent(String studentId);
     void updateLastSchool(LastSchoolRequest lastSchool,String id);
     void deleteLastSchool(String lsId);
     

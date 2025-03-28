@@ -25,7 +25,7 @@ public class ReceiptServiceImpl implements ReceiptService{
     }
 
     @Override
-    public ReceiptResponse getReceiptById(String id) {
+    public Receipt getReceiptById(String id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getReceiptById'");
     }
@@ -35,7 +35,7 @@ public class ReceiptServiceImpl implements ReceiptService{
     }
 
     @Override
-    public List<ReceiptResponse> getReceiptByPaymentDetail(String id) {
+    public List<Receipt> getReceiptByPaymentDetail(String id) {
         return this.receiptRepo.findByPaymentDetail(id);
     }
     

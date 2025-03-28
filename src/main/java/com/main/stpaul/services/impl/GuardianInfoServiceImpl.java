@@ -26,13 +26,13 @@ public class GuardianInfoServiceImpl implements GuardianInfoService{
     }
 
     @Override
-    public GuardianInfoResponse getGuardianInfoById(String id) {
+    public GuardianInfo getGuardianInfoById(String id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getGuardianInfoById'");
     }
 
     @Override
-    public GuardianInfoResponse getGuardianInfoByStudent(String studentId) {
+    public GuardianInfo getGuardianInfoByStudent(String studentId) {
         return this.guardianInfoRepo.findByStudentId(studentId).orElse(null);
     }
 

@@ -13,13 +13,15 @@ import com.itextpdf.layout.properties.*;
 import com.main.stpaul.dto.response.PaymentDetailResponse;
 import com.main.stpaul.dto.response.ReceiptResponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
+import com.main.stpaul.entities.PaymentDetail;
+import com.main.stpaul.entities.Student;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class PdfGenerator {
 
-    public static byte[] generateReceiptPdf(StudentDetailResponse student,ReceiptResponse receipt,PaymentDetailResponse payment) {
+    public static byte[] generateReceiptPdf(Student student,ReceiptResponse receipt,PaymentDetail payment) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             PdfWriter writer = new PdfWriter(byteArrayOutputStream);
             PdfDocument pdfDocument = new PdfDocument(writer);

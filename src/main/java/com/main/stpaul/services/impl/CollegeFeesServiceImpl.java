@@ -24,12 +24,12 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
 
 
     @Override
-    public List<CollegeFeesResponse> getAllCollegeFees() {
+    public List<CollegeFees> getAllCollegeFees() {
         return this.collegeFeesRepo.getAllCollegeFees();
     }
 
     @Override
-    public CollegeFeesResponse getCollegeFees(long id) {
+    public CollegeFees getCollegeFees(long id) {
         return this.collegeFeesRepo.findCollegeFeesById(id).orElse(null);
     }
 
@@ -53,7 +53,7 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
 
 
     @Override
-    public CollegeFeesResponse getCollegeFeesByClass(String Class) {
+    public CollegeFees getCollegeFeesByClass(String Class) {
         return this.collegeFeesRepo.getCollegefeesFeesByClass(Class).orElse(null);
     }
 

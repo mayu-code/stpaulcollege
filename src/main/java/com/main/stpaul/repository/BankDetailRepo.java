@@ -14,9 +14,8 @@ import jakarta.transaction.Transactional;
 public interface BankDetailRepo extends JpaRepository<BankDetail,String>{
     
 
-    @Query("SELECT new com.main.stpaul.dto.response.BankDetailResponse(b.bankDetailId, b.bankName, b.branchName, b.accountNo, b.ifscCode) " +
-           "FROM BankDetail b WHERE b.student.id = :studentId AND b.isDelete = false")
-    Optional<BankDetailResponse> findByStudentId(String studentId);
+    @Query("SELECT b FROM BankDetail b Where b.student.id=:id AND b.isDelete=false")
+    Optional<BankDetail> findByStudentId(String studentId);
 
 
     @Transactional

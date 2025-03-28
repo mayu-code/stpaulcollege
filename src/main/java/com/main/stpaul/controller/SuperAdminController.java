@@ -11,6 +11,7 @@ import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.CollegeFeesRequest;
 import com.main.stpaul.dto.response.CollegeFeesResponse;
+import com.main.stpaul.entities.CollegeFees;
 import com.main.stpaul.mapper.CollegeFeesMappler;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 
@@ -40,7 +41,7 @@ public class SuperAdminController {
     @PostMapping("/college/fees")    
     public ResponseEntity<?> addCollegeFees(@RequestBody CollegeFeesRequest request)throws Exception{
         try {
-            CollegeFeesResponse cf = this.collegeFeesServiceImpl.getCollegeFeesByClass(request.getStdClass());
+            CollegeFees cf = this.collegeFeesServiceImpl.getCollegeFeesByClass(request.getStdClass());
             if(cf!=null){
                 throw new DuplicateEntityException("Class alredy found !");
             }

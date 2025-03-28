@@ -14,11 +14,8 @@ import jakarta.transaction.Transactional;
 
 public interface LastSchoolRepo extends JpaRepository<LastSchool,String> {
     
-    @Query("SELECT new com.main.stpaul.dto.response.LastSchoolResponse(" +
-           "l.lsId, l.collegeName, l.lastStudentId, l.rollNo, l.uid, " +
-           "l.examination, l.examMonth, l.marksObtained, l.result) " +
-           "FROM LastSchool l WHERE l.student.id = :id AND l.isDelete = false")
-    Optional<LastSchoolResponse> findByStudent(String id);
+    @Query("SELECT l FROM LastSchool l WHERE l.student.id = :id AND l.isDelete = false")
+    Optional<LastSchool> findByStudent(String id);
     
     @Transactional
     @Modifying
