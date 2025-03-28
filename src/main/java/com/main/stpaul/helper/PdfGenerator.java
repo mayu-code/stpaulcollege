@@ -48,7 +48,7 @@ public class PdfGenerator {
             detailsTable.addCell(getBorderedCell("Receipt No:", boldFont));
             detailsTable.addCell(getBorderedCell(getValueOrDefault(receipt.getReceiptNo()), regularFont));
             detailsTable.addCell(getBorderedCell("Date:", boldFont));
-            detailsTable.addCell(getBorderedCell(getValueOrDefault(receipt.getPaymentDate()), regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(DateTimeFormater.formatDate(receipt.getPaymentDate())), regularFont));
 
             detailsTable.addCell(getBorderedCell("Name:", boldFont));
             detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getFirstName()+" "+student.getSurname()), regularFont));
