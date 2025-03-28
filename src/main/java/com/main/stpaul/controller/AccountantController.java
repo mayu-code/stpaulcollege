@@ -77,10 +77,14 @@ public class AccountantController {
     }
 
     @GetMapping("/student/pending")
-    public ResponseEntity<?> getPendingStudents()throws Exception{
+    public ResponseEntity<?> getPendingStudents(@PathVariable("query")String query,
+                                                @PathVariable("stdClass")String stdClass,
+                                                @PathVariable("section")String section,
+                                                @PathVariable("session")String session
+                                            )throws Exception{
         log.info("Starting getPendingStudents method");
         try {
-            List<PendingStudents> students = this.studentServiceImpl.getPendingStudents();
+            List<PendingStudents> students = this.studentServiceImpl.getPendingStudents(query, stdClass, section, session); 
             for(PendingStudents student:students){
                 student.setTotalFees(this.collegeFeesServiceImpl.getTotalFeesByClass(student.getStdClass()));
             }

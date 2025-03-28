@@ -43,10 +43,15 @@ public interface StudentRepo extends JpaRepository<Student,String>{
             FROM Student s 
             LEFT JOIN studentAcademics sa
             ON s.studentId=sa.student.studentId AND sa.isDelete = false
-            WHERE s.status = :status 
+            WHERE(:query IS NULL OR (s.firstName LIKE %:query% OR s.fatherName LIKE %:query% OR s.surname LIKE %:query% OR s.email LIKE %:query% OR s.phoneNo LIKE %:query%))
+            AND (:stdClass IS NULL OR s.stdClass=:stdClass)
+            AND (:section IS NULL OR s.section=:section)
+            AND (:session IS NULL OR s.session=:session)
+            AND s.status = :status 
             AND s.isDelete = false
             """)
-    List<PendingStudents> findByStatus(Status status);
+    List<PendingStudents> findByStatus(@Param("query")String query,@Param("stdClass")String stdClass,@Param("section")String section,
+                                        @Param("session")String session,@Param("status") Status status);
 
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END FROM Student s WHERE s.email = :email AND s.isDelete = false")
     boolean existsByEmail(@Param("email") String email);
@@ -61,9 +66,14 @@ public interface StudentRepo extends JpaRepository<Student,String>{
         FROM Student s 
         LEFT JOIN StudentAcademics sa 
         ON s.studentId = sa.student.studentId
-        WHERE s.isDelete = false AND sa.result=:fail
+        WHERE (:query IS NULL OR (s.firstName LIKE %:query% OR s.fatherName LIKE %:query% OR s.surname LIKE %:query% OR s.email LIKE %:query% OR s.phoneNo LIKE %:query%))
+        AND (:stdClass IS NULL OR s.stdClass=:stdClass)
+        AND (:section IS NULL OR s.section=:section)
+        AND (:session IS NULL OR s.session=:session)
+        AND s.isDelete = false AND sa.result=:fail
         ORDER BY s.addDate DESC
        """)
-    List<Student> findFailStudents(Result fail);
+    List<Student> findFailStudents(@Param("query")String query,@Param("stdClass")String stdClass,@Param("section")String section,
+                                    @Param("session")String session,Result fail);
 
 }

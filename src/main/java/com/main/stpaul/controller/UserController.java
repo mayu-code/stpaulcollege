@@ -198,11 +198,14 @@ public class UserController {
 
 
     @GetMapping("/students/fail")
-    public ResponseEntity<?> getAllFailStudents()throws Exception{
+    public ResponseEntity<?> getAllFailStudents(@RequestParam(required = false)String query,
+                                                @RequestParam(required = false)String stdClass,
+                                                @RequestParam(required = false)String section,
+                                                @RequestParam(required = false)String session)throws Exception{
         log.info("Starting getAllFailStudents method");
         try {
             DataResponse response = DataResponse.builder()
-                                                .data(this.studentServiceImpl.getFailStudents())
+                                                .data(this.studentServiceImpl.getFailStudents(query,stdClass,section,session))
                                                 .message("Get All Fail Students Successfully !")
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)

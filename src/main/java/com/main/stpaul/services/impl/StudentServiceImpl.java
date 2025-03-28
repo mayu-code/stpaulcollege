@@ -62,8 +62,8 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<PendingStudents> getPendingStudents() {
-        return this.studentRepo.findByStatus(Status.Pending);
+    public List<PendingStudents> getPendingStudents(String query,String stdClass,String section,String session) {
+        return this.studentRepo.findByStatus(query,stdClass,section,session,Status.Pending);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<Student> getFailStudents() {
-        return this.studentRepo.findFailStudents(Result.FAIL);
+    public List<Student> getFailStudents(String query,String stdClass,String section,String session) {
+        return this.studentRepo.findFailStudents(query,stdClass,section,session,Result.FAIL);
     }
     
 }
