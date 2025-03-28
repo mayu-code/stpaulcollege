@@ -87,11 +87,11 @@ public class UserController {
 
     @GetMapping("/college/fees")
     @Operation(summary = "Get all college fees", description = "Fetches all college fees details")
-    public ResponseEntity<?> getAllCollegeFees()throws Exception{
+    public ResponseEntity<?> getAllCollegeFees(@RequestParam(required = false)String stdClass)throws Exception{
         log.info("Starting getAllCollegeFees method");
         try {
             DataResponse response = DataResponse.builder()
-                                                .data(this.collegeFeesServiceImpl.getAllCollegeFees())
+                                                .data(this.collegeFeesServiceImpl.getAllCollegeFees(stdClass))
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .message("get All Fees successfully !")

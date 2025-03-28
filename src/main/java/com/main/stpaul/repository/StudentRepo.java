@@ -13,6 +13,8 @@ import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.entities.Student;
 
+import jakarta.transaction.Transactional;
+
 public interface StudentRepo extends JpaRepository<Student,String>{
     
     @Query("""
@@ -56,6 +58,7 @@ public interface StudentRepo extends JpaRepository<Student,String>{
     @Query("SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END FROM Student s WHERE s.email = :email AND s.isDelete = false")
     boolean existsByEmail(@Param("email") String email);
 
+    @Transactional
     @Modifying
     @Query("UPDATE Student s SET s.deleteDate=now , s.isDelete=true WHERE s.studentId=:id")
     void deleteStudent(String id);

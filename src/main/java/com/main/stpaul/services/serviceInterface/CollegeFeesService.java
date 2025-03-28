@@ -8,7 +8,7 @@ import com.main.stpaul.entities.CollegeFees;
 
 public interface CollegeFeesService {
     CollegeFees addCollegeFees(CollegeFees collegeFees);
-    List<CollegeFees> getAllCollegeFees();
+    List<CollegeFees> getAllCollegeFees(String stdClass);
     CollegeFees getCollegeFees(long id);
     CollegeFees getCollegeFeesByClass(String Class);
     void updateCollegeFees(CollegeFeesRequest collegeFees,long id);

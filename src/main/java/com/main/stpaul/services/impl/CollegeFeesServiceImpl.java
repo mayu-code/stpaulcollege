@@ -24,8 +24,8 @@ public class CollegeFeesServiceImpl implements CollegeFeesService{
 
 
     @Override
-    public List<CollegeFees> getAllCollegeFees() {
-        return this.collegeFeesRepo.getAllCollegeFees();
+    public List<CollegeFees> getAllCollegeFees(String stdClass) {
+        return this.collegeFeesRepo.getAllCollegeFees(stdClass);
     }
 
     @Override

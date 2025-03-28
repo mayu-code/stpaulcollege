@@ -10,7 +10,6 @@ import com.main.stpaul.Exceptions.DuplicateEntityException;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.CollegeFeesRequest;
-import com.main.stpaul.dto.response.CollegeFeesResponse;
 import com.main.stpaul.entities.CollegeFees;
 import com.main.stpaul.mapper.CollegeFeesMappler;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
