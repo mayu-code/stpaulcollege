@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 public interface BankDetailRepo extends JpaRepository<BankDetail,String>{
     
 
-    @Query("SELECT b FROM BankDetail b Where b.student.id=:id AND b.isDelete=false")
+    @Query("SELECT b FROM BankDetail b Where b.student.id=:studentId AND b.isDelete=false")
     Optional<BankDetail> findByStudentId(String studentId);
 
 
