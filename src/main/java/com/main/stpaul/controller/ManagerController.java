@@ -507,21 +507,6 @@ public class ManagerController {
         }
     }
 
-    @DeleteMapping("/students/documents/{docId}")
-    @Operation(summary = "Delete student document", description = "Deletes a specific document of a student by their ID and document ID")
-    public ResponseEntity<?> deleteDocument(@PathVariable("docId")long docId)throws Exception{
-        log.info("Starting deleteDocument method");
-        try {
-            this.documentService.deleteDocument(docId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Document deleted Successfully !");
-            log.info("Successfully deleted document");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            log.error("Error deleting document: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
-    }
-
     @PutMapping("/students/documents/{docId}")
     @Operation(summary = "Update student document", description = "Updates a specific document of a student by their ID and document ID")
     public ResponseEntity<?> updateDocument(@PathVariable("docId")long docId,@RequestPart("document")MultipartFile document)throws Exception{
