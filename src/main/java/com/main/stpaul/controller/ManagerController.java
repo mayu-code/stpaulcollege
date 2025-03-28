@@ -513,7 +513,7 @@ public class ManagerController {
         log.info("Starting deleteDocument method");
         try {
             this.documentService.deleteDocument(docId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Document deleted Successfully !");
             log.info("Successfully deleted document");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
