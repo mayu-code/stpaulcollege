@@ -10,9 +10,7 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
-import com.main.stpaul.dto.response.PaymentDetailResponse;
 import com.main.stpaul.dto.response.ReceiptResponse;
-import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.entities.Student;
 
@@ -63,7 +61,7 @@ public class PdfGenerator {
             detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getSession()), regularFont));
 
             detailsTable.addCell(getBorderedCell("Admission No:", boldFont));
-            detailsTable.addCell(getBorderedCell("2166", regularFont));
+            detailsTable.addCell(getBorderedCell(student.getAdmissionForm().getFormNo(), regularFont));
             detailsTable.addCell(getBorderedCell("Academic Session:", boldFont));
             detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getSession()), regularFont));
 
@@ -108,7 +106,7 @@ public class PdfGenerator {
 
             outerTable.addCell(new Cell().add(feeTable).setBorder(new SolidBorder(ColorConstants.BLACK, 1f)));
 
-            outerTable.addCell(new Cell().add(new Paragraph("Amount (In word)  NINE THOUSAND ONLY").setFont(boldFont))
+            outerTable.addCell(new Cell().add(new Paragraph("Amount (In word) "+NumberToWordConverter.convert(receipt.getAmountPaid())+"  ONLY").setFont(boldFont))
                     .setBorder(new SolidBorder(ColorConstants.BLACK, 1f)));
 
             // **Signatures Section**

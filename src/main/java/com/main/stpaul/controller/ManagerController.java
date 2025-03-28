@@ -2,8 +2,6 @@ package com.main.stpaul.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.main.stpaul.constants.PaymetMode;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
@@ -33,8 +29,6 @@ import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.PaymentDetailRequest;
 import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.request.StudentRequest;
-import com.main.stpaul.dto.response.StudentAcademicsResponse;
-import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.BiofocalSubject;
