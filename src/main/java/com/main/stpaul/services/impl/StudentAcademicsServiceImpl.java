@@ -26,17 +26,17 @@ public class StudentAcademicsServiceImpl implements StudentAcademicsService{
     }
 
     @Override
-    public List<StudentAcademicsResponse> getAcademicsByStudent(String studentId) {
+    public List<StudentAcademics> getAcademicsByStudent(String studentId) {
         return this.studentAcademicsRepo.findByStudentId(studentId);
     }
 
     @Override
-    public StudentAcademicsResponse getAcademicsById(String id) {
+    public StudentAcademics getAcademicsById(String id) {
         return this.studentAcademicsRepo.findAcademicsById(id).orElse(null);
     }
 
     @Override
-    public StudentAcademicsResponse getOngoingAcademicsByStudent(String studentId) {
+    public StudentAcademics getOngoingAcademicsByStudent(String studentId) {
         return this.studentAcademicsRepo.findOngoingAcademicsByStudent(studentId, Status.Ongoing).orElse(null);
     }
 

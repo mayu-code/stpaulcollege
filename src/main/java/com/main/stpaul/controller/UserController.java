@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.response.StudentAcademicsResponse;
 import com.main.stpaul.entities.PaymentDetail;
+import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.entities.User;
 import com.main.stpaul.mapper.PaymentDetailMapper;
 import com.main.stpaul.mapper.UserMapper;
@@ -159,10 +160,10 @@ public class UserController {
     public ResponseEntity<?> getAcademicsDetail(@PathVariable("studentId")String studentId)throws Exception{
         log.info("Starting getAcademicsDetail method with studentId: {}", studentId);
         try {
-            List<StudentAcademicsResponse> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
-            for(StudentAcademicsResponse st:students){
+            List<StudentAcademics> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
+            for(StudentAcademics st:students){
                 PaymentDetail paymentDetail = this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId());
-                st.setPaymentDetail(paymentDetailMapper.toPaymentDetailResponse(paymentDetail));
+                // st.setPaymentDetail(paymentDetailMapper.toPaymentDetailResponse(paymentDetail));
                 // st.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
             }
             DataResponse response = DataResponse.builder()

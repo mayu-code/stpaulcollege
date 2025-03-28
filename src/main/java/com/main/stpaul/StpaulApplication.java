@@ -11,7 +11,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 @SpringBootApplication
 public class StpaulApplication {
 
-	
 	public static void main(String[] args) {
 		Dotenv dotenv = Dotenv.load();
 		dotenv.entries().forEach(entry->System.setProperty(entry.getKey(),entry.getValue()));

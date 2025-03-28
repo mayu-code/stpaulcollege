@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
-import com.main.stpaul.dto.response.StudentAcademicsResponse;
-import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.helper.StudentHelper;
@@ -64,11 +62,10 @@ public class AdminController {
 
                 log.info("Promoted student with ID: {}", id);
 
-                StudentAcademicsResponse studentAcademics = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(student.getStudentId());
-                if(studentAcademics == null){
+                StudentAcademics academics = this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(student.getStudentId());
+                if(academics == null){
                     log.warn("No ongoing academics found for student ID: {}", id);
                 }else{
-                    StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(studentAcademics);
                     academics.setStatus(Status.Completed);
                     academics.setUpdatedDate(LocalDateTime.now());
                     academics.setResult(Result.PASS);

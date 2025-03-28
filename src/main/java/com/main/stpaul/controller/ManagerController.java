@@ -258,7 +258,7 @@ public class ManagerController {
     public ResponseEntity<?> addPaymentDetail(@PathVariable("studentId")String studentId,@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
         log.info("Starting addPaymentDetail method with studentId: {} and academicId: {}", studentId, academicId);
        try {
-        StudentAcademics academics = this.studentAcademicsMapper.toStudentAcademics(this.studentAcademicsServiceImpl.getAcademicsById(academicId));
+        StudentAcademics academics = this.studentAcademicsServiceImpl.getAcademicsById(academicId);
         PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
         paymentDetail2.setStudentAcademics(academics);
         Receipt receipt = new Receipt();
