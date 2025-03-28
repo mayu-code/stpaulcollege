@@ -24,7 +24,7 @@ public interface DocumentRepo extends JpaRepository<Documents,Long>{
 
     @Transactional
     @Modifying
-    @Query("UPDATE Documents d SET d.isDelete=true AND d.deleteDate=now WHERE d.documentId=:id")
+    @Query("UPDATE Documents d SET d.isDelete=true , d.deleteDate=now WHERE d.documentId=:id")
     void deleteDocumentById(long id);
 
 }
