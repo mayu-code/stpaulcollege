@@ -275,9 +275,9 @@ public class ManagerController {
         Student student =  this.studentServiceImpl.getStudentById(studentId);
         student.setStatus(Status.Ongoing);
         this.studentServiceImpl.updateStudent(student);
-        // byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),receiptMapper.toReceiptResponse(receipt),paymentDetailMapper.toPaymentDetailResponse(paymentDetail2));
+        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),receiptMapper.toReceiptResponse(receipt),paymentDetail2);
         DataResponse response = DataResponse.builder()
-                                            // .data(pdfBytes)
+                                            .data(pdfBytes)
                                             .message("payment detail added Successfully")
                                             .status(HttpStatus.OK)
                                             .statusCode(200)
