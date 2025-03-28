@@ -58,7 +58,7 @@ public class PdfGenerator {
             detailsTable.addCell(getBorderedCell("Std:", boldFont));
             detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getStdClass()), regularFont));
             detailsTable.addCell(getBorderedCell("Section:", boldFont));
-            detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getSession()), regularFont));
+            detailsTable.addCell(getBorderedCell(getValueOrDefault(student.getSection()), regularFont));
 
             detailsTable.addCell(getBorderedCell("Admission No:", boldFont));
             detailsTable.addCell(getBorderedCell(student.getAdmissionForm().getFormNo(), regularFont));

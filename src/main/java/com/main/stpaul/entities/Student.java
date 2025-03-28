@@ -40,6 +40,7 @@ public class Student {
     private LocalDate admissionDate;
     private String session;
     private String stdClass;
+    private String section;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.Pending;
