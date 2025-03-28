@@ -1,6 +1,8 @@
 package com.main.stpaul.entities;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.stpaul.constants.PaymetMode;
 
 import jakarta.persistence.Entity;
@@ -32,6 +34,7 @@ public class Receipt {
     private LocalDateTime updatedDate = LocalDateTime.now();
     private LocalDateTime deleteDate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "payment_detail_id")
     private PaymentDetail paymentDetail;
