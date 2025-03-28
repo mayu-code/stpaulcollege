@@ -1,5 +1,7 @@
 package com.main.stpaul.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
+import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.entities.Receipt;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.helper.PdfGenerator;
 import com.main.stpaul.mapper.ReceiptMapper;
 import com.main.stpaul.mapper.StudentMapper;
+import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
 import com.main.stpaul.services.impl.ReceiptServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
@@ -37,6 +41,9 @@ public class AccountantController {
 
     @Autowired
     private ReceiptMapper receiptMapper;
+
+    @Autowired
+    private CollegeFeesServiceImpl collegeFeesServiceImpl;
 
     @Autowired
     private StudentMapper studentMapper;
@@ -73,8 +80,12 @@ public class AccountantController {
     public ResponseEntity<?> getPendingStudents()throws Exception{
         log.info("Starting getPendingStudents method");
         try {
+            List<PendingStudents> students = this.studentServiceImpl.getPendingStudents();
+            for(PendingStudents student:students){
+                student.setTotalFees(this.collegeFeesServiceImpl.getTotalFeesByClass(student.getStdClass()));
+            }
             DataResponse response = DataResponse.builder()
-                                                .data(this.studentServiceImpl.getPendingStudents())
+                                                .data(students)
                                                 .message("get All Pending Students successfully !")
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)

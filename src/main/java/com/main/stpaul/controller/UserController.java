@@ -170,8 +170,13 @@ public class UserController {
             for(StudentAcademics st:students){
                 StudentAcademicsResponse studentAcademicsResponse = studentAcademicsMapper.toStudentAcademicsResponse(st);  
                 PaymentDetail paymentDetail = this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId());
-                studentAcademicsResponse.setPaymentDetail(paymentDetailMapper.toPaymentDetailResponse(paymentDetail));
-                studentAcademicsResponse.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
+                System.out.println("ok");
+                if(paymentDetail == null){
+                    studentAcademicsResponse.setPaymentDetail(null);
+                } else {
+                    studentAcademicsResponse.setPaymentDetail(paymentDetailMapper.toPaymentDetailResponse(paymentDetail));
+                    studentAcademicsResponse.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
+                }
                 studentAcademicsResponses.add(studentAcademicsResponse);
             }
             DataResponse response = DataResponse.builder()
