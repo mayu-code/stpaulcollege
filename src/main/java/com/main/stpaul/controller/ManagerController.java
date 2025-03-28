@@ -522,5 +522,18 @@ public class ManagerController {
         }
     }
 
-    
+    @PutMapping("/students/documents/{docId}")
+    @Operation(summary = "Update student document", description = "Updates a specific document of a student by their ID and document ID")
+    public ResponseEntity<?> updateDocument(@PathVariable("docId")long docId,@RequestPart("document")MultipartFile document)throws Exception{
+        log.info("Starting updateDocument method with documentId: {}", docId);
+        try {
+            this.documentService.updateDocument(document.getBytes(), docId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Document updated Successfully !");
+            log.info("Successfully updated document");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error updating document: {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
 }

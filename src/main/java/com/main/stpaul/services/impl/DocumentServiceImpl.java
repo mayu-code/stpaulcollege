@@ -31,5 +31,11 @@ public class DocumentServiceImpl implements DocumentsService{
         this.documentRepo.deleteDocumentById(id);
         return;
     }
+
+    @Override
+    public void updateDocument(byte[] document, long id) {
+        this.documentRepo.updateDocument(document, id);
+        return;
+    }
     
 }

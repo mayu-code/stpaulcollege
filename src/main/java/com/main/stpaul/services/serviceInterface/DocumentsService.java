@@ -9,4 +9,5 @@ public interface DocumentsService {
     Documents addDocuments(Documents documents);
     List<DocumentReponse> getStudentDocuments(String studentid);
     void deleteDocument(long id);
+    void updateDocument(byte[] document,long id);
 }

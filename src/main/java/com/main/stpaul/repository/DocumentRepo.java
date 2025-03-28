@@ -1,5 +1,6 @@
 package com.main.stpaul.repository;
 
+import java.lang.annotation.Repeatable;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,5 +27,14 @@ public interface DocumentRepo extends JpaRepository<Documents,Long>{
     @Modifying
     @Query("UPDATE Documents d SET d.isDelete=true , d.deleteDate=now WHERE d.documentId=:id")
     void deleteDocumentById(long id);
+
+    @Transactional
+    @Modifying
+    @Query("""
+        UPDATE Documents d SET d.document=:document,d.updatedDate=now
+        WHERE d.documentId=:id
+        """)
+    void updateDocument(@Param("document")byte[] document,
+                        @Param("id")long id);
 
 }
