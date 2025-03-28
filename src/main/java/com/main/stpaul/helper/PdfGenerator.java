@@ -159,7 +159,7 @@ public class PdfGenerator {
         table.addCell(getBorderedCell1(amount, PdfFontFactory.createFont(StandardFonts.HELVETICA))).setBorder(null);
         table.addCell(getBorderedCell1("", PdfFontFactory.createFont(StandardFonts.HELVETICA))).setBorder(null);
     }
-    
+
     private static void addFeeRow(Table table, String srNo, String particulars, String amount) throws IOException {
         table.addCell(getBorderedCell(srNo, PdfFontFactory.createFont(StandardFonts.HELVETICA)));
         table.addCell(getBorderedCell(particulars, PdfFontFactory.createFont(StandardFonts.HELVETICA)));
