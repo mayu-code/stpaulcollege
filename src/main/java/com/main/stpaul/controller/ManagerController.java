@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.Doc;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -139,6 +141,9 @@ public class ManagerController {
 
     @Autowired
     private ReceiptMapper receiptMapper;
+
+    @Autowired
+    private DocumentServiceImpl documentService;
 
 
     // Post Apis *********************
@@ -504,6 +509,21 @@ public class ManagerController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error deleting last school with ID: {}: {}", lsId, e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/students/documents/{docId}")
+    @Operation(summary = "Delete student document", description = "Deletes a specific document of a student by their ID and document ID")
+    public ResponseEntity<?> deleteDocument(@PathVariable("docId")Long docId)throws Exception{
+        log.info("Starting deleteDocument method");
+        try {
+            this.documentService.deleteDocument(docId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            log.info("Successfully deleted document");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error deleting document: {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }

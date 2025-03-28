@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
@@ -77,11 +78,10 @@ public class AccountantController {
     }
 
     @GetMapping("/student/pending")
-    public ResponseEntity<?> getPendingStudents(@PathVariable("query")String query,
-                                                @PathVariable("stdClass")String stdClass,
-                                                @PathVariable("section")String section,
-                                                @PathVariable("session")String session
-                                            )throws Exception{
+    public ResponseEntity<?> getPendingStudents(@RequestParam String query,
+                                                @RequestParam String stdClass,
+                                                @RequestParam String section,
+                                                @RequestParam String session)throws Exception{
         log.info("Starting getPendingStudents method");
         try {
             List<PendingStudents> students = this.studentServiceImpl.getPendingStudents(query, stdClass, section, session); 

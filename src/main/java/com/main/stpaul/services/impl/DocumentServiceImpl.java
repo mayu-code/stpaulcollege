@@ -28,8 +28,8 @@ public class DocumentServiceImpl implements DocumentsService{
 
     @Override
     public void deleteDocument(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteDocument'");
+        this.documentRepo.deleteDocumentById(id);
+        return;
     }
     
 }
