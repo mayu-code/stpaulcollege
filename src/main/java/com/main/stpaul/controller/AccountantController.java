@@ -1,7 +1,5 @@
 package com.main.stpaul.controller;
 
-import java.util.Base64;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
-import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.Receipt;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.helper.PdfGenerator;

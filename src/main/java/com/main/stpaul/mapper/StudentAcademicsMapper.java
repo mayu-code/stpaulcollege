@@ -16,4 +16,8 @@ public class StudentAcademicsMapper {
     public StudentAcademics toStudentAcademics(StudentAcademicsResponse studentAcademicsResponse){
         return this.modelMapper.map(studentAcademicsResponse, StudentAcademics.class);
     }
+
+    public StudentAcademicsResponse toStudentAcademicsResponse(StudentAcademics studentAcademics){
+        return this.modelMapper.map(studentAcademics, StudentAcademicsResponse.class);
+    }
 }

@@ -1,5 +1,6 @@
 package com.main.stpaul.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.main.stpaul.entities.PaymentDetail;
 import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.entities.User;
 import com.main.stpaul.mapper.PaymentDetailMapper;
+import com.main.stpaul.mapper.StudentAcademicsMapper;
 import com.main.stpaul.mapper.UserMapper;
 import com.main.stpaul.services.impl.CollegeFeesServiceImpl;
 import com.main.stpaul.services.impl.PaymentDetailServiceImpl;
@@ -55,6 +57,9 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private StudentAcademicsMapper studentAcademicsMapper;
 
     @Autowired
     private PaymentDetailMapper paymentDetailMapper;
@@ -161,13 +166,16 @@ public class UserController {
         log.info("Starting getAcademicsDetail method with studentId: {}", studentId);
         try {
             List<StudentAcademics> students =this.studentAcademicsServiceImpl.getAcademicsByStudent(studentId);
+            List<StudentAcademicsResponse> studentAcademicsResponses = new ArrayList<>();
             for(StudentAcademics st:students){
+                StudentAcademicsResponse studentAcademicsResponse = studentAcademicsMapper.toStudentAcademicsResponse(st);  
                 PaymentDetail paymentDetail = this.paymentDetailServiceImpl.getPaymentDetailByStudent(st.getStudentAcademicsId());
-                // st.setPaymentDetail(paymentDetailMapper.toPaymentDetailResponse(paymentDetail));
-                // st.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
+                studentAcademicsResponse.setPaymentDetail(paymentDetailMapper.toPaymentDetailResponse(paymentDetail));
+                studentAcademicsResponse.getPaymentDetail().setReceipt(this.receiptServiceImpl.getReceiptByPaymentDetail(st.getPaymentDetail().getPaymentDetailId()));
+                studentAcademicsResponses.add(studentAcademicsResponse);
             }
             DataResponse response = DataResponse.builder()
-                                                .data(students)
+                                                .data(studentAcademicsResponses)
                                                 .message("Get All Academics Successfully !")
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
