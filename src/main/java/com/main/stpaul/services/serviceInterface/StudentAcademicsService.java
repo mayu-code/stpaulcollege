@@ -2,6 +2,7 @@ package com.main.stpaul.services.serviceInterface;
 
 import java.util.List;
 
+import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
 
 public interface StudentAcademicsService {

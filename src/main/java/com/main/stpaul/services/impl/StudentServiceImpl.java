@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.entities.Student;
@@ -19,9 +20,6 @@ public class StudentServiceImpl implements StudentService{
 
     @Autowired
     private StudentRepo studentRepo;
-
-    @Autowired
-    private StudentMapper studentMapper;
 
     @Override
     public Student addStudent(Student student) {
@@ -72,6 +70,11 @@ public class StudentServiceImpl implements StudentService{
     public Student promoteStudent(Student student) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'promoteStudent'");
+    }
+
+    @Override
+    public List<Student> getFailStudents() {
+        return this.studentRepo.findFailStudents(Result.FAIL);
     }
     
 }

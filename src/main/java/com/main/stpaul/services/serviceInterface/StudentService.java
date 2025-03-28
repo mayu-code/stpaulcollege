@@ -18,9 +18,9 @@ public interface StudentService {
     void deleteStudent(String id);
 
     Student getData(String id);
-
     List<PendingStudents> getPendingStudents();
-
     Student promoteStudent(Student student);
+
+    List<Student> getFailStudents();
     
 }

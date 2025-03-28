@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.entities.Student;
@@ -48,5 +49,16 @@ public interface StudentRepo extends JpaRepository<Student,String>{
     @Modifying
     @Query("UPDATE Student s SET s.deleteDate=now , s.isDelete=true WHERE s.studentId=:id")
     void deleteStudent(String id);
+
+
+    @Query("""
+        SELECT s 
+        FROM Student s 
+        LEFT JOIN StudentAcademics sa 
+        ON s.studentId = sa.student.studentId
+        WHERE s.isDelete = false AND sa.result=:fail
+        ORDER BY s.addDate DESC
+       """)
+    List<Student> findFailStudents(Result fail);
 
 }

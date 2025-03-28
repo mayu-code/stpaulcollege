@@ -192,4 +192,22 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/students/fail")
+    public ResponseEntity<?> getAllFailStudents()throws Exception{
+        log.info("Starting getAllFailStudents method");
+        try {
+            DataResponse response = DataResponse.builder()
+                                                .data(this.studentServiceImpl.getFailStudents())
+                                                .message("Get All Fail Students Successfully !")
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .build();
+            log.info("All Fail Students Fetched Successfully ");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Fail Students {}",e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
 }

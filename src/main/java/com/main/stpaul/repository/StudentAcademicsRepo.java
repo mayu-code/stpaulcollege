@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
+import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
 
 import jakarta.transaction.Transactional;
@@ -48,4 +50,5 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
         WHERE s.student.id = :studentId AND s.isDelete = false AND s.status=:status
     """)
     Optional<StudentAcademics> findOngoingAcademicsByStudent(@Param("studentId") String studentId,@Param("status")Status status);
+
 }
