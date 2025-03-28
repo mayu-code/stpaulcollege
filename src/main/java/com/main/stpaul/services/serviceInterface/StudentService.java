@@ -2,6 +2,7 @@ package com.main.stpaul.services.serviceInterface;
 
 import java.util.List;
 
+import com.main.stpaul.constants.Result;
 import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.dto.response.StudentResponse;
@@ -12,7 +13,7 @@ public interface StudentService {
     Student addStudent(Student student);
     Student findById(String id);
     Student getStudentById(String id);
-    List<Student> getAllStudents();
+    List<Student> getAllStudents(String query,String stdClass,String section,String session);
 
     Student updateStudent(Student student);
     void deleteStudent(String id);

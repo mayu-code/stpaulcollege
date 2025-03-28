@@ -35,8 +35,8 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        return this.studentRepo.findAllStudents();
+    public List<Student> getAllStudents(String query,String stdClass,String section,String session) {
+        return this.studentRepo.findAllStudents(query,stdClass,section,session);
     }
 
     @Override

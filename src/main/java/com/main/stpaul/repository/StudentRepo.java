@@ -16,11 +16,16 @@ import com.main.stpaul.entities.Student;
 public interface StudentRepo extends JpaRepository<Student,String>{
     
     @Query("""
-        SELECT s 
-        FROM Student s WHERE s.isDelete = false 
+        SELECT s FROM Student s 
+        WHERE (:query IS NULL OR (s.firstName LIKE %:query% OR s.fatherName LIKE %:query% OR s.surname LIKE %:query% OR s.email LIKE %:query% OR s.phoneNo LIKE %:query%))
+        AND (:stdClass IS NULL OR s.stdClass=:stdClass)
+        AND (:section IS NULL OR s.section=:section)
+        AND (:session IS NULL OR s.session=:session)
+        AND s.isDelete = false 
         ORDER BY s.addDate DESC
        """)
-    List<Student> findAllStudents();
+    List<Student> findAllStudents(@Param("query")String query,@Param("stdClass")String stdClass,@Param("section")String section,
+                                    @Param("session")String session);
 
 
     @Query("""

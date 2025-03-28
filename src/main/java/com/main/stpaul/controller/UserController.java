@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
@@ -143,14 +144,17 @@ public class UserController {
 
     @GetMapping("/students")
     @Operation(summary = "Get all students", description = "Fetches details of all students")
-    public ResponseEntity<?> allStudents() throws Exception{
+    public ResponseEntity<?> allStudents(@RequestParam(required = false)String query,
+                                        @RequestParam(required = false)String stdClass,
+                                        @RequestParam(required = false)String section,
+                                        @RequestParam(required = false)String session) throws Exception{
         log.info("Starting allStudents method");
         try {
             DataResponse response = DataResponse.builder()
                                                 .status(HttpStatus.OK)
                                                 .statusCode(200)
                                                 .message("Get All Users Successfully !")
-                                                .data(this.studentServiceImpl.getAllStudents())
+                                                .data(this.studentServiceImpl.getAllStudents(query,stdClass,section,session))
                                                 .build();
             log.info("All Students Fetched Successfully ");
             return ResponseEntity.status(HttpStatus.OK).body(response);
