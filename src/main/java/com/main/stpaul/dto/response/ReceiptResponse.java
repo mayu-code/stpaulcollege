@@ -2,7 +2,7 @@ package com.main.stpaul.dto.response;
 
 import java.time.LocalDateTime;
 
-import com.main.stpaul.constants.PaymetMode;
+import com.main.stpaul.constants.PaymentMode;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class ReceiptResponse {
     private String receiptId;
     private String receiptNo;
     private double amountPaid;
-    private PaymetMode paymentMode;
+    private PaymentMode paymentMode;
     private LocalDateTime paymentDate;
     private String transactionId;
 }

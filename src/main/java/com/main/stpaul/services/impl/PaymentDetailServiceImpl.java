@@ -33,9 +33,8 @@ public class PaymentDetailServiceImpl implements PaymentDetailService{
     }
 
     @Override
-    public boolean updatePaymentDetail(PaymentDetail paymentDetail, String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePaymentDetail'");
+    public PaymentDetail updatePaymentDetail(PaymentDetail paymentDetail) {
+      return this.paymentDetailRepo.save(paymentDetail);
     }
 
     @Override

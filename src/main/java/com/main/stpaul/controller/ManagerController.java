@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.main.stpaul.constants.PaymetMode;
+import com.main.stpaul.constants.PaymentMode;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
@@ -261,7 +261,7 @@ public class ManagerController {
 
         receipt.setAmountPaid(paymentDetail2.getPaidAmount());
         receipt.setTransactionId(null);
-        receipt.setPaymentMode(PaymetMode.valueOf(paymentDetail2.getPaymentType()));
+        receipt.setPaymentMode(PaymentMode.valueOf(paymentDetail2.getPaymentType()));
         receipt.setPaymentDate(LocalDateTime.now());
         
         paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);

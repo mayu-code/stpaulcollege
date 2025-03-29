@@ -6,6 +6,6 @@ public interface PaymentDetailService {
     PaymentDetail addPaymentDetail(PaymentDetail paymentDetail);
     PaymentDetail getPaymentDetailByStudent(String id);
     PaymentDetail getPaymentById(String id);
-    boolean updatePaymentDetail(PaymentDetail paymentDetail,String id);
+    PaymentDetail updatePaymentDetail(PaymentDetail paymentDetail);
     boolean deletePaymentDetail(String id);
 }
