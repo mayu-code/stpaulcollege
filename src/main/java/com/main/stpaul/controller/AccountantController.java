@@ -1,5 +1,6 @@
 package com.main.stpaul.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -82,12 +83,15 @@ public class AccountantController {
             if(paymentDetail.getInstallments()> 0){
                 paymentDetail.setInstallments(paymentDetail.getInstallments() - 1);
             }
-            paymentDetail.setDueDate(paymentDetail.getDueDate().plusMonths(paymentDetail.getInstallmentGap()));
-            paymentDetail =  this.paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
+            if(paymentDetail.getDueDate()!=null){
+                paymentDetail.setDueDate(LocalDate.now().plusDays(paymentDetail.getInstallmentGap()));
+            }
             Receipt newReceipt = new Receipt();
             newReceipt.setAmountPaid(addPaymentRequest.getAmountPaid());
             newReceipt.setPaymentMode(addPaymentRequest.getPaymentMode());
             newReceipt.setPaymentDate(LocalDateTime.now());
+            paymentDetail =  this.paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
+            newReceipt.setPaymentDetail(paymentDetail);
             newReceipt= this.receiptServiceImpl.addReceipt(newReceipt);
 
             byte[] pdf = PdfGenerator.generateReceiptPdf(student,this.receiptMapper.toReceiptResponse(newReceipt),paymentDetail);
