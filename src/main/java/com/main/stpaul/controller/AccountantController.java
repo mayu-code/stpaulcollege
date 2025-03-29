@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,6 @@ import com.main.stpaul.services.impl.ReceiptServiceImpl;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,13 +68,11 @@ public class AccountantController {
                 throw new EntityNotFoundException("Student Academics not found !");
             }
             PaymentDetail paymentDetail = studentAcademics.getPaymentDetail();
-            System.out.println(paymentDetail.getTotalFees());
             if(paymentDetail == null){
                 log.error("Payment Detail not found for student with academicsId: {}", academicsId);
                 throw new EntityNotFoundException("Payment Detail not found !");
             }
             Student student = this.studentServiceImpl.getStudentById(studentAcademics.getStudent().getStudentId());
-            System.out.println(student.getStudentId());
             if(student == null){
                 log.error("Student not found with ID: {}", studentAcademics.getStudent().getStudentId());
                 throw new EntityNotFoundException("Student not found !");
