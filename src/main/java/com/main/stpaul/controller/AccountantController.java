@@ -68,15 +68,18 @@ public class AccountantController {
                 throw new EntityNotFoundException("Student Academics not found !");
             }
             PaymentDetail paymentDetail = studentAcademics.getPaymentDetail();
+            System.out.println(paymentDetail.getTotalFees());
             if(paymentDetail == null){
                 log.error("Payment Detail not found for student with academicsId: {}", academicsId);
                 throw new EntityNotFoundException("Payment Detail not found !");
             }
             Student student = this.studentServiceImpl.getStudentById(studentAcademics.getStudent().getStudentId());
+            System.out.println(student.getStudentId());
             if(student == null){
                 log.error("Student not found with ID: {}", studentAcademics.getStudent().getStudentId());
                 throw new EntityNotFoundException("Student not found !");
             }
+
             paymentDetail.setPaidAmount(paymentDetail.getPaidAmount() + addPaymentRequest.getAmountPaid());
             paymentDetail.setBalanceAmount(paymentDetail.getTotalFees() - paymentDetail.getPaidAmount());
             paymentDetail.setUpdatedDate(paymentDetail.getUpdatedDate());
@@ -90,6 +93,7 @@ public class AccountantController {
             newReceipt.setAmountPaid(addPaymentRequest.getAmountPaid());
             newReceipt.setPaymentMode(addPaymentRequest.getPaymentMode());
             newReceipt.setPaymentDate(LocalDateTime.now());
+
             paymentDetail =  this.paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
             newReceipt.setPaymentDetail(paymentDetail);
             newReceipt= this.receiptServiceImpl.addReceipt(newReceipt);
