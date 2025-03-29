@@ -21,8 +21,6 @@ import lombok.Data;
 public class Receipt {
 
     @Id
-    private String receiptId;
-
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "receipt_seq")
     @SequenceGenerator(name = "receipt_seq", sequenceName = "receipt_sequence", allocationSize = 1)
     private Long receiptNo;

@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.main.stpaul.entities.Receipt;
 
-public interface ReceiptRepo extends JpaRepository<Receipt,String>{
+public interface ReceiptRepo extends JpaRepository<Receipt,Long>{
+
+    Receipt findByReceiptNo(Long receiptNo);
     
     @Query("""
             SELECT r
@@ -20,7 +22,7 @@ public interface ReceiptRepo extends JpaRepository<Receipt,String>{
     @Query("""
         SELECT r
         FROM Receipt r
-        WHERE r.receiptId=:id AND r.isDelete=false
+        WHERE r.receiptNo=:id AND r.isDelete=false
         """)
     Optional<Receipt> findByReceiptId(String id);
 }

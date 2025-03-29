@@ -18,8 +18,6 @@ public class ReceiptServiceImpl implements ReceiptService{
 
     @Override
     public Receipt addReceipt(Receipt receipt) {
-        String id = UUID.randomUUID().toString();
-        receipt.setReceiptId(id);
         return this.receiptRepo.save(receipt);
     }
 
@@ -29,7 +27,7 @@ public class ReceiptServiceImpl implements ReceiptService{
         throw new UnsupportedOperationException("Unimplemented method 'getReceiptById'");
     }
 
-    public Receipt findByid(String id){
+    public Receipt findByid(Long id){
         return this.receiptRepo.findById(id).get();
     }
 

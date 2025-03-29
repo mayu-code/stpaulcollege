@@ -107,7 +107,7 @@ public class AccountantController {
     }
     
     @GetMapping("/student/{studentId}/payment/receipt/{receiptId}")
-    public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")String receiptId)throws Exception{
+    public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")Long receiptId)throws Exception{
         log.info("Starting downloadPdf method with studentId: {} and receiptId: {}", studentId, receiptId);
         try {
             Student student = this.studentServiceImpl.getStudentById(studentId);
