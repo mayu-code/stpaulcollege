@@ -21,5 +21,5 @@ public class UpdateAcademicsRequest {
     private Result result;
     private int markObtained;
     private Status status;
-    private boolean isAlumni;
+    private boolean alumni;
 }

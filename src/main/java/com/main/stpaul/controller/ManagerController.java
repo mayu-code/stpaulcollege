@@ -541,6 +541,7 @@ public class ManagerController {
             biofocalSubject.setSubStream(bioFocalSubject.getSubStream());
             biofocalSubject.setAcademics(studentAcademics);
             biofocalSubject.setSubject(bioFocalSubject.getSubject());
+            biofocalSubject.setAcademics(studentAcademics);
             this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Bio Focal Subject updated Successfully !");
             log.info("Updated Student Bio Focal Subject for ID : {}",academicsId);
