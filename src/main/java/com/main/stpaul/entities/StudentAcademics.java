@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -58,6 +59,6 @@ public class StudentAcademics {
     @OneToOne(mappedBy = "academics")
     private Stream stream;
 
-    @OneToOne(mappedBy = "academics")
+    @OneToOne(mappedBy = "academics",cascade = CascadeType.ALL, orphanRemoval = true)
     private BiofocalSubject biofocalSubject;
 }
