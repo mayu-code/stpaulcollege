@@ -28,6 +28,7 @@ import com.main.stpaul.dto.request.BankDetailRequest;
 import com.main.stpaul.dto.request.GuardianInfoRequest;
 import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.PaymentDetailRequest;
+import com.main.stpaul.dto.request.StreamRequest;
 import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.request.StudentRequest;
 import com.main.stpaul.dto.request.UpdateAcademicsRequest;
@@ -469,6 +470,9 @@ public class ManagerController {
             studentAcademics.setStdClass(request.getStdClass());
             studentAcademics.setResult(request.getResult());
             studentAcademics.setMarksObtained(request.getMarkObtained());
+            studentAcademics.setExamination(request.getExamination());
+            studentAcademics.setExamMonth(request.getExamMonth());
+            studentAcademics.setRollNo(request.getRollNo());
             studentAcademics.setStatus(request.getStatus());
             studentAcademics.setAlumni(request.isAlumni());
 
@@ -481,6 +485,38 @@ public class ManagerController {
             throw new Exception(e.getMessage());
         }
     }
+
+    @PutMapping("/students/{studentId}/stream/{stId}")
+    @Operation(summary = "Update student stream", description = "Updates the stream details of a specific student by their ID and stream ID")
+    public ResponseEntity<?> updateStream(@PathVariable("studentId")String studentId,@PathVariable("stId")long stId,
+                                                @RequestBody StreamRequest stream)throws Exception{
+        log.info("Starting updateStream method with studentId: {} and streamId: {}", studentId, stId);
+        log.info("Updating Student Stream for ID : {}",studentId);
+        try {
+            Student student = this.studentServiceImpl.getStudentById(studentId);
+            if(student ==null){
+                log.warn("student not found with id : {}", studentId);
+                throw new EntityNotFoundException("Student not present !");
+            }
+            Stream stream1 = this.streamServiceImpl.getStreamById(stId);
+            if(stream1 ==null){
+                log.warn("student Stream not found with id : {}", stId);
+                throw new EntityNotFoundException("Student Stream not present !");
+            }
+            this.streamServiceImpl.deleteStreamById(stId);
+            stream1.setMedium(stream.getMedium());
+            stream1.setStream(stream.getStream());
+            stream1.setSubStream(stream.getSubStream());
+            this.streamServiceImpl.addStream(stream1);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Stream updated Successfully !");
+            log.info("Updated Student Stream for ID : {}",studentId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
     // Delete API's ********************************
 
     @DeleteMapping("/students/{id}")

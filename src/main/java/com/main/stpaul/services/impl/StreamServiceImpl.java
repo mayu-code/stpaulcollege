@@ -17,5 +17,15 @@ public class StreamServiceImpl implements StreamService{
     public Stream addStream(Stream stream) {
         return this.streamRepo.save(stream);
     }
+
+    @Override
+    public Stream getStreamById(Long id) {
+        return this.streamRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public void deleteStreamById(Long id) {
+        this.streamRepo.deleteById(id);
+    }
     
 }

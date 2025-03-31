@@ -1,5 +1,7 @@
 package com.main.stpaul.dto.request;
 
+import java.time.LocalDate;
+
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 
@@ -13,6 +15,9 @@ import lombok.NoArgsConstructor;
 public class UpdateAcademicsRequest {
     private String collegeName;
     private String stdClass;
+    private String examination;
+    private String examMonth;
+    private String rollNo;
     private Result result;
     private int markObtained;
     private Status status;

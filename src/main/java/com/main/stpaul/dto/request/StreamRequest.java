@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class StreamRequest {
     private String stream;
     private String subStream;
-    private String medium;
+    private String medium="English";
     private List<String> subjects;
 }
