@@ -25,6 +25,7 @@ import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.dto.request.BankDetailRequest;
+import com.main.stpaul.dto.request.BioFocalSubjectRequest;
 import com.main.stpaul.dto.request.GuardianInfoRequest;
 import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.PaymentDetailRequest;
@@ -486,7 +487,7 @@ public class ManagerController {
         }
     }
 
-    @PutMapping("/students/{studentId}/stream/{stId}")
+    @PutMapping("/students/stream/{stId}")
     @Operation(summary = "Update student stream", description = "Updates the stream details of a specific student by their ID and stream ID")
     public ResponseEntity<?> updateStream(@PathVariable("studentId")String studentId,@PathVariable("stId")long stId,
                                                 @RequestBody StreamRequest stream)throws Exception{
@@ -517,6 +518,36 @@ public class ManagerController {
         }
     }
 
+    @PutMapping("/students/bio-focal-subject/{bfId}")
+    @Operation(summary = "Update student bio-focal subject", description = "Updates the bio-focal subject details of a specific student by their ID and bio-focal subject ID")
+    public ResponseEntity<?> updateBioFocalSubject(@PathVariable("studentId")String studentId,@PathVariable("bfId")long bfId,
+                                                @RequestBody BioFocalSubjectRequest bioFocalSubject)throws Exception{
+        log.info("Starting updateBioFocalSubject method with studentId: {} and bioFocalSubjectId: {}", studentId, bfId);
+        log.info("Updating Student Bio Focal Subject for ID : {}",studentId);
+        try {
+            Student student = this.studentServiceImpl.getStudentById(studentId);
+            if(student ==null){
+                log.warn("student not found with id : {}", studentId);
+                throw new EntityNotFoundException("Student not present !");
+            }
+            BiofocalSubject biofocalSubject = this.bioFocalSubjectServiceImpl.getBiofocalSubjectById(bfId);
+            if(biofocalSubject ==null){
+                log.warn("student Bio Focal Subject not found with id : {}", bfId);
+                throw new EntityNotFoundException("Student Bio Focal Subject not present !");
+            }
+            this.bioFocalSubjectServiceImpl.deleteBiofocalSubjectById(bfId);
+            biofocalSubject.setMedium(bioFocalSubject.getMedium());
+            biofocalSubject.setSubStream(bioFocalSubject.getSubStream());
+            biofocalSubject.setSubject(bioFocalSubject.getSubject());
+            this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Bio Focal Subject updated Successfully !");
+            log.info("Updated Student Bio Focal Subject for ID : {}",studentId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
     // Delete API's ********************************
 
     @DeleteMapping("/students/{id}")

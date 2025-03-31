@@ -17,5 +17,15 @@ public class BioFocalSubjectServiceImpl implements BioFocalSubjectService{
     public BiofocalSubject addBiofocalSubject(BiofocalSubject biofocalSubject) {
         return this.bioFocalSubjectRepo.save(biofocalSubject);
     }
+
+    @Override
+    public BiofocalSubject getBiofocalSubjectById(Long id) {
+        return this.bioFocalSubjectRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public void deleteBiofocalSubjectById(Long id) {
+        this.bioFocalSubjectRepo.deleteById(id);
+    }
     
 }
