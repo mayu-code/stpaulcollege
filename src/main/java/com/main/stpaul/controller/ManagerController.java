@@ -487,17 +487,17 @@ public class ManagerController {
         }
     }
 
-    @PutMapping("/students/stream/{stId}")
+    @PutMapping("/students/academics/{academicsId}/stream/{stId}")
     @Operation(summary = "Update student stream", description = "Updates the stream details of a specific student by their ID and stream ID")
-    public ResponseEntity<?> updateStream(@PathVariable("studentId")String studentId,@PathVariable("stId")long stId,
-                                                @RequestBody StreamRequest stream)throws Exception{
-        log.info("Starting updateStream method with studentId: {} and streamId: {}", studentId, stId);
-        log.info("Updating Student Stream for ID : {}",studentId);
+    public ResponseEntity<?> updateStream(@PathVariable("academicsId")String academicsId,@PathVariable("stId")long stId,
+                                            @RequestBody StreamRequest stream)throws Exception{
+        log.info("Starting updateStream method with academicsId: {} and streamId: {}", academicsId, stId);
+        log.info("Updating Student Stream for ID : {}",academicsId);
         try {
-            Student student = this.studentServiceImpl.getStudentById(studentId);
-            if(student ==null){
-                log.warn("student not found with id : {}", studentId);
-                throw new EntityNotFoundException("Student not present !");
+            StudentAcademics studentAcademics = this.studentAcademicsServiceImpl.getAcademicsById(academicsId);
+            if(studentAcademics ==null){
+                log.warn("student Academics not found with id : {}", academicsId);
+                throw new EntityNotFoundException("Student Academics not present !");
             }
             Stream stream1 = this.streamServiceImpl.getStreamById(stId);
             if(stream1 ==null){
@@ -508,9 +508,10 @@ public class ManagerController {
             stream1.setMedium(stream.getMedium());
             stream1.setStream(stream.getStream());
             stream1.setSubStream(stream.getSubStream());
+            stream1.setAcademics(studentAcademics);
             this.streamServiceImpl.addStream(stream1);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Stream updated Successfully !");
-            log.info("Updated Student Stream for ID : {}",studentId);
+            log.info("Updated Student Stream for ID : {}",academicsId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error While Fetching Students {}",e.getMessage());
@@ -518,17 +519,17 @@ public class ManagerController {
         }
     }
 
-    @PutMapping("/students/bio-focal-subject/{bfId}")
+    @PutMapping("/students/academics/{academicsId}/bio-focal-subject/{bfId}")
     @Operation(summary = "Update student bio-focal subject", description = "Updates the bio-focal subject details of a specific student by their ID and bio-focal subject ID")
-    public ResponseEntity<?> updateBioFocalSubject(@PathVariable("studentId")String studentId,@PathVariable("bfId")long bfId,
-                                                @RequestBody BioFocalSubjectRequest bioFocalSubject)throws Exception{
-        log.info("Starting updateBioFocalSubject method with studentId: {} and bioFocalSubjectId: {}", studentId, bfId);
-        log.info("Updating Student Bio Focal Subject for ID : {}",studentId);
+    public ResponseEntity<?> updateBioFocalSubject(@PathVariable("academicsId")String academicsId,@PathVariable("bfId")long bfId,
+                                                    @RequestBody BioFocalSubjectRequest bioFocalSubject)throws Exception{
+        log.info("Starting updateBioFocalSubject method with academicsId: {} and bioFocalSubjectId: {}", academicsId, bfId);
+        log.info("Updating Student Bio Focal Subject for ID : {}",academicsId);
         try {
-            Student student = this.studentServiceImpl.getStudentById(studentId);
-            if(student ==null){
-                log.warn("student not found with id : {}", studentId);
-                throw new EntityNotFoundException("Student not present !");
+            StudentAcademics studentAcademics = this.studentAcademicsServiceImpl.getAcademicsById(academicsId);
+            if(studentAcademics ==null){
+                log.warn("student Academics not found with id : {}", academicsId);
+                throw new EntityNotFoundException("Student Academics not present !");
             }
             BiofocalSubject biofocalSubject = this.bioFocalSubjectServiceImpl.getBiofocalSubjectById(bfId);
             if(biofocalSubject ==null){
@@ -538,16 +539,18 @@ public class ManagerController {
             this.bioFocalSubjectServiceImpl.deleteBiofocalSubjectById(bfId);
             biofocalSubject.setMedium(bioFocalSubject.getMedium());
             biofocalSubject.setSubStream(bioFocalSubject.getSubStream());
+            biofocalSubject.setAcademics(studentAcademics);
             biofocalSubject.setSubject(bioFocalSubject.getSubject());
             this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Bio Focal Subject updated Successfully !");
-            log.info("Updated Student Bio Focal Subject for ID : {}",studentId);
+            log.info("Updated Student Bio Focal Subject for ID : {}",academicsId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error While Fetching Students {}",e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
+
     // Delete API's ********************************
 
     @DeleteMapping("/students/{id}")
