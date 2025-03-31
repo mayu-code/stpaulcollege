@@ -30,6 +30,7 @@ import com.main.stpaul.dto.request.LastSchoolRequest;
 import com.main.stpaul.dto.request.PaymentDetailRequest;
 import com.main.stpaul.dto.request.StudentAddRequest;
 import com.main.stpaul.dto.request.StudentRequest;
+import com.main.stpaul.dto.request.UpdateAcademicsRequest;
 import com.main.stpaul.dto.response.DocumentReponse;
 import com.main.stpaul.dto.response.StudentDetailResponse;
 import com.main.stpaul.entities.AdmissionForm;
@@ -439,6 +440,41 @@ public class ManagerController {
             this.studentServiceImpl.updateStudent(student);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Image updated Successfully !");
             log.info("Updated Student Image for ID : {}",studentId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error While Fetching Students {}",e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @PutMapping("/students/{studentId}/academics/{academicsId}")
+    @Operation(summary = "Update student academics", description = "Updates the academic details of a specific student by their ID and academic record ID")
+    public ResponseEntity<?> updateAcademics(@PathVariable("studentId")String studentId,@PathVariable("academicsId")String academicsId,
+                                                @RequestBody UpdateAcademicsRequest request)throws Exception{
+        log.info("Starting updateAcademics method with studentId: {} and academicsId: {}", studentId, academicsId);
+        log.info("Updating Student Academics for ID : {}",studentId);
+        try {
+
+            Student student = this.studentServiceImpl.getStudentById(studentId);
+            if(student ==null){
+                log.warn("student not found with id : {}", studentId);
+                throw new EntityNotFoundException("Student not present !");
+            }
+            StudentAcademics studentAcademics = this.studentAcademicsServiceImpl.getAcademicsById(academicsId);
+            if(studentAcademics ==null){
+                log.warn("student Academics not found with id : {}", academicsId);
+                throw new EntityNotFoundException("Student Academics not present !");
+            }
+            studentAcademics.setCollegeName(request.getCollegeName());
+            studentAcademics.setStdClass(request.getStdClass());
+            studentAcademics.setResult(request.getResult());
+            studentAcademics.setMarksObtained(request.getMarkObtained());
+            studentAcademics.setStatus(request.getStatus());
+            studentAcademics.setAlumni(request.isAlumni());
+
+            this.studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Academics updated Successfully !");
+          
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error While Fetching Students {}",e.getMessage());
