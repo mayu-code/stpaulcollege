@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/accountant")
 public class AccountantController {
+    
 
     @Autowired
     private StudentServiceImpl studentServiceImpl;
