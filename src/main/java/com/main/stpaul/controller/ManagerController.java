@@ -470,7 +470,7 @@ public class ManagerController {
             studentAcademics.setCollegeName(request.getCollegeName());
             studentAcademics.setStdClass(request.getStdClass());
             studentAcademics.setResult(request.getResult());
-            studentAcademics.setMarksObtained(request.getMarkObtained());
+            studentAcademics.setMarksObtained(request.getMarksObtained());
             studentAcademics.setExamination(request.getExamination());
             studentAcademics.setExamMonth(request.getExamMonth());
             studentAcademics.setRollNo(request.getRollNo());

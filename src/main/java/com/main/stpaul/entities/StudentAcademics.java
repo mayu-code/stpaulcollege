@@ -56,7 +56,7 @@ public class StudentAcademics {
     @OneToOne(mappedBy = "studentAcademics")
     private PaymentDetail paymentDetail;
 
-    @OneToOne(mappedBy = "academics")
+    @OneToOne(mappedBy = "academics",cascade = CascadeType.ALL, orphanRemoval = true)
     private Stream stream;
 
     @OneToOne(mappedBy = "academics",cascade = CascadeType.ALL, orphanRemoval = true)

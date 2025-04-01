@@ -19,7 +19,7 @@ public class UpdateAcademicsRequest {
     private String examMonth;
     private String rollNo;
     private Result result;
-    private int markObtained;
+    private int marksObtained;
     private Status status;
     private boolean alumni;
 }
