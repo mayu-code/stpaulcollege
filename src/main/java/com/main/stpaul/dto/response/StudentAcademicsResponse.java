@@ -27,6 +27,7 @@ public class StudentAcademicsResponse {
     private boolean isAlumni;
     private LocalDate promotionDate;
     private Status status;
+    private String section;
 
     private PaymentDetailResponse paymentDetail;
     private Stream stream;

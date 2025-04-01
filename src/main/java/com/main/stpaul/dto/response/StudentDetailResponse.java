@@ -36,6 +36,7 @@ public class StudentDetailResponse {
 
     private LocalDate admissionDate;
     private String session;
+    private String section;
     private String stdClass;
     private Status status;
 
