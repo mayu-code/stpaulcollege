@@ -475,6 +475,7 @@ public class ManagerController {
             studentAcademics.setExamMonth(request.getExamMonth());
             studentAcademics.setRollNo(request.getRollNo());
             studentAcademics.setStatus(request.getStatus());
+            studentAcademics.setSection(request.getSection());
             studentAcademics.setAlumni(request.isAlumni());
 
             this.studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics);

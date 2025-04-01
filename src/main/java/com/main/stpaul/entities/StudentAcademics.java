@@ -31,6 +31,7 @@ public class StudentAcademics {
     private int marksObtained;
     private String stdClass;
     private String session;
+    private String section;
 
     @Enumerated(EnumType.STRING)
     private Result result=Result.ON_GOING;
