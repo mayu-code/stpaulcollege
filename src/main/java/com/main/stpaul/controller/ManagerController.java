@@ -1,12 +1,16 @@
 package com.main.stpaul.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -630,4 +634,66 @@ public class ManagerController {
         }
     }
 
+
+    // import export
+
+    @PostMapping("/students/csv")
+    @Operation(summary = "Import students from CSV", description = "Imports student data from a CSV file")
+    public ResponseEntity<?> importStudents(@RequestParam("file") MultipartFile file)throws Exception{
+        log.info("Starting importStudents method with file: {}", file.getOriginalFilename());
+        String filename = file.getOriginalFilename();
+        if (file.isEmpty()) {
+            throw new Exception("Please upload a file !");
+        }
+        if (filename == null || 
+            (!filename.endsWith(".csv") && 
+            !filename.endsWith(".xlsx") && 
+            !filename.endsWith(".xls") && 
+            !filename.endsWith(".xlsm"))) {
+            throw new Exception("Invalid file format. Please upload a CSV or Excel file (.csv, .xlsx, .xls, .xlsm).");
+        }
+        try {
+            if(filename.endsWith(".csv")){
+                this.studentServiceImpl.saveStudentFromCSV(file);
+            }else if(filename.endsWith(".xlsx") || filename.endsWith(".xls") || filename.endsWith(".xlsm")){
+                this.studentServiceImpl.saveStudentFromExcel(file);
+            }
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student data imported successfully !");
+            log.info("Successfully imported student data from CSV file: {}", file.getOriginalFilename());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error importing student data from CSV: {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @GetMapping("/students/csv")
+    @Operation(summary = "Export students to CSV", description = "Exports student data to a CSV file")
+    public ResponseEntity<?> exportStudents(@RequestParam Map<String, String> params)throws Exception{
+        log.info("Starting exportStudents method with params: {}", params);
+        try {
+            ByteArrayInputStream stream = this.studentServiceImpl.loadStudentDataToCSV(params.get("query"),params.get("stdClass"),params.get("section"),params.get("session"));
+            if (stream == null) {
+                log.warn("No data found for the given parameters: {}", params);
+                throw new EntityNotFoundException("No data found for the given parameters!");
+            }
+           
+            InputStreamResource resource = new InputStreamResource(stream);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student.csv");
+            headers.setContentType(MediaType.parseMediaType("text/csv"));
+            DataResponse response = DataResponse.builder()
+                                                .data(resource)
+                                                .status(HttpStatus.OK)
+                                                .statusCode(200)
+                                                .message("Student data exported successfully !")
+                                                .build();
+            log.info("Successfully exported student data to CSV file");
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(resource);
+        } catch (Exception e) {
+            log.error("Error exporting student data to CSV: {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
 }
