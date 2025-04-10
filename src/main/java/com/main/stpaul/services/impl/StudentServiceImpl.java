@@ -129,9 +129,9 @@ public class StudentServiceImpl implements StudentService{
         try {
             List<List<Object>> studentDataList = parseXlsx(file);
             for (List<Object> data : studentDataList) {
-                Student student = null;
-                GuardianInfo guardianInfo = null;
-                BankDetail bankDetail = null;
+                Student student = new Student();
+                GuardianInfo guardianInfo = new GuardianInfo();
+                BankDetail bankDetail = new BankDetail();
     
                 for (Object obj : data) {
                     if (obj instanceof Student) {
