@@ -73,8 +73,10 @@ import com.main.stpaul.services.impl.StreamServiceImpl;
 import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 import com.main.stpaul.services.impl.SubjectServiceImpl;
+import com.main.stpaul.services.serviceInterface.ExcelService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -146,15 +148,18 @@ public class ManagerController {
     @Autowired
     private DocumentServiceImpl documentService;
 
+    @Autowired
+    private ExcelService excelService;
 
     // Post Apis *********************
 
     @PostMapping("/student")
     @Operation(summary = "Register a new student", description = "Registers a new student with the provided details and optional image")
-    public ResponseEntity<?> registerStudent(@RequestPart("studentAdd")StudentAddRequest request,@RequestPart(value = "image",required = false)MultipartFile image)throws Exception{
+    public ResponseEntity<?> registerStudent(@RequestPart("studentAdd") StudentAddRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
         log.info("Starting registerStudent method");
         try {
-            Student student=this.studentMapper.toStudent(request.getStudent());
+            Student student = this.studentMapper.toStudent(request.getStudent());
             student.setSession(request.getAdmissionForm().getSession());
             student.setAdmissionDate(request.getAdmissionForm().getAdmissionDate());
             student.setStdClass(request.getAdmissionForm().getStdClass());
@@ -163,7 +168,7 @@ public class ManagerController {
             } catch (Exception e) {
                 student.setImage(null);
             }
-            student=this.studentServiceImpl.addStudent(student);
+            student = this.studentServiceImpl.addStudent(student);
             log.info("Student Added Successfully ");
 
             AdmissionForm admissionForm = this.admissionFromMapper.toAdmissionForm(request.getAdmissionForm());
@@ -198,7 +203,7 @@ public class ManagerController {
             stream.setStream(request.getSubject().getStream());
             stream.setSubStream(request.getSubject().getSubStream());
             stream = this.streamServiceImpl.addStream(stream);
-            for(String subject:request.getSubject().getSubjects()){
+            for (String subject : request.getSubject().getSubjects()) {
                 Subject sb = new Subject();
                 sb.setName(subject);
                 sb.setStream(stream);
@@ -215,11 +220,11 @@ public class ManagerController {
             log.info("Bio Focal Subject Added Successfully ");
 
             DataResponse response = DataResponse.builder()
-                                                .data(student.getStudentId())
-                                                .status(HttpStatus.OK)
-                                                .statusCode(200)
-                                                .message("Student Register Successfully !")
-                                                .build();
+                    .data(student.getStudentId())
+                    .status(HttpStatus.OK)
+                    .statusCode(200)
+                    .message("Student Register Successfully !")
+                    .build();
             log.info("Student Admission Successfully ");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -230,18 +235,18 @@ public class ManagerController {
 
     @PostMapping("/students/{id}/documents")
     @Operation(summary = "Upload student documents", description = "Uploads documents for a specific student by their ID")
-    public ResponseEntity<?> uploadDoucuments(@PathVariable("id")String id,
-                                            @RequestParam Map<String, MultipartFile> files)throws Exception{
+    public ResponseEntity<?> uploadDoucuments(@PathVariable("id") String id,
+            @RequestParam Map<String, MultipartFile> files) throws Exception {
         log.info("Starting uploadDoucuments method with studentId: {}", id);
         log.info("Uploading Student Documents");
         Student student = this.studentServiceImpl.getStudentById(id);
-        if(student ==null){
-            log.warn("student not found for id : {}",id);
+        if (student == null) {
+            log.warn("student not found for id : {}", id);
             throw new EntityNotFoundException("Student not present !");
-        }                                         
+        }
 
-        files.forEach((docName,file)->{
-            try{
+        files.forEach((docName, file) -> {
+            try {
                 Documents document = new Documents();
                 document.setDocumentType(docName);
                 document.setDocument(file.getBytes());
@@ -251,96 +256,103 @@ public class ManagerController {
                 throw new RuntimeException(e.getMessage());
             }
         });
-        SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"document uploaded Successfully !");   
+        SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "document uploaded Successfully !");
         log.info("document uploaded Successfully ");
-        return ResponseEntity.status(HttpStatus.OK).body(response);  
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-    
+
     @PostMapping("/students/{studentId}/academics/{academicId}/payment-detail")
     @Operation(summary = "Add payment detail", description = "Adds payment details for a specific student and academic record")
-    public ResponseEntity<?> addPaymentDetail(@PathVariable("studentId")String studentId,@PathVariable("academicId")String academicId,@RequestBody PaymentDetailRequest paymentDetail)throws Exception{
+    public ResponseEntity<?> addPaymentDetail(@PathVariable("studentId") String studentId,
+            @PathVariable("academicId") String academicId, @RequestBody PaymentDetailRequest paymentDetail)
+            throws Exception {
         log.info("Starting addPaymentDetail method with studentId: {} and academicId: {}", studentId, academicId);
-       try {
-        StudentAcademics academics = this.studentAcademicsServiceImpl.getAcademicsById(academicId);
-        PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
-        paymentDetail2.setStudentAcademics(academics);
-        Receipt receipt = new Receipt();
+        try {
+            StudentAcademics academics = this.studentAcademicsServiceImpl.getAcademicsById(academicId);
+            PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
+            paymentDetail2.setStudentAcademics(academics);
+            Receipt receipt = new Receipt();
 
-        receipt.setAmountPaid(paymentDetail2.getPaidAmount());
-        receipt.setTransactionId(null);
-        receipt.setPaymentMode(PaymentMode.valueOf(paymentDetail2.getPaymentType()));
-        receipt.setPaymentDate(LocalDateTime.now());
-        
-        paymentDetail2= this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
-        receipt.setPaymentDetail(paymentDetail2);
-        receipt = this.receiptServiceImpl.addReceipt(receipt);
+            receipt.setAmountPaid(paymentDetail2.getPaidAmount());
+            receipt.setTransactionId(null);
+            receipt.setPaymentMode(PaymentMode.valueOf(paymentDetail2.getPaymentType()));
+            receipt.setPaymentDate(LocalDateTime.now());
 
-        Student student =  this.studentServiceImpl.getStudentById(studentId);
-        student.setStatus(Status.Ongoing);
-        this.studentServiceImpl.updateStudent(student);
-        byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),receiptMapper.toReceiptResponse(receipt),paymentDetail2);
-        DataResponse response = DataResponse.builder()
-                                            .data(pdfBytes)
-                                            .message("payment detail added Successfully")
-                                            .status(HttpStatus.OK)
-                                            .statusCode(200)
-                                            .build();
-        log.info("Successfully added payment detail for studentId: {} and academicId: {}", studentId, academicId);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-       } catch (Exception e) {
-            log.error("Error adding payment detail for studentId: {} and academicId: {}: {}", studentId, academicId, e.getMessage());
+            paymentDetail2 = this.paymentDetailServiceImpl.addPaymentDetail(paymentDetail2);
+            receipt.setPaymentDetail(paymentDetail2);
+            receipt = this.receiptServiceImpl.addReceipt(receipt);
+
+            Student student = this.studentServiceImpl.getStudentById(studentId);
+            student.setStatus(Status.Ongoing);
+            this.studentServiceImpl.updateStudent(student);
+            byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),
+                    receiptMapper.toReceiptResponse(receipt), paymentDetail2);
+            DataResponse response = DataResponse.builder()
+                    .data(pdfBytes)
+                    .message("payment detail added Successfully")
+                    .status(HttpStatus.OK)
+                    .statusCode(200)
+                    .build();
+            log.info("Successfully added payment detail for studentId: {} and academicId: {}", studentId, academicId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error adding payment detail for studentId: {} and academicId: {}: {}", studentId, academicId,
+                    e.getMessage());
             throw new Exception(e.getMessage());
-       }
+        }
     }
 
     // Get API's ***************************
 
     @GetMapping("/students/{id}")
     @Operation(summary = "Get student by ID", description = "Fetches details of a specific student by their ID")
-    public ResponseEntity<?> studentById(@PathVariable("id")String id)throws Exception{
+    public ResponseEntity<?> studentById(@PathVariable("id") String id) throws Exception {
         log.info("Starting studentById method with studentId: {}", id);
-        log.info("Student Detail Fetching for Id : {}",id);
+        log.info("Student Detail Fetching for Id : {}", id);
         try {
-                StudentDetailResponse student1 = this.studentMapper.toStudentDetailResponse(this.studentServiceImpl.getStudentById(id));
-                List<StudentAcademics> academics = this.studentAcademicsServiceImpl.getAcademicsByStudent(id);
-                student1.setStudentAcademics(academics==null?null:this.studentAcademicsMapper.toStudentAcademicsResponseList(academics));
-                GuardianInfo guardianInfo = this.guardianInfoServiceImpl.getGuardianInfoByStudent(id);
-                student1.setGuardianInfo(guardianInfo==null?null:this.guardianInfoMapper.toGuardianInfoResponse(guardianInfo));
-                BankDetail bankDetail = this.bankDetailServiceImpl.getBankDetailByStudent(id);
-                student1.setBankDetail(bankDetail==null?null:this.bankDetailMapper.toBankDetailResponse(bankDetail));
-                LastSchool lastSchool = this.lastSchoolServiceImpl.getLastSchoolByStudent(id);
-                student1.setLastSchool(lastSchool==null?null:this.lastSchoolMapper.toLastSchoolResponse(lastSchool));
-                List<DocumentReponse> documents = this.documentServiceImpl.getStudentDocuments(id);
-                student1.setDocuments(documents);
+            StudentDetailResponse student1 = this.studentMapper
+                    .toStudentDetailResponse(this.studentServiceImpl.getStudentById(id));
+            List<StudentAcademics> academics = this.studentAcademicsServiceImpl.getAcademicsByStudent(id);
+            student1.setStudentAcademics(
+                    academics == null ? null : this.studentAcademicsMapper.toStudentAcademicsResponseList(academics));
+            GuardianInfo guardianInfo = this.guardianInfoServiceImpl.getGuardianInfoByStudent(id);
+            student1.setGuardianInfo(
+                    guardianInfo == null ? null : this.guardianInfoMapper.toGuardianInfoResponse(guardianInfo));
+            BankDetail bankDetail = this.bankDetailServiceImpl.getBankDetailByStudent(id);
+            student1.setBankDetail(bankDetail == null ? null : this.bankDetailMapper.toBankDetailResponse(bankDetail));
+            LastSchool lastSchool = this.lastSchoolServiceImpl.getLastSchoolByStudent(id);
+            student1.setLastSchool(lastSchool == null ? null : this.lastSchoolMapper.toLastSchoolResponse(lastSchool));
+            List<DocumentReponse> documents = this.documentServiceImpl.getStudentDocuments(id);
+            student1.setDocuments(documents);
 
             DataResponse response = DataResponse.builder()
-                                                .status(HttpStatus.OK)
-                                                .statusCode(200)
-                                                .message("Get All Users Successfully !")
-                                                .data(student1)
-                                                .build();
-            log.info("Student Detail Fetched for Id : {}",id);
+                    .status(HttpStatus.OK)
+                    .statusCode(200)
+                    .message("Get All Users Successfully !")
+                    .data(student1)
+                    .build();
+            log.info("Student Detail Fetched for Id : {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
-
 
     // Put API's *************************************
 
     @PutMapping("/students/{id}")
     @Operation(summary = "Update student details", description = "Updates the details of a specific student by their ID")
-    public ResponseEntity<?> updateStudent(@PathVariable("id")String id,@RequestBody StudentRequest request)throws Exception{
+    public ResponseEntity<?> updateStudent(@PathVariable("id") String id, @RequestBody StudentRequest request)
+            throws Exception {
         log.info("Starting updateStudent method with studentId: {}", id);
-        log.info("Updating Student Detail for Student ID : {}",id);
+        log.info("Updating Student Detail for Student ID : {}", id);
         try {
             Student student = this.studentServiceImpl.findById(id);
-            if(student ==null){
+            if (student == null) {
                 log.warn("student not found with id : {}", id);
                 throw new EntityNotFoundException("Student not present !");
-            } 
+            }
             student.setFirstName(request.getFirstName());
             student.setFatherName(request.getFatherName());
             student.setMotherName(request.getMotherName());
@@ -356,118 +368,125 @@ public class ManagerController {
             student.setScholarshipCategory(request.getScholarshipCategory());
             student.setUpdatedDate(LocalDateTime.now());
             this.studentServiceImpl.updateStudent(student);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student detail updated Successfully !");
-            log.info("Updated Student Detail for Student ID : {}",id);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Student detail updated Successfully !");
+            log.info("Updated Student Detail for Student ID : {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @PutMapping("/students/{studentId}/bank-detail/{bkId}")
     @Operation(summary = "Update bank details", description = "Updates the bank details of a specific student by their ID and bank detail ID")
-    public ResponseEntity<?> updateBankDetail(@PathVariable("studentId")String studentId,@PathVariable("bkId")String bkId,
-                                                @RequestBody BankDetailRequest bankDetail)throws Exception{
+    public ResponseEntity<?> updateBankDetail(@PathVariable("studentId") String studentId,
+            @PathVariable("bkId") String bkId,
+            @RequestBody BankDetailRequest bankDetail) throws Exception {
         log.info("Starting updateBankDetail method with studentId: {} and bankDetailId: {}", studentId, bkId);
-        log.info("Updating Student bank Detail for Student ID : {}",studentId);
+        log.info("Updating Student bank Detail for Student ID : {}", studentId);
         try {
             Student student = this.studentServiceImpl.getStudentById(studentId);
-            if(student ==null){
+            if (student == null) {
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
-            } 
+            }
             this.bankDetailServiceImpl.updateBankDetail(bankDetail, bkId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"bank detail updated Successfully !");
-            log.info("Updated Student bank Detail for Student ID : {}",studentId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "bank detail updated Successfully !");
+            log.info("Updated Student bank Detail for Student ID : {}", studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @PutMapping("/students/{studentId}/last-school/{lsId}")
     @Operation(summary = "Update last school details", description = "Updates the last school details of a specific student by their ID and last school ID")
-    public ResponseEntity<?> updateLastSchool(@PathVariable("studentId")String studentId,@PathVariable("lsId")String lsId,
-                                                @RequestBody LastSchoolRequest lastSchool)throws Exception{
+    public ResponseEntity<?> updateLastSchool(@PathVariable("studentId") String studentId,
+            @PathVariable("lsId") String lsId,
+            @RequestBody LastSchoolRequest lastSchool) throws Exception {
         log.info("Starting updateLastSchool method with studentId: {} and lastSchoolId: {}", studentId, lsId);
-        log.info("Updating Student Last School Detail for Student Id :{}",studentId);
+        log.info("Updating Student Last School Detail for Student Id :{}", studentId);
         try {
             Student student = this.studentServiceImpl.getStudentById(studentId);
-            if(student ==null){
+            if (student == null) {
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
             }
             this.lastSchoolServiceImpl.updateLastSchool(lastSchool, lsId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Last School Detail updated Successfully !");
-            log.info("Updated Student Last School Detail for Student Id :{}",studentId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200,
+                    "Last School Detail updated Successfully !");
+            log.info("Updated Student Last School Detail for Student Id :{}", studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @PutMapping("/students/{studentId}/guardian-info/{giId}")
     @Operation(summary = "Update guardian info", description = "Updates the guardian information of a specific student by their ID and guardian info ID")
-    public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId")String studentId,@PathVariable("giId")String giId,
-                                                @RequestBody GuardianInfoRequest guardianInfo)throws Exception{
+    public ResponseEntity<?> updateGuardianInfo(@PathVariable("studentId") String studentId,
+            @PathVariable("giId") String giId,
+            @RequestBody GuardianInfoRequest guardianInfo) throws Exception {
         log.info("Starting updateGuardianInfo method with studentId: {} and guardianInfoId: {}", studentId, giId);
-        log.info("Updating Student Guardian Info for ID : {}",studentId);
+        log.info("Updating Student Guardian Info for ID : {}", studentId);
         try {
             Student student = this.studentServiceImpl.getStudentById(studentId);
-            if(student ==null){
+            if (student == null) {
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
             }
-            this.guardianInfoServiceImpl.updateGuardianInfo(guardianInfo,giId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Guardian information updated Successfully !");
-            log.info("Updated Student Guardian Info for ID : {}",studentId);
+            this.guardianInfoServiceImpl.updateGuardianInfo(guardianInfo, giId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200,
+                    "Guardian information updated Successfully !");
+            log.info("Updated Student Guardian Info for ID : {}", studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @PutMapping("/students/{studentId}/image")
     @Operation(summary = "Update student image", description = "Updates the image of a specific student by their ID")
-    public ResponseEntity<?> updateImage(@PathVariable("studentId")String studentId,@RequestPart("image")MultipartFile image)throws Exception{
+    public ResponseEntity<?> updateImage(@PathVariable("studentId") String studentId,
+            @RequestPart("image") MultipartFile image) throws Exception {
         log.info("Starting updateImage method with studentId: {}", studentId);
-        log.info("Updating Student Image for ID : {}",studentId);
+        log.info("Updating Student Image for ID : {}", studentId);
         try {
             Student student = this.studentServiceImpl.findById(studentId);
-            if(student ==null){
+            if (student == null) {
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
             }
             student.setImage(image.getBytes());
             this.studentServiceImpl.updateStudent(student);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Image updated Successfully !");
-            log.info("Updated Student Image for ID : {}",studentId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Image updated Successfully !");
+            log.info("Updated Student Image for ID : {}", studentId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @PutMapping("/students/{studentId}/academics/{academicsId}")
     @Operation(summary = "Update student academics", description = "Updates the academic details of a specific student by their ID and academic record ID")
-    public ResponseEntity<?> updateAcademics(@PathVariable("studentId")String studentId,@PathVariable("academicsId")String academicsId,
-                                                @RequestBody UpdateAcademicsRequest request)throws Exception{
+    public ResponseEntity<?> updateAcademics(@PathVariable("studentId") String studentId,
+            @PathVariable("academicsId") String academicsId,
+            @RequestBody UpdateAcademicsRequest request) throws Exception {
         log.info("Starting updateAcademics method with studentId: {} and academicsId: {}", studentId, academicsId);
-        log.info("Updating Student Academics for ID : {}",studentId);
+        log.info("Updating Student Academics for ID : {}", studentId);
         try {
 
             Student student = this.studentServiceImpl.getStudentById(studentId);
-            if(student ==null){
+            if (student == null) {
                 log.warn("student not found with id : {}", studentId);
                 throw new EntityNotFoundException("Student not present !");
             }
             StudentAcademics studentAcademics = this.studentAcademicsServiceImpl.getAcademicsById(academicsId);
-            if(studentAcademics ==null){
+            if (studentAcademics == null) {
                 log.warn("student Academics not found with id : {}", academicsId);
                 throw new EntityNotFoundException("Student Academics not present !");
             }
@@ -483,29 +502,30 @@ public class ManagerController {
             studentAcademics.setAlumni(request.isAlumni());
 
             this.studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Academics updated Successfully !");
-          
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Academics updated Successfully !");
+
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @PutMapping("/students/academics/{academicsId}/stream/{stId}")
     @Operation(summary = "Update student stream", description = "Updates the stream details of a specific student by their ID and stream ID")
-    public ResponseEntity<?> updateStream(@PathVariable("academicsId")String academicsId,@PathVariable("stId")long stId,
-                                            @RequestBody StreamRequest stream)throws Exception{
+    public ResponseEntity<?> updateStream(@PathVariable("academicsId") String academicsId,
+            @PathVariable("stId") long stId,
+            @RequestBody StreamRequest stream) throws Exception {
         log.info("Starting updateStream method with academicsId: {} and streamId: {}", academicsId, stId);
-        log.info("Updating Student Stream for ID : {}",academicsId);
+        log.info("Updating Student Stream for ID : {}", academicsId);
         try {
             StudentAcademics studentAcademics = this.studentAcademicsServiceImpl.getAcademicsById(academicsId);
-            if(studentAcademics ==null){
+            if (studentAcademics == null) {
                 log.warn("student Academics not found with id : {}", academicsId);
                 throw new EntityNotFoundException("Student Academics not present !");
             }
             Stream stream1 = this.streamServiceImpl.getStreamById(stId);
-            if(stream1 ==null){
+            if (stream1 == null) {
                 log.warn("student Stream not found with id : {}", stId);
                 throw new EntityNotFoundException("Student Stream not present !");
             }
@@ -515,29 +535,31 @@ public class ManagerController {
             stream1.setSubStream(stream.getSubStream());
             stream1.setAcademics(studentAcademics);
             this.streamServiceImpl.addStream(stream1);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Stream updated Successfully !");
-            log.info("Updated Student Stream for ID : {}",academicsId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Stream updated Successfully !");
+            log.info("Updated Student Stream for ID : {}", academicsId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
     @PutMapping("/students/academics/{academicsId}/bio-focal-subject/{bfId}")
     @Operation(summary = "Update student bio-focal subject", description = "Updates the bio-focal subject details of a specific student by their ID and bio-focal subject ID")
-    public ResponseEntity<?> updateBioFocalSubject(@PathVariable("academicsId")String academicsId,@PathVariable("bfId")long bfId,
-                                                    @RequestBody BioFocalSubjectRequest bioFocalSubject)throws Exception{
-        log.info("Starting updateBioFocalSubject method with academicsId: {} and bioFocalSubjectId: {}", academicsId, bfId);
-        log.info("Updating Student Bio Focal Subject for ID : {}",academicsId);
+    public ResponseEntity<?> updateBioFocalSubject(@PathVariable("academicsId") String academicsId,
+            @PathVariable("bfId") long bfId,
+            @RequestBody BioFocalSubjectRequest bioFocalSubject) throws Exception {
+        log.info("Starting updateBioFocalSubject method with academicsId: {} and bioFocalSubjectId: {}", academicsId,
+                bfId);
+        log.info("Updating Student Bio Focal Subject for ID : {}", academicsId);
         try {
             StudentAcademics studentAcademics = this.studentAcademicsServiceImpl.getAcademicsById(academicsId);
-            if(studentAcademics ==null){
+            if (studentAcademics == null) {
                 log.warn("student Academics not found with id : {}", academicsId);
                 throw new EntityNotFoundException("Student Academics not present !");
             }
             BiofocalSubject biofocalSubject = this.bioFocalSubjectServiceImpl.getBiofocalSubjectById(bfId);
-            if(biofocalSubject ==null){
+            if (biofocalSubject == null) {
                 log.warn("student Bio Focal Subject not found with id : {}", bfId);
                 throw new EntityNotFoundException("Student Bio Focal Subject not present !");
             }
@@ -548,11 +570,12 @@ public class ManagerController {
             biofocalSubject.setSubject(bioFocalSubject.getSubject());
             biofocalSubject.setAcademics(studentAcademics);
             this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Bio Focal Subject updated Successfully !");
-            log.info("Updated Student Bio Focal Subject for ID : {}",academicsId);
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200,
+                    "Bio Focal Subject updated Successfully !");
+            log.info("Updated Student Bio Focal Subject for ID : {}", academicsId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            log.error("Error While Fetching Students {}",e.getMessage());
+            log.error("Error While Fetching Students {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
@@ -561,11 +584,11 @@ public class ManagerController {
 
     @DeleteMapping("/students/{id}")
     @Operation(summary = "Delete student", description = "Deletes a specific student by their ID")
-    public ResponseEntity<?> deleteStudent(@PathVariable("id")String id)throws Exception{
+    public ResponseEntity<?> deleteStudent(@PathVariable("id") String id) throws Exception {
         log.info("Starting deleteStudent method with studentId: {}", id);
         try {
             this.studentServiceImpl.deleteStudent(id);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Student deleted Successfully !");
             log.info("Successfully deleted student with ID: {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -576,11 +599,11 @@ public class ManagerController {
 
     @DeleteMapping("/students/bank-detail/{bkId}")
     @Operation(summary = "Delete bank detail", description = "Deletes the bank detail of a specific student by the bank detail ID")
-    public ResponseEntity<?> deleteBankDetail(@PathVariable("bkId")String bkId)throws Exception{
+    public ResponseEntity<?> deleteBankDetail(@PathVariable("bkId") String bkId) throws Exception {
         log.info("Starting deleteBankDetail method with bankDetailId: {}", bkId);
         try {
             this.bankDetailServiceImpl.deleteBankDetail(bkId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Student deleted Successfully !");
             log.info("Successfully deleted bank detail with ID: {}", bkId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -591,11 +614,11 @@ public class ManagerController {
 
     @DeleteMapping("/students/guardian-info/{giId}")
     @Operation(summary = "Delete guardian info", description = "Deletes the guardian information of a specific student by the guardian info ID")
-    public ResponseEntity<?> deleteGuardianInfo(@PathVariable("giId")String giId)throws Exception{
+    public ResponseEntity<?> deleteGuardianInfo(@PathVariable("giId") String giId) throws Exception {
         log.info("Starting deleteGuardianInfo method with guardianInfoId: {}", giId);
         try {
             this.guardianInfoServiceImpl.deleteGuardianInfo(giId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Student deleted Successfully !");
             log.info("Successfully deleted guardian info with ID: {}", giId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -606,11 +629,11 @@ public class ManagerController {
 
     @DeleteMapping("/students/last-school/{lsId}")
     @Operation(summary = "Delete last school detail", description = "Deletes the last school detail of a specific student by the last school ID")
-    public ResponseEntity<?> deleteLastSchool(@PathVariable("lsId")String lsId)throws Exception{
+    public ResponseEntity<?> deleteLastSchool(@PathVariable("lsId") String lsId) throws Exception {
         log.info("Starting deleteLastSchool method with lastSchoolId: {}", lsId);
         try {
             this.lastSchoolServiceImpl.deleteLastSchool(lsId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student deleted Successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Student deleted Successfully !");
             log.info("Successfully deleted last school with ID: {}", lsId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -621,11 +644,12 @@ public class ManagerController {
 
     @PutMapping("/students/documents/{docId}")
     @Operation(summary = "Update student document", description = "Updates a specific document of a student by their ID and document ID")
-    public ResponseEntity<?> updateDocument(@PathVariable("docId")long docId,@RequestPart("document")MultipartFile document)throws Exception{
+    public ResponseEntity<?> updateDocument(@PathVariable("docId") long docId,
+            @RequestPart("document") MultipartFile document) throws Exception {
         log.info("Starting updateDocument method with documentId: {}", docId);
         try {
             this.documentService.updateDocument(document.getBytes(), docId);
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Document updated Successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Document updated Successfully !");
             log.info("Successfully updated document");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -634,31 +658,30 @@ public class ManagerController {
         }
     }
 
-
     // import export
 
     @PostMapping("/students/csv")
     @Operation(summary = "Import students from CSV", description = "Imports student data from a CSV file")
-    public ResponseEntity<?> importStudents(@RequestParam("file") MultipartFile file)throws Exception{
+    public ResponseEntity<?> importStudents(@RequestParam("file") MultipartFile file) throws Exception {
         log.info("Starting importStudents method with file: {}", file.getOriginalFilename());
         String filename = file.getOriginalFilename();
         if (file.isEmpty()) {
             throw new Exception("Please upload a file !");
         }
-        if (filename == null || 
-            (!filename.endsWith(".csv") && 
-            !filename.endsWith(".xlsx") && 
-            !filename.endsWith(".xls") && 
-            !filename.endsWith(".xlsm"))) {
+        if (filename == null ||
+                (!filename.endsWith(".csv") &&
+                        !filename.endsWith(".xlsx") &&
+                        !filename.endsWith(".xls") &&
+                        !filename.endsWith(".xlsm"))) {
             throw new Exception("Invalid file format. Please upload a CSV or Excel file (.csv, .xlsx, .xls, .xlsm).");
         }
         try {
-            if(filename.endsWith(".csv")){
+            if (filename.endsWith(".csv")) {
                 this.studentServiceImpl.saveStudentFromCSV(file);
-            }else if(filename.endsWith(".xlsx") || filename.endsWith(".xls") || filename.endsWith(".xlsm")){
+            } else if (filename.endsWith(".xlsx") || filename.endsWith(".xls") || filename.endsWith(".xlsm")) {
                 this.studentServiceImpl.saveStudentFromExcel(file);
             }
-            SuccessResponse response = new SuccessResponse(HttpStatus.OK,200,"Student data imported successfully !");
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Student data imported successfully !");
             log.info("Successfully imported student data from CSV file: {}", file.getOriginalFilename());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -669,26 +692,27 @@ public class ManagerController {
 
     @GetMapping("/students/csv")
     @Operation(summary = "Export students to CSV", description = "Exports student data to a CSV file")
-    public ResponseEntity<?> exportStudents(@RequestParam Map<String, String> params)throws Exception{
+    public ResponseEntity<?> exportStudents(@RequestParam Map<String, String> params) throws Exception {
         log.info("Starting exportStudents method with params: {}", params);
         try {
-            ByteArrayInputStream stream = this.studentServiceImpl.loadStudentDataToCSV(params.get("query"),params.get("stdClass"),params.get("section"),params.get("session"));
+            ByteArrayInputStream stream = this.studentServiceImpl.loadStudentDataToCSV(params.get("query"),
+                    params.get("stdClass"), params.get("section"), params.get("session"));
             if (stream == null) {
                 log.warn("No data found for the given parameters: {}", params);
                 throw new EntityNotFoundException("No data found for the given parameters!");
             }
-           
+
             InputStreamResource resource = new InputStreamResource(stream);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student.csv");
             headers.setContentType(MediaType.parseMediaType("text/csv"));
             DataResponse response = DataResponse.builder()
-                                                .data(resource)
-                                                .status(HttpStatus.OK)
-                                                .statusCode(200)
-                                                .message("Student data exported successfully !")
-                                                .build();
+                    .data(resource)
+                    .status(HttpStatus.OK)
+                    .statusCode(200)
+                    .message("Student data exported successfully !")
+                    .build();
             log.info("Successfully exported student data to CSV file");
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(resource);
         } catch (Exception e) {
@@ -696,4 +720,30 @@ public class ManagerController {
             throw new Exception(e.getMessage());
         }
     }
+
+    @GetMapping("/students/excel")
+    public ResponseEntity<?> exportStudentsToExcel(@RequestParam Map<String, String> params) throws Exception {
+        log.info("Starting exportStudentsToExcel method with params: {}", params);
+        try {
+            ByteArrayInputStream stream = this.excelService.generateExcel(params.get("query"),
+                    params.get("stdClass"), params.get("section"), params.get("session"));
+            if (stream == null) {
+                log.warn("No data found for the given parameters: {}", params);
+                throw new EntityNotFoundException("No data found for the given parameters!");
+            }
+
+            InputStreamResource resource = new InputStreamResource(stream);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student.xlsx");
+            headers.setContentType(
+                    MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            log.info("Successfully exported student data to Excel file");
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(resource);
+        } catch (Exception e) {
+            log.error("Error exporting student data to Excel: {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
 }
