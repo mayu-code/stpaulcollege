@@ -23,7 +23,7 @@ public class LastSchool {
     private String uid;
     private String examination;
     private String examMonth;
-    private int marksObtained;
+    private double marksObtained;
     private String result;
 
     private boolean isDelete = false;

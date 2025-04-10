@@ -35,6 +35,7 @@ import com.main.stpaul.dto.request.ExcelStudent;
 import com.main.stpaul.dto.response.PendingStudents;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.GuardianInfo;
+import com.main.stpaul.entities.LastSchool;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.repository.StudentRepo;
 import com.main.stpaul.services.serviceInterface.StudentService;
@@ -51,6 +52,9 @@ public class StudentServiceImpl implements StudentService{
 
     @Autowired
     private BankDetailServiceImpl bankDetailServiceImpl;
+
+    @Autowired
+    private LastSchoolServiceImpl lastSchoolServiceImpl;
 
     @Override
     public Student addStudent(Student student) {
@@ -132,15 +136,19 @@ public class StudentServiceImpl implements StudentService{
                 System.out.println(data.get(0));
                 Student student = new Student();
                 GuardianInfo guardianInfo = new GuardianInfo();
-                BankDetail bankDetail = new BankDetail();
+                // BankDetail bankDetail = new BankDetail();
+                LastSchool lastSchool = new LastSchool();
     
                 for (Object obj : data) {
                     if (obj instanceof Student) {
                         student = (Student) obj;
                     } else if (obj instanceof GuardianInfo) {
                         guardianInfo = (GuardianInfo) obj;
-                    } else if (obj instanceof BankDetail) {
-                        bankDetail = (BankDetail) obj;
+                    // } else if (obj instanceof BankDetail) {
+                    //     bankDetail = (BankDetail) obj;
+                    // }
+                    } else if (obj instanceof LastSchool) {
+                        lastSchool = (LastSchool) obj;
                     }
                 }
     
@@ -148,8 +156,10 @@ public class StudentServiceImpl implements StudentService{
                     student = addStudent(student);
                     guardianInfo.setStudent(student);
                     this.guardianInfoServiceImpl.addGuardianInfo(guardianInfo);
-                    bankDetail.setStudent(student);
-                    this.bankDetailServiceImpl.addBankDetail(bankDetail);
+                    // bankDetail.setStudent(student);
+                    // this.bankDetailServiceImpl.addBankDetail(bankDetail);
+                    lastSchool.setStudent(student);
+                    this.lastSchoolServiceImpl.addLastSchool(lastSchool);
                 }
             }
         } catch (Exception e) {
@@ -250,16 +260,25 @@ public class StudentServiceImpl implements StudentService{
             int stdClassIdx = getColumnIndex(headerRow, "stdClass");
             int rollNoIdx = getColumnIndex(headerRow, "rollNo");
     
-            int bankNameIdx = getColumnIndex(headerRow, "bankName");
-            int branchNameIdx = getColumnIndex(headerRow, "branchName");
-            int accountNoIdx = getColumnIndex(headerRow, "accountNo");
-            int ifscCodeIdx = getColumnIndex(headerRow, "ifscCode");
+            // int bankNameIdx = getColumnIndex(headerRow, "bankName");
+            // int branchNameIdx = getColumnIndex(headerRow, "branchName");
+            // int accountNoIdx = getColumnIndex(headerRow, "accountNo");
+            // int ifscCodeIdx = getColumnIndex(headerRow, "ifscCode");
     
             int guardianNameIdx = getColumnIndex(headerRow, "guardianName");
             int guardianPhoneNoIdx = getColumnIndex(headerRow, "guardianPhoneNo");
             int guardianRelationIdx = getColumnIndex(headerRow, "guardianRelation");
             int guardianOccupationIdx = getColumnIndex(headerRow, "guardianOccupation");
             int guardianIncomeIdx = getColumnIndex(headerRow, "guardianIncome");
+
+            int lastSchoolNameIdx = getColumnIndex(headerRow, "lastSchoolName");
+            int lastStudentIdIdx = getColumnIndex(headerRow, "lastStudentId");
+            int lastRollNoIdx = getColumnIndex(headerRow, "lastRollNo");
+            int lastSchoolUidIdx = getColumnIndex(headerRow, "lastSchoolId");   
+            int lastExaminationIdx = getColumnIndex(headerRow, "lastExamination");  
+            int examMonthIdx = getColumnIndex(headerRow, "examMonth");
+            int marksObtainedIdx = getColumnIndex(headerRow, "marksObtained");
+            int resultIdx = getColumnIndex(headerRow, "result");
     
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -295,15 +314,26 @@ public class StudentServiceImpl implements StudentService{
                 guardianInfo.setOccupation(getCellValue(row.getCell(guardianOccupationIdx)));
                 guardianInfo.setIncome(safeParseDouble(getCellValue(row.getCell(guardianIncomeIdx))));
     
-                BankDetail bankDetail = new BankDetail();
-                bankDetail.setBankName(getCellValue(row.getCell(bankNameIdx)));
-                bankDetail.setBranchName(getCellValue(row.getCell(branchNameIdx)));
-                bankDetail.setAccountNo(getCellValue(row.getCell(accountNoIdx)));
-                bankDetail.setIfscCode(getCellValue(row.getCell(ifscCodeIdx)));
+                // BankDetail bankDetail = new BankDetail();
+                // bankDetail.setBankName(getCellValue(row.getCell(bankNameIdx)));
+                // bankDetail.setBranchName(getCellValue(row.getCell(branchNameIdx)));
+                // bankDetail.setAccountNo(getCellValue(row.getCell(accountNoIdx)));
+                // bankDetail.setIfscCode(getCellValue(row.getCell(ifscCodeIdx)));
+
+                LastSchool lastSchool = new LastSchool();
+                lastSchool.setCollegeName(getCellValue(row.getCell(lastSchoolNameIdx)));
+                lastSchool.setLastStudentId(getCellValue(row.getCell(lastStudentIdIdx)));
+                lastSchool.setRollNo(getCellValue(row.getCell(lastRollNoIdx)));
+                lastSchool.setUid(getCellValue(row.getCell(lastSchoolUidIdx)));
+                lastSchool.setExamination(getCellValue(row.getCell(lastExaminationIdx)));
+                lastSchool.setExamMonth(getCellValue(row.getCell(examMonthIdx)));
+                lastSchool.setMarksObtained(safeParseDouble(getCellValue(row.getCell(marksObtainedIdx))));
+                lastSchool.setResult(getCellValue(row.getCell(resultIdx)));
     
                 objects.add(student);
                 objects.add(guardianInfo);
-                objects.add(bankDetail);
+                // objects.add(bankDetail);
+                objects.add(students);
                 students.add(objects);
             }
         }
