@@ -274,7 +274,7 @@ public class StudentServiceImpl implements StudentService{
             int lastSchoolNameIdx = getColumnIndex(headerRow, "lastSchoolName");
             int lastStudentIdIdx = getColumnIndex(headerRow, "lastStudentId");
             int lastRollNoIdx = getColumnIndex(headerRow, "lastRollNo");
-            int lastSchoolUidIdx = getColumnIndex(headerRow, "lastSchoolId");   
+            int lastSchoolUidIdx = getColumnIndex(headerRow, "uId");   
             int lastExaminationIdx = getColumnIndex(headerRow, "lastExamination");  
             int examMonthIdx = getColumnIndex(headerRow, "examMonth");
             int marksObtainedIdx = getColumnIndex(headerRow, "marksObtained");
