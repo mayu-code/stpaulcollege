@@ -1,7 +1,5 @@
 package com.main.stpaul.dto.request;
 
-import java.time.LocalDate;
-
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 

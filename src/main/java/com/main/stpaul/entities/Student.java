@@ -41,6 +41,7 @@ public class Student {
     private String session;
     private String stdClass;
     private String section;
+    private String rollNo;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.Pending;
