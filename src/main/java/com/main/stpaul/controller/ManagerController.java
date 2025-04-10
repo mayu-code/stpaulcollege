@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -749,7 +750,7 @@ public class ManagerController {
 
     @DeleteMapping("/students/delete")
     @Operation(summary = "Delete students by IDs", description = "Deletes multiple students by their IDs")
-    public ResponseEntity<?> deleteStudents(@RequestParam("ids") List<String> studentIds) throws Exception {
+    public ResponseEntity<?> deleteStudents(@RequestHeader("jwt")String jwt,@RequestParam("ids") List<String> studentIds) throws Exception {
         log.info("Starting deleteStudents method with studentIds: {}", studentIds);
         try {
             for (String studentId : studentIds) {
