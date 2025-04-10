@@ -748,7 +748,7 @@ public class ManagerController {
         }
     }
 
-    @PostMapping("/students/delete")
+    @DeleteMapping("/students/delete")
     @Operation(summary = "Delete students by IDs", description = "Deletes multiple students by their IDs")
     public ResponseEntity<?> deleteStudents(@RequestBody List<String> studentIds) throws Exception {
         log.info("Starting deleteStudents method with studentIds: {}", studentIds);
