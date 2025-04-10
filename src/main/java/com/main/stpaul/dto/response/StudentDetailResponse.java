@@ -25,6 +25,9 @@ public class StudentDetailResponse {
     private String phoneNo;
     private LocalDate dateOfBirth;
     private String gender;
+    
+    private String localAddress;
+    private String permanentAddress;
     private byte[] image;
 
     private String adharNo;

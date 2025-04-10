@@ -23,6 +23,9 @@ public class StudentResponse {
     private LocalDate dateOfBirth;
     private String gender;
     private byte[] image;
+    
+    private String localAddress;
+    private String permanentAddress;
 
     private String adharNo;
     private String bloodGroup;
