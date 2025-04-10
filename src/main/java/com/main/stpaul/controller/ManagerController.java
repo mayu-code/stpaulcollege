@@ -746,4 +746,27 @@ public class ManagerController {
         }
     }
 
+    @GetMapping("/students/excel/sample")
+    public ResponseEntity<?> SampleExcel() throws Exception {
+        try {
+            ByteArrayInputStream stream = this.excelService.generateRawExcel();
+            if (stream == null) {
+                log.warn("No data found");
+                throw new EntityNotFoundException("No data found!");
+            }
+
+            InputStreamResource resource = new InputStreamResource(stream);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student.xlsx");
+            headers.setContentType(
+                    MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            log.info("Successfully exported the Excel file");
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(resource);
+        } catch (Exception e) {
+            log.error("Error exporting Excel: {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
 }
