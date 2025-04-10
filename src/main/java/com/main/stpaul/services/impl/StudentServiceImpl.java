@@ -277,7 +277,7 @@ public class StudentServiceImpl implements StudentService{
                 student.setDateOfBirth(parseLocalDate(row.getCell(dobIdx)));
     
                 student.setGender(getCellValue(row.getCell(genderIdx)));
-                student.setAdharNo(getCellValue(row.getCell(adharNoIdx)));
+                student.setAdharNo(String.valueOf(getCellValue(row.getCell(adharNoIdx))));
                 student.setBloodGroup(getCellValue(row.getCell(bloodGroupIdx)));
                 student.setCaste(getCellValue(row.getCell(casteIdx)));
                 student.setCategory(getCellValue(row.getCell(categoryIdx)));

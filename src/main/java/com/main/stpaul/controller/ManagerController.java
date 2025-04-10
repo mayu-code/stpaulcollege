@@ -746,4 +746,25 @@ public class ManagerController {
         }
     }
 
+    @DeleteMapping("/students/deleteStudents")
+    @Operation(summary = "Delete students", description = "Deletes multiple students based on the provided IDs")
+    public ResponseEntity<?> deleteStudents(@RequestBody List<String> studentIds) throws Exception {
+        log.info("Starting deleteStudents method with studentIds: {}", studentIds);
+        try {
+            for (String studentId : studentIds) {
+                Student student = this.studentServiceImpl.getStudentById(studentId);
+                if (student == null) {
+                    log.warn("Student not found with ID: {}", studentId);
+                    throw new EntityNotFoundException("Student not present !");
+                }
+                this.studentServiceImpl.deleteStudent(studentId);
+            }
+            SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Students deleted Successfully !");
+            log.info("Successfully deleted students with IDs: {}", studentIds);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            log.error("Error deleting students with IDs: {}: {}", studentIds, e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
 }
