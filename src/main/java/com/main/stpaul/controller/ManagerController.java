@@ -660,7 +660,7 @@ public class ManagerController {
 
     // import export
 
-    @PostMapping("/students/csv")
+    @PostMapping("/students/upload")
     @Operation(summary = "Import students from CSV", description = "Imports student data from a CSV file")
     public ResponseEntity<?> importStudents(@RequestParam("file") MultipartFile file) throws Exception {
         log.info("Starting importStudents method with file: {}", file.getOriginalFilename());
