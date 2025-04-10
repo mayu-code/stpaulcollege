@@ -372,6 +372,8 @@ public class ManagerController {
             student.setCaste(request.getCaste());
             student.setCategory(request.getCategory());
             student.setScholarshipCategory(request.getScholarshipCategory());
+            student.setLocalAddress(request.getLocalAddress());
+            student.setPermanentAddress(request.getPermanentAddress());
             student.setUpdatedDate(LocalDateTime.now());
             this.studentServiceImpl.updateStudent(student);
             SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "Student detail updated Successfully !");
