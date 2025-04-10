@@ -213,13 +213,15 @@ public class ManagerController {
             }
             log.info("Subjects Added Successfully ");
 
-            BiofocalSubject biofocalSubject = new BiofocalSubject();
-            biofocalSubject.setMedium(request.getBioFocalSubject().getMedium());
-            biofocalSubject.setAcademics(studentAcademics);
-            biofocalSubject.setSubStream(request.getBioFocalSubject().getSubStream());
-            biofocalSubject.setSubject(request.getBioFocalSubject().getSubject());
-            this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
-            log.info("Bio Focal Subject Added Successfully ");
+            if(request.getBioFocalSubject()==null ){
+                BiofocalSubject biofocalSubject = new BiofocalSubject();
+                biofocalSubject.setMedium(request.getBioFocalSubject().getMedium());
+                biofocalSubject.setAcademics(studentAcademics);
+                biofocalSubject.setSubStream(request.getBioFocalSubject().getSubStream());
+                biofocalSubject.setSubject(request.getBioFocalSubject().getSubject());
+                this.bioFocalSubjectServiceImpl.addBiofocalSubject(biofocalSubject);
+                log.info("Bio Focal Subject Added Successfully ");
+            }
 
             DataResponse response = DataResponse.builder()
                     .data(student.getStudentId())
