@@ -301,4 +301,60 @@ public class ExcelServiceImpl implements ExcelService {
         }
     }
 
+    // method to generate raw data sheet of excel file
+    @Override
+    public ByteArrayInputStream generateRawExcel() throws Exception {
+        try (XSSFWorkbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            XSSFSheet sheet = workbook.createSheet("Raw Data");
+            XSSFRow headerRow = sheet.createRow(0);
+
+            List<String> headers = List.of("session", "stdClass", "section", "firstName", "fatherName",
+                    "surname", "motherName",
+                    "rollNo",
+                    "phoneNo", "dateOfBirth",
+                    "gender", "aadharNo",
+                    "bloodGroup", "caste", "category", "scholarship", "admissionDate", "bankName", "branchName",
+                    "accountNo", "ifscCode", "guardianName", "guardianRelation", "guardianOccupation",
+                    "guardianIncome");
+            for (int i = 0; i < headers.size(); i++) {
+                headerRow.createCell(i).setCellValue(headers.get(i));
+            }
+
+            // Sample data for demonstration purposes
+            XSSFRow dataRow = sheet.createRow(1);
+            dataRow.createCell(0).setCellValue("2023-2024");
+            dataRow.createCell(1).setCellValue("10");
+            dataRow.createCell(2).setCellValue("A");
+            dataRow.createCell(3).setCellValue("John");
+            dataRow.createCell(4).setCellValue("Doe");
+            dataRow.createCell(5).setCellValue("Smith");
+            dataRow.createCell(6).setCellValue("Jane");
+            dataRow.createCell(7).setCellValue("1234");
+            dataRow.createCell(8).setCellValue("9876543210");
+            dataRow.createCell(9).setCellValue("2005-01-01");
+            dataRow.createCell(10).setCellValue("Male");
+            dataRow.createCell(11).setCellValue("123456789012");
+            dataRow.createCell(12).setCellValue("A+");
+            dataRow.createCell(13).setCellValue("General");
+            dataRow.createCell(14).setCellValue("General");
+            dataRow.createCell(15).setCellValue("None");
+            dataRow.createCell(16).setCellValue("2023-01-01");
+            dataRow.createCell(17).setCellValue("Bank of America");
+            dataRow.createCell(18).setCellValue("Main Branch");
+            dataRow.createCell(19).setCellValue("1234567890");
+            dataRow.createCell(20).setCellValue("IFSC123");
+            dataRow.createCell(21).setCellValue("Michael");
+            dataRow.createCell(22).setCellValue("Father");
+            dataRow.createCell(23).setCellValue("Engineer");
+            dataRow.createCell(24).setCellValue("50000");
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Failed to generate Excel file", e);
+        }
+    }
+
 }
