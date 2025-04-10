@@ -748,6 +748,29 @@ public class ManagerController {
         }
     }
 
+    @GetMapping("/students/excel/sample")
+    public ResponseEntity<?> sampleSheet() throws Exception {
+        try {
+            ByteArrayInputStream stream = this.excelService.generateRawExcel();
+            if (stream == null) {
+                log.warn("No data found");
+                throw new EntityNotFoundException("No data found!");
+            }
+
+            InputStreamResource resource = new InputStreamResource(stream);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student.xlsx");
+            headers.setContentType(
+                    MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            log.info("Successfully exported Excel file");
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(resource);
+        } catch (Exception e) {
+            log.error("Error exporting : {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/students/delete")
     @Operation(summary = "Delete students by IDs", description = "Deletes multiple students by their IDs")
     public ResponseEntity<?> deleteStudents(@RequestBody List<String> studentIds) throws Exception {
