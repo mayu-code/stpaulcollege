@@ -178,10 +178,10 @@ public class ManagerController {
             this.admissionFormServiceImpl.addAdmissionForm(admissionForm);
             log.info("admission form Added Successfully ");
 
-            BankDetail bankDetail = this.bankDetailMapper.toBankDetail(request.getBankDetail());
-            bankDetail.setStudent(student);
-            this.bankDetailServiceImpl.addBankDetail(bankDetail);
-            log.info("Bank Detail Added Successfully ");
+            // BankDetail bankDetail = this.bankDetailMapper.toBankDetail(request.getBankDetail());
+            // bankDetail.setStudent(student);
+            // this.bankDetailServiceImpl.addBankDetail(bankDetail);
+            // log.info("Bank Detail Added Successfully ");
 
             LastSchool lastSchool = this.lastSchoolMapper.toLastSchool(request.getLastSchool());
             lastSchool.setStudent(student);
