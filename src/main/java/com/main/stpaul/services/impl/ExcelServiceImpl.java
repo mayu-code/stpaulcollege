@@ -38,7 +38,7 @@ public class ExcelServiceImpl implements ExcelService {
 
             generateGuardianSheet(workbook, students);
 
-            generateBankSheet(workbook, students);
+            // generateBankSheet(workbook, students);
 
             generateLastSheet(workbook, students);
 
@@ -151,9 +151,13 @@ public class ExcelServiceImpl implements ExcelService {
 
         for (Student student : students) {
             XSSFRow row = sheet.createRow(dataIndex);
-            row.createCell(0).setCellValue(
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd").format(student.getAdmissionForm().getAddedDate()));
-            row.createCell(1).setCellValue(student.getAdmissionForm().getFormNo());
+
+            if (student.getAdmissionForm() != null) {
+
+                row.createCell(0).setCellValue(
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd").format(student.getAdmissionForm().getAddedDate()));
+                row.createCell(1).setCellValue(student.getAdmissionForm().getFormNo());
+            }
             row.createCell(2).setCellValue(student.getSession());
             row.createCell(3).setCellValue(student.getSection());
             row.createCell(4).setCellValue(student.getStdClass());
@@ -232,15 +236,18 @@ public class ExcelServiceImpl implements ExcelService {
 
             row.createCell(0)
                     .setCellValue(student.getFirstName() + " " + student.getFatherName() + " " + student.getSurname());
-            row.createCell(1).setCellValue(student.getLastSchool().getCollegeName());
-            row.createCell(2).setCellValue(student.getLastSchool().getLastStudentId());
-            row.createCell(3).setCellValue(student.getLastSchool().getRollNo());
-            row.createCell(4).setCellValue(student.getLastSchool().getUid());
-            row.createCell(5).setCellValue(student.getLastSchool().getExamination());
-            row.createCell(6).setCellValue(student.getLastSchool().getExamMonth());
-            row.createCell(7).setCellValue(student.getLastSchool().getMarksObtained());
-            row.createCell(8).setCellValue(student.getLastSchool().getResult());
+            if (student.getLastSchool() != null) {
 
+                row.createCell(1).setCellValue(student.getLastSchool().getCollegeName());
+                row.createCell(2).setCellValue(student.getLastSchool().getLastStudentId());
+                row.createCell(3).setCellValue(student.getLastSchool().getRollNo());
+                row.createCell(4).setCellValue(student.getLastSchool().getUid());
+                row.createCell(5).setCellValue(student.getLastSchool().getExamination());
+                row.createCell(6).setCellValue(student.getLastSchool().getExamMonth());
+                row.createCell(7).setCellValue(student.getLastSchool().getMarksObtained());
+                row.createCell(8).setCellValue(student.getLastSchool().getResult());
+
+            }
             dataIndex++;
         }
         ;
@@ -313,9 +320,10 @@ public class ExcelServiceImpl implements ExcelService {
                     "rollNo",
                     "phoneNo", "dateOfBirth",
                     "gender", "aadharNo",
-                    "bloodGroup", "caste", "category", "scholarship", "admissionDate", "bankName", "branchName",
-                    "accountNo", "ifscCode", "guardianName", "guardianRelation", "guardianOccupation",
-                    "guardianIncome");
+                    "bloodGroup", "caste", "category", "scholarship", "admissionDate", "guardianName",
+                    "guardianRelation", "guardianOccupation",
+                    "guardianIncome", "lastSchoolName", "lastStudentId", "lastRollNo", "uId", "lastExamination",
+                    "examMonth", "marksObtained", "result");
             for (int i = 0; i < headers.size(); i++) {
                 headerRow.createCell(i).setCellValue(headers.get(i));
             }
@@ -339,14 +347,22 @@ public class ExcelServiceImpl implements ExcelService {
             dataRow.createCell(14).setCellValue("General");
             dataRow.createCell(15).setCellValue("None");
             dataRow.createCell(16).setCellValue("2023-01-01");
-            dataRow.createCell(17).setCellValue("Bank of America");
-            dataRow.createCell(18).setCellValue("Main Branch");
-            dataRow.createCell(19).setCellValue("1234567890");
-            dataRow.createCell(20).setCellValue("IFSC123");
-            dataRow.createCell(21).setCellValue("Michael");
-            dataRow.createCell(22).setCellValue("Father");
-            dataRow.createCell(23).setCellValue("Engineer");
-            dataRow.createCell(24).setCellValue("50000");
+            // dataRow.createCell(17).setCellValue("Bank of America");
+            // dataRow.createCell(18).setCellValue("Main Branch");
+            // dataRow.createCell(19).setCellValue("1234567890");
+            // dataRow.createCell(20).setCellValue("IFSC123");
+            dataRow.createCell(17).setCellValue("Michael");
+            dataRow.createCell(18).setCellValue("Father");
+            dataRow.createCell(19).setCellValue("Engineer");
+            dataRow.createCell(20).setCellValue("50000");
+            dataRow.createCell(21).setCellValue("ABC School");
+            dataRow.createCell(22).setCellValue("5678");
+            dataRow.createCell(23).setCellValue("91011");
+            dataRow.createCell(24).setCellValue("21351331");
+            dataRow.createCell(25).setCellValue("MH STATE");
+            dataRow.createCell(26).setCellValue("March 2023");
+            dataRow.createCell(27).setCellValue("85");
+            dataRow.createCell(28).setCellValue("Pass");
 
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
