@@ -213,7 +213,7 @@ public class ManagerController {
             }
             log.info("Subjects Added Successfully ");
 
-            if(request.getBioFocalSubject()==null ){
+            if(request.getBioFocalSubject()!=null ){
                 BiofocalSubject biofocalSubject = new BiofocalSubject();
                 biofocalSubject.setMedium(request.getBioFocalSubject().getMedium());
                 biofocalSubject.setAcademics(studentAcademics);
