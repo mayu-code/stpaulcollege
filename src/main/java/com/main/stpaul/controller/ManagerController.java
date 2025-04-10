@@ -750,7 +750,7 @@ public class ManagerController {
 
     @DeleteMapping("/students/delete")
     @Operation(summary = "Delete students by IDs", description = "Deletes multiple students by their IDs")
-    public ResponseEntity<?> deleteStudents(@RequestHeader("jwt")String jwt,@RequestParam("ids") List<String> studentIds) throws Exception {
+    public ResponseEntity<?> deleteStudents(@RequestBody("ids") List<String> studentIds) throws Exception {
         log.info("Starting deleteStudents method with studentIds: {}", studentIds);
         try {
             for (String studentId : studentIds) {
