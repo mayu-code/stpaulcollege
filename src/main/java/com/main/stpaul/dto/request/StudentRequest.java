@@ -14,6 +14,8 @@ public class StudentRequest {
     private String phoneNo;
     private LocalDate dateOfBirth;
     private String gender;
+    private String localAddress;
+    private String permanentAddress;
 
     private String adharNo;
     private String bloodGroup;

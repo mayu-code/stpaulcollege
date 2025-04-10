@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.main.stpaul.constants.Status;
-import com.main.stpaul.entities.Address;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,8 +40,6 @@ public class StudentDetailResponse {
     private Status status;
 
     private List<StudentAcademicsResponse> studentAcademics;
-
-    private List<Address> addresses;
 
     private List<DocumentReponse> documents;
     

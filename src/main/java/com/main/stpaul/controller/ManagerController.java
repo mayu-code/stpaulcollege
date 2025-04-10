@@ -165,6 +165,8 @@ public class ManagerController {
             student.setSession(request.getAdmissionForm().getSession());
             student.setAdmissionDate(request.getAdmissionForm().getAdmissionDate());
             student.setStdClass(request.getAdmissionForm().getStdClass());
+            student.setLocalAddress(request.getStudent().getLocalAddress());
+            student.setPermanentAddress(request.getStudent().getPermanentAddress());
             try {
                 student.setImage(image.getBytes());
             } catch (Exception e) {

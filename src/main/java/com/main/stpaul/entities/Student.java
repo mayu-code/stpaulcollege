@@ -33,6 +33,10 @@ public class Student {
     private String category;
     private String scholarshipCategory;
 
+    
+    private String localAddress;
+    private String permanentAddress;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] image;
@@ -56,9 +60,6 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentAcademics> studentAcademics;
-
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<Address> addresses;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Documents> documents;
