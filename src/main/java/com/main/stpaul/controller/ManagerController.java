@@ -694,6 +694,7 @@ public class ManagerController {
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             log.error("Error importing student data from CSV: {}", e.getMessage());
+            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
