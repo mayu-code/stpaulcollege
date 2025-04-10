@@ -149,6 +149,7 @@ public class StudentServiceImpl implements StudentService{
                     this.guardianInfoServiceImpl.addGuardianInfo(guardianInfo);
                     bankDetail.setStudent(student);
                     this.bankDetailServiceImpl.addBankDetail(bankDetail);
+                    student = null;
                 }
             }
         } catch (Exception e) {
