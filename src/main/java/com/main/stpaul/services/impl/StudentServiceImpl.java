@@ -129,6 +129,7 @@ public class StudentServiceImpl implements StudentService{
         try {
             List<List<Object>> studentDataList = parseXlsx(file);
             for (List<Object> data : studentDataList) {
+                System.out.println(data.get(0));
                 Student student = new Student();
                 GuardianInfo guardianInfo = new GuardianInfo();
                 BankDetail bankDetail = new BankDetail();
@@ -149,7 +150,6 @@ public class StudentServiceImpl implements StudentService{
                     this.guardianInfoServiceImpl.addGuardianInfo(guardianInfo);
                     bankDetail.setStudent(student);
                     this.bankDetailServiceImpl.addBankDetail(bankDetail);
-                    student = null;
                 }
             }
         } catch (Exception e) {
@@ -217,103 +217,100 @@ public class StudentServiceImpl implements StudentService{
     }
 
     private List<List<Object>> parseXlsx(MultipartFile file) throws Exception {
-    List<List<Object>> students = new ArrayList<>();
-    List<Object> objects = new ArrayList<>();
-
-
-    try (InputStream inputStream = file.getInputStream(); Workbook workbook = WorkbookFactory.create(inputStream)) {
-        Sheet sheet = workbook.getSheetAt(0); 
-        Iterator<Row> rowIterator = sheet.iterator();
-
-        Row headerRow = rowIterator.next();
-        int nameIdx = getColumnIndex(headerRow, "firstName");
-        int fatherNameIdx = getColumnIndex(headerRow, "fatherName");
-        int motherNameIdx = getColumnIndex(headerRow, "motherName");
-        int surnameIdx = getColumnIndex(headerRow, "surname");
-        int emailIdx = getColumnIndex(headerRow, "email");
-        int phoneNoIdx = getColumnIndex(headerRow, "phoneNo");
-        int dobIdx = getColumnIndex(headerRow, "dateOfBirth");
-        int genderIdx = getColumnIndex(headerRow, "gender");
-        int adharNoIdx = getColumnIndex(headerRow, "aadharNo");
-        int bloodGroupIdx = getColumnIndex(headerRow, "bloodGroup");
-        int casteIdx = getColumnIndex(headerRow, "caste");
-        int categeoryIdx = getColumnIndex(headerRow, "category");
-        int schollershipIdx = getColumnIndex(headerRow, "scholarship");
-        int admistionDateIdx = getColumnIndex(headerRow, "admissionDate");
-        int sectionIdx = getColumnIndex(headerRow, "section");
-        int sessionIdx = getColumnIndex(headerRow, "session");
-        int stdClassIdx = getColumnIndex(headerRow, "stdClass");
-        int rollNoIdx = getColumnIndex(headerRow, "rollNo");
-        
-        int bankNameIdx = getColumnIndex(headerRow, "bankName");
-        int branchNameIdx = getColumnIndex(headerRow, "branchName");
-        int accountNoIdx = getColumnIndex(headerRow, "accountNo");  
-        int ifscCodeIdx = getColumnIndex(headerRow, "ifscCode");
-
-        int guardianNameIdx = getColumnIndex(headerRow, "guardianName");
-        int guardianPhoneNoIdx = getColumnIndex(headerRow, "guardianPhoneNo");
-        int guardianRelationIdx = getColumnIndex(headerRow, "guardianRelation");
-        int guardianOccupationIdx = getColumnIndex(headerRow, "guardianOccupation");
-        int gaurdianIncomeIdx = getColumnIndex(headerRow, "guardianIncome");
-
-        // Read each row and map to Student object
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-            Student student = new Student();
-
-            student.setFirstName(getCellValue(row.getCell(nameIdx)));
-            student.setFatherName(getCellValue(row.getCell(fatherNameIdx)));
-            student.setMotherName(getCellValue(row.getCell(motherNameIdx)));
-            student.setSurname(getCellValue(row.getCell(surnameIdx)));
-            student.setEmail(getCellValue(row.getCell(emailIdx)));
-            student.setPhoneNo(getCellValue(row.getCell(phoneNoIdx)));
-            student.setDateOfBirth(LocalDate.parse(getCellValue(row.getCell(dobIdx))));
-            student.setGender(getCellValue(row.getCell(genderIdx)));
-            student.setAdharNo(String.valueOf(getCellValue(row.getCell(adharNoIdx))));
-            student.setBloodGroup(getCellValue(row.getCell(bloodGroupIdx)));
-            student.setCaste(getCellValue(row.getCell(casteIdx)));
-            student.setCategory(getCellValue(row.getCell(categeoryIdx)));
-            student.setScholarshipCategory(getCellValue(row.getCell(schollershipIdx)));
-            student.setAdmissionDate(LocalDate.parse(getCellValue(row.getCell(admistionDateIdx))));
-            student.setSection(getCellValue(row.getCell(sectionIdx)));
-            student.setSession(getCellValue(row.getCell(sessionIdx)));
-            student.setStdClass(getCellValue(row.getCell(stdClassIdx)));
-            student.setRollNo(getCellValue(row.getCell(rollNoIdx)));
-
-            GuardianInfo guardianInfo = new GuardianInfo();
-            guardianInfo.setName(getCellValue(row.getCell(guardianNameIdx)));
-            guardianInfo.setPhone(getCellValue(row.getCell(guardianPhoneNoIdx)));
-            guardianInfo.setRelation(getCellValue(row.getCell(guardianRelationIdx)));
-            guardianInfo.setOccupation(getCellValue(row.getCell(guardianOccupationIdx)));
-            guardianInfo.setIncome(Double.parseDouble(getCellValue(row.getCell(gaurdianIncomeIdx))));
-
-            BankDetail bankDetail = new BankDetail();
-            bankDetail.setBankName(getCellValue(row.getCell(bankNameIdx)));
-            bankDetail.setBranchName(getCellValue(row.getCell(branchNameIdx)));
-            bankDetail.setAccountNo(getCellValue(row.getCell(accountNoIdx)));
-            bankDetail.setIfscCode(getCellValue(row.getCell(ifscCodeIdx))); 
-
-
-
-
-            // Handle date parsing
-            if (dobIdx != -1) {
-                Cell dobCell = row.getCell(dobIdx);
-                if (dobCell != null && dobCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(dobCell)) {
-                    student.setDateOfBirth(dobCell.getLocalDateTimeCellValue().toLocalDate());
-                } else {
-                    student.setDateOfBirth(LocalDate.parse(getCellValue(dobCell)));
-                }
+        List<List<Object>> students = new ArrayList<>();
+    
+        try (InputStream inputStream = file.getInputStream();
+             Workbook workbook = WorkbookFactory.create(inputStream)) {
+    
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
+    
+            if (!rowIterator.hasNext()) {
+                return students;
             }
-
-            objects.add(student);
-            objects.add(guardianInfo);
-            objects.add(bankDetail);
-            students.add(objects);
+    
+            Row headerRow = rowIterator.next();
+    
+            int nameIdx = getColumnIndex(headerRow, "firstName");
+            int fatherNameIdx = getColumnIndex(headerRow, "fatherName");
+            int motherNameIdx = getColumnIndex(headerRow, "motherName");
+            int surnameIdx = getColumnIndex(headerRow, "surname");
+            int emailIdx = getColumnIndex(headerRow, "email");
+            int phoneNoIdx = getColumnIndex(headerRow, "phoneNo");
+            int dobIdx = getColumnIndex(headerRow, "dateOfBirth");
+            int genderIdx = getColumnIndex(headerRow, "gender");
+            int adharNoIdx = getColumnIndex(headerRow, "aadharNo");
+            int bloodGroupIdx = getColumnIndex(headerRow, "bloodGroup");
+            int casteIdx = getColumnIndex(headerRow, "caste");
+            int categoryIdx = getColumnIndex(headerRow, "category");
+            int scholarshipIdx = getColumnIndex(headerRow, "scholarship");
+            int admissionDateIdx = getColumnIndex(headerRow, "admissionDate");
+            int sectionIdx = getColumnIndex(headerRow, "section");
+            int sessionIdx = getColumnIndex(headerRow, "session");
+            int stdClassIdx = getColumnIndex(headerRow, "stdClass");
+            int rollNoIdx = getColumnIndex(headerRow, "rollNo");
+    
+            int bankNameIdx = getColumnIndex(headerRow, "bankName");
+            int branchNameIdx = getColumnIndex(headerRow, "branchName");
+            int accountNoIdx = getColumnIndex(headerRow, "accountNo");
+            int ifscCodeIdx = getColumnIndex(headerRow, "ifscCode");
+    
+            int guardianNameIdx = getColumnIndex(headerRow, "guardianName");
+            int guardianPhoneNoIdx = getColumnIndex(headerRow, "guardianPhoneNo");
+            int guardianRelationIdx = getColumnIndex(headerRow, "guardianRelation");
+            int guardianOccupationIdx = getColumnIndex(headerRow, "guardianOccupation");
+            int guardianIncomeIdx = getColumnIndex(headerRow, "guardianIncome");
+    
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                List<Object> objects = new ArrayList<>();
+    
+                Student student = new Student();
+                student.setFirstName(getCellValue(row.getCell(nameIdx)));
+                student.setFatherName(getCellValue(row.getCell(fatherNameIdx)));
+                student.setMotherName(getCellValue(row.getCell(motherNameIdx)));
+                student.setSurname(getCellValue(row.getCell(surnameIdx)));
+                student.setEmail(getCellValue(row.getCell(emailIdx)));
+                student.setPhoneNo(getCellValue(row.getCell(phoneNoIdx)));
+    
+                // Date of Birth
+                student.setDateOfBirth(parseLocalDate(row.getCell(dobIdx)));
+    
+                student.setGender(getCellValue(row.getCell(genderIdx)));
+                student.setAdharNo(getCellValue(row.getCell(adharNoIdx)));
+                student.setBloodGroup(getCellValue(row.getCell(bloodGroupIdx)));
+                student.setCaste(getCellValue(row.getCell(casteIdx)));
+                student.setCategory(getCellValue(row.getCell(categoryIdx)));
+                student.setScholarshipCategory(getCellValue(row.getCell(scholarshipIdx)));
+                student.setAdmissionDate(parseLocalDate(row.getCell(admissionDateIdx)));
+                student.setSection(getCellValue(row.getCell(sectionIdx)));
+                student.setSession(getCellValue(row.getCell(sessionIdx)));
+                student.setStdClass(getCellValue(row.getCell(stdClassIdx)));
+                student.setRollNo(getCellValue(row.getCell(rollNoIdx)));
+    
+                GuardianInfo guardianInfo = new GuardianInfo();
+                guardianInfo.setName(getCellValue(row.getCell(guardianNameIdx)));
+                guardianInfo.setPhone(getCellValue(row.getCell(guardianPhoneNoIdx)));
+                guardianInfo.setRelation(getCellValue(row.getCell(guardianRelationIdx)));
+                guardianInfo.setOccupation(getCellValue(row.getCell(guardianOccupationIdx)));
+                guardianInfo.setIncome(safeParseDouble(getCellValue(row.getCell(guardianIncomeIdx))));
+    
+                BankDetail bankDetail = new BankDetail();
+                bankDetail.setBankName(getCellValue(row.getCell(bankNameIdx)));
+                bankDetail.setBranchName(getCellValue(row.getCell(branchNameIdx)));
+                bankDetail.setAccountNo(getCellValue(row.getCell(accountNoIdx)));
+                bankDetail.setIfscCode(getCellValue(row.getCell(ifscCodeIdx)));
+    
+                objects.add(student);
+                objects.add(guardianInfo);
+                objects.add(bankDetail);
+                students.add(objects);
+            }
         }
+    
+        return students;
     }
-    return students;
-}
+    
 
 // Get the column index by header name
 private int getColumnIndex(Row headerRow, String columnName) {
@@ -340,6 +337,25 @@ private int getColumnIndex(Row headerRow, String columnName) {
                 return String.valueOf(cell.getBooleanCellValue());
             default:
                 return "";
+        }
+    }
+    private LocalDate parseLocalDate(Cell cell) {
+        if (cell == null) return null;
+        try {
+            if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+                return cell.getLocalDateTimeCellValue().toLocalDate();
+            }
+            return LocalDate.parse(getCellValue(cell));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    private Double safeParseDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return 0.0;
         }
     }
 
