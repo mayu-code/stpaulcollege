@@ -60,7 +60,8 @@ public class ExcelServiceImpl implements ExcelService {
         XSSFRow headerRow = sheet.createRow(0);
         int dataIndex = 1;
 
-        List<String> headers = List.of("Admission Date", "Admission Number", "Session", "Section", "Class",
+        List<String> headers = List.of("Form Number", "Admission Date", "Admission Number", "Session", "Section",
+                "Class",
                 "First Name", "Father Name",
                 "Last Name",
                 "Mother Name", "Email",
@@ -154,26 +155,27 @@ public class ExcelServiceImpl implements ExcelService {
 
             if (student.getAdmissionForm() != null) {
 
-                row.createCell(0).setCellValue(
+                row.createCell(0).setCellValue(student.getAdmissionForm().getFormNo());
+                row.createCell(1).setCellValue(
                         DateTimeFormatter.ofPattern("yyyy-MM-dd").format(student.getAdmissionForm().getAddedDate()));
-                row.createCell(1).setCellValue(student.getAdmissionForm().getFormNo());
+                row.createCell(2).setCellValue(student.getAdmissionForm().getFormNo());
             }
-            row.createCell(2).setCellValue(student.getSession());
-            row.createCell(3).setCellValue(student.getSection());
-            row.createCell(4).setCellValue(student.getStdClass());
-            row.createCell(5).setCellValue(student.getFirstName());
-            row.createCell(6).setCellValue(student.getFatherName());
-            row.createCell(7).setCellValue(student.getSurname());
-            row.createCell(8).setCellValue(student.getMotherName());
-            row.createCell(9).setCellValue(student.getEmail());
-            row.createCell(10).setCellValue(student.getPhoneNo());
-            row.createCell(11).setCellValue(student.getDateOfBirth());
-            row.createCell(12).setCellValue(student.getGender());
-            row.createCell(13).setCellValue(student.getAdharNo());
-            row.createCell(14).setCellValue(student.getBloodGroup());
-            row.createCell(15).setCellValue(student.getCaste());
-            row.createCell(16).setCellValue(student.getCategory());
-            row.createCell(17).setCellValue(student.getScholarshipCategory());
+            row.createCell(3).setCellValue(student.getSession());
+            row.createCell(4).setCellValue(student.getSection());
+            row.createCell(5).setCellValue(student.getStdClass());
+            row.createCell(6).setCellValue(student.getFirstName());
+            row.createCell(7).setCellValue(student.getFatherName());
+            row.createCell(8).setCellValue(student.getSurname());
+            row.createCell(9).setCellValue(student.getMotherName());
+            row.createCell(10).setCellValue(student.getEmail());
+            row.createCell(11).setCellValue(student.getPhoneNo());
+            row.createCell(12).setCellValue(student.getDateOfBirth());
+            row.createCell(13).setCellValue(student.getGender());
+            row.createCell(14).setCellValue(student.getAdharNo());
+            row.createCell(15).setCellValue(student.getBloodGroup());
+            row.createCell(16).setCellValue(student.getCaste());
+            row.createCell(17).setCellValue(student.getCategory());
+            row.createCell(18).setCellValue(student.getScholarshipCategory());
             dataIndex++;
         }
         ;
