@@ -19,6 +19,7 @@ public class PendingStudents {
     public String surName;
     public String email;
     public String contact;
+    private String gender;
     public LocalDate dob;
     public LocalDate dateOfAdmission;
     public String academicId;
