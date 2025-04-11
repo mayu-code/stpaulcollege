@@ -97,6 +97,7 @@ public class AccountantController {
             paymentDetail =  this.paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
             newReceipt.setPaymentDetail(paymentDetail);
             newReceipt= this.receiptServiceImpl.addReceipt(newReceipt);
+            
             studentAcademics.setStatus(Status.Ongoing);
             this.studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics);
 
