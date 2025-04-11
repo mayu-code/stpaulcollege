@@ -33,6 +33,7 @@ import com.main.stpaul.services.impl.StudentAcademicsServiceImpl;
 import com.main.stpaul.services.impl.StudentServiceImpl;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -61,61 +62,85 @@ public class AccountantController {
 
 
     @PostMapping("/student/academics/{academicsId}/payment")
-    public ResponseEntity<?> addPayment(@PathVariable("academicsId")String academicsId,@RequestBody AddPaymentRequest addPaymentRequest)throws Exception{
+    public ResponseEntity<?> addPayment(
+            @PathVariable("academicsId") String academicsId,
+            @RequestBody AddPaymentRequest addPaymentRequest) throws Exception {
+
         log.info("Starting addPayment method with academicsId: {}", academicsId);
+        
         try {
-            StudentAcademics studentAcademics = this.studentAcademicsServiceImpl.getAcademicsById(academicsId);
-            if(studentAcademics == null){
+            // 1. Fetch StudentAcademics
+            StudentAcademics studentAcademics = studentAcademicsServiceImpl.getAcademicsById(academicsId);
+            if (studentAcademics == null) {
                 log.error("Student Academics not found with ID: {}", academicsId);
-                throw new EntityNotFoundException("Student Academics not found !");
-            }
-            PaymentDetail paymentDetail = studentAcademics.getPaymentDetail();
-            if(paymentDetail == null){
-                log.error("Payment Detail not found for student with academicsId: {}", academicsId);
-                throw new EntityNotFoundException("Payment Detail not found !");
-            }
-            Student student = this.studentServiceImpl.getStudentById(studentAcademics.getStudent().getStudentId());
-            if(student == null){
-                log.error("Student not found with ID: {}", studentAcademics.getStudent().getStudentId());
-                throw new EntityNotFoundException("Student not found !");
+                throw new EntityNotFoundException("Student Academics not found!");
             }
 
-            paymentDetail.setPaidAmount(paymentDetail.getPaidAmount() + addPaymentRequest.getAmountPaid());
-            paymentDetail.setBalanceAmount(paymentDetail.getTotalFees() - paymentDetail.getPaidAmount());
-            paymentDetail.setUpdatedDate(paymentDetail.getUpdatedDate());
-            if(paymentDetail.getInstallments()> 0){
+            // 2. Fetch PaymentDetail
+            PaymentDetail paymentDetail = studentAcademics.getPaymentDetail();
+            if (paymentDetail == null) {
+                log.error("Payment Detail not found for student with academicsId: {}", academicsId);
+                throw new EntityNotFoundException("Payment Detail not found!");
+            }
+
+            // 3. Fetch Student
+            Student student = studentServiceImpl.getStudentById(studentAcademics.getStudent().getStudentId());
+            if (student == null) {
+                log.error("Student not found with ID: {}", studentAcademics.getStudent().getStudentId());
+                throw new EntityNotFoundException("Student not found!");
+            }
+
+            // 4. Update PaymentDetail
+            double updatedPaidAmount = paymentDetail.getPaidAmount() + addPaymentRequest.getAmountPaid();
+            paymentDetail.setPaidAmount(updatedPaidAmount);
+            paymentDetail.setBalanceAmount(paymentDetail.getTotalFees() - updatedPaidAmount);
+            paymentDetail.setUpdatedDate(LocalDateTime.now()); // fix: update the timestamp
+            if (paymentDetail.getInstallments() > 0) {
                 paymentDetail.setInstallments(paymentDetail.getInstallments() - 1);
             }
-            if(paymentDetail.getDueDate()!=null){
+            if (paymentDetail.getDueDate() != null) {
                 paymentDetail.setDueDate(LocalDate.now().plusDays(paymentDetail.getInstallmentGap()));
             }
+
+            // 5. Update StudentAcademics status
+            studentAcademics.setStatus(Status.Ongoing);
+
+            // 6. Create Receipt
             Receipt newReceipt = new Receipt();
             newReceipt.setAmountPaid(addPaymentRequest.getAmountPaid());
             newReceipt.setPaymentMode(addPaymentRequest.getPaymentMode());
             newReceipt.setPaymentDate(LocalDateTime.now());
 
-            paymentDetail =  this.paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
+            // 7. Persist changes
+            paymentDetail = paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
             newReceipt.setPaymentDetail(paymentDetail);
-            newReceipt= this.receiptServiceImpl.addReceipt(newReceipt);
-            
-            studentAcademics.setStatus(Status.Ongoing);
-            this.studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics);
+            newReceipt = receiptServiceImpl.addReceipt(newReceipt);
+            studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics); // this must save status
 
-            byte[] pdf = PdfGenerator.generateReceiptPdf(student,this.receiptMapper.toReceiptResponse(newReceipt),paymentDetail);
+            // 8. Generate PDF
+            byte[] pdf = PdfGenerator.generateReceiptPdf(
+                    student,
+                    receiptMapper.toReceiptResponse(newReceipt),
+                    paymentDetail
+            );
 
+            // 9. Build response
             DataResponse response = DataResponse.builder()
-                                                .data(pdf)
-                                                .message("payment added successfully !")
-                                                .status(HttpStatus.OK)
-                                                .statusCode(200)
-                                                .build();
+                    .data(pdf)
+                    .message("Payment added successfully!")
+                    .status(HttpStatus.OK)
+                    .statusCode(200)
+                    .build();
+
             log.info("Successfully added payment for student with academicsId: {}", academicsId);
             return ResponseEntity.status(HttpStatus.OK).body(response);
+
         } catch (Exception e) {
             log.error("Error adding payment for student with academicsId: {}: {}", academicsId, e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
+
     
     @GetMapping("/student/{studentId}/payment/receipt/{receiptId}")
     public ResponseEntity<?> downloadPdf(@PathVariable("studentId")String studentId,@PathVariable("receiptId")Long receiptId)throws Exception{
