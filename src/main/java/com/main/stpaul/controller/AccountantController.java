@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.request.AddPaymentRequest;
 import com.main.stpaul.dto.response.PendingStudents;
@@ -96,6 +97,8 @@ public class AccountantController {
             paymentDetail =  this.paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
             newReceipt.setPaymentDetail(paymentDetail);
             newReceipt= this.receiptServiceImpl.addReceipt(newReceipt);
+            studentAcademics.setStatus(Status.Ongoing);
+            this.studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics);
 
             byte[] pdf = PdfGenerator.generateReceiptPdf(student,this.receiptMapper.toReceiptResponse(newReceipt),paymentDetail);
 

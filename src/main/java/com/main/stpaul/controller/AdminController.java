@@ -49,6 +49,7 @@ public class AdminController {
                     log.error("Student not found with ID: {}", id);
                     throw new EntityNotFoundException("Student not found !");
                 }
+                
                 if (stdClass.equals("12")) {
                     student.setStatus(Status.Completed); 
                 }
