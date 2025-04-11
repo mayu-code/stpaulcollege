@@ -333,7 +333,7 @@ public class StudentServiceImpl implements StudentService{
                 objects.add(student);
                 objects.add(guardianInfo);
                 // objects.add(bankDetail);
-                objects.add(students);
+                objects.add(lastSchool);
                 students.add(objects);
             }
         }
