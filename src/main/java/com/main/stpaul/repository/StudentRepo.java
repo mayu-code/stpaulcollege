@@ -41,7 +41,7 @@ public interface StudentRepo extends JpaRepository<Student,String>{
     @Query("""
             SELECT new com.main.stpaul.dto.response.PendingStudents(s.studentId, s.firstName, s.fatherName, s.surname,
             s.email, s.phoneNo, s.dateOfBirth, s.admissionDate,  sa.studentAcademicsId,
-            s.session, s.stdClass, s.status,0)
+            s.session, s.stdClass, s.status,0.0)
             FROM Student s 
             LEFT JOIN studentAcademics sa
             ON s.studentId=sa.student.studentId AND sa.isDelete = false

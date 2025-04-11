@@ -168,6 +168,10 @@ public class StudentServiceImpl implements StudentService{
                     StudentAcademics studentAcademics = new StudentAcademics();
                     studentAcademics.setStudent(student);
                     studentAcademics.setStatus(Status.Pending);
+                    studentAcademics.setStdClass(student.getStdClass());
+                    studentAcademics.setSection(student.getSection());
+                    studentAcademics.setSession(student.getSession());
+                    studentAcademics.setRollNo(student.getRollNo());
                     this.academicsServiceImpl.addStudentAcademics(studentAcademics);
 
                 }
@@ -277,7 +281,7 @@ public class StudentServiceImpl implements StudentService{
             student.setFatherName(getCellValue(row.getCell(indexMap.get("fatherName"))));
             student.setMotherName(getCellValue(row.getCell(indexMap.get("motherName"))));
             student.setSurname(getCellValue(row.getCell(indexMap.get("surname"))));
-            // student.setEmail(getCellValue(row.getCell(indexMap.get("email"))));
+            student.setEmail(getCellValue(row.getCell(indexMap.get("email"))));
             student.setPhoneNo(getCellValue(row.getCell(indexMap.get("phoneNo"))));
             student.setDateOfBirth(parseLocalDate(row.getCell(indexMap.get("dateOfBirth"))));
             student.setGender(getCellValue(row.getCell(indexMap.get("gender"))));
@@ -295,7 +299,7 @@ public class StudentServiceImpl implements StudentService{
             // GuardianInfo
             GuardianInfo guardianInfo = new GuardianInfo();
             guardianInfo.setName(getCellValue(row.getCell(indexMap.get("guardianName"))));
-            // guardianInfo.setPhone(getCellValue(row.getCell(indexMap.get("guardianPhoneNo"))));
+            guardianInfo.setPhone(getCellValue(row.getCell(indexMap.get("guardianPhoneNo"))));
             guardianInfo.setRelation(getCellValue(row.getCell(indexMap.get("guardianRelation"))));
             guardianInfo.setOccupation(getCellValue(row.getCell(indexMap.get("guardianOccupation"))));
             guardianInfo.setIncome(safeParseDouble(getCellValue(row.getCell(indexMap.get("guardianIncome")))));

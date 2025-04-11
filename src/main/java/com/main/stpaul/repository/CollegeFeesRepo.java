@@ -51,7 +51,7 @@ public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
             """)
     void deleteCollegeFees(@Param("id")long id);
 
-    @Query("SELECT c.totalFees FROM CollegeFees c WHERE c.stdClass=:stdClass and c.isDelete=false")
+    @Query("SELECT c.totalFees FROM CollegeFees c WHERE (:stdClass IS NULL OR c.stdClass=:stdClass) and c.isDelete=false")
     Optional<Double> getFeesByClass(@Param("stdClass") String stdClass);
 
     @Query("""
