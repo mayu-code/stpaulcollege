@@ -35,6 +35,7 @@ import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
 import com.main.stpaul.dto.request.ExcelStudent;
 import com.main.stpaul.dto.response.PendingStudents;
+import com.main.stpaul.entities.AdmissionForm;
 import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.entities.LastSchool;
@@ -61,6 +62,9 @@ public class StudentServiceImpl implements StudentService{
 
     @Autowired
     private StudentAcademicsServiceImpl academicsServiceImpl;
+
+    @Autowired
+    private AdmissionFormServiceImpl admissionFormServiceImpl;
 
     @Override
     public Student addStudent(Student student) {
@@ -143,6 +147,7 @@ public class StudentServiceImpl implements StudentService{
                 GuardianInfo guardianInfo = new GuardianInfo();
                 // BankDetail bankDetail = new BankDetail();
                 LastSchool lastSchool = new LastSchool();
+                String formNo = null;
     
                 for (Object obj : data) {
                     if (obj instanceof Student) {
@@ -154,6 +159,8 @@ public class StudentServiceImpl implements StudentService{
                     // }
                     } else if (obj instanceof LastSchool) {
                         lastSchool = (LastSchool) obj;
+                    }else if(obj instanceof String) {
+                        formNo = (String) obj;
                     }
                 }
     
@@ -173,7 +180,13 @@ public class StudentServiceImpl implements StudentService{
                     studentAcademics.setSession(student.getSession());
                     studentAcademics.setRollNo(student.getRollNo());
                     this.academicsServiceImpl.addStudentAcademics(studentAcademics);
-
+                    AdmissionForm admissionForm = new AdmissionForm();
+                    admissionForm.setStudent(student);
+                    admissionForm.setStdClass(student.getStdClass());
+                    admissionForm.setAdmissionDate(String.valueOf(student.getAdmissionDate()));
+                    admissionForm.setSession(student.getSession());
+                    admissionForm.setFormNo(formNo);
+                    this.admissionFormServiceImpl.addAdmissionForm(admissionForm);
                 }
             }
         } catch (Exception e) {
@@ -181,7 +194,6 @@ public class StudentServiceImpl implements StudentService{
         }
         return;
     }
-
 
 
     @Override
@@ -201,8 +213,6 @@ public class StudentServiceImpl implements StudentService{
         return new ByteArrayInputStream(outputStream.toByteArray());
 
     }
-
-
 
     /**
      * Parses a CSV file and converts it into a list of Student objects.
@@ -255,7 +265,7 @@ public class StudentServiceImpl implements StudentService{
 
         // Extract all indexes at once
         Map<String, Integer> indexMap = new HashMap<>();
-        String[] headers = {
+        String[] headers = {"formNo",
             "firstName", "fatherName", "motherName", "surname","email","phoneNo",
             "dateOfBirth", "gender", "aadharNo", "bloodGroup", "caste", "category", "scholarship",
             "admissionDate", "section", "session", "stdClass", "rollNo",
@@ -318,6 +328,7 @@ public class StudentServiceImpl implements StudentService{
             objects.add(student);
             objects.add(guardianInfo);
             objects.add(lastSchool);
+            objects.add(getCellValue(row.getCell(indexMap.get("formNo"))));
             students.add(objects);
         }
     }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main.stpaul.constants.Result;
 import com.main.stpaul.constants.Status;
+import com.main.stpaul.dto.ResponseDTO.DataResponse;
 import com.main.stpaul.dto.ResponseDTO.SuccessResponse;
 import com.main.stpaul.entities.Student;
 import com.main.stpaul.entities.StudentAcademics;
@@ -80,6 +81,38 @@ public class AdminController {
             return ResponseEntity.status(200).body(response);
         } catch (Exception e) {
             log.error("Error promoting students: {}", e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @PostMapping("/student/assignRollNoAndSection")
+    
+    public ResponseEntity<?> assignRollNoAndSection(@RequestBody List<String> studentIds)throws Exception{
+        log.info("Starting assignRollNoAndSection method with studentIds: {}", studentIds);
+        try {
+            for(String id:studentIds){
+                log.info("Processing student with ID: {}", id);
+                Student student = this.studentServiceImpl.getStudentById(id);
+                if(student==null){
+                    log.error("Student not found with ID: {}", id);
+                    throw new EntityNotFoundException("Student not found !");
+                }
+                student.setStatus(Status.Ongoing);
+                student.setStdClass(String.valueOf(Integer.parseInt(student.getStdClass())+1));
+                student.setSession(StudentHelper.sessionIncrementer(student.getSession()));
+                this.studentServiceImpl.updateStudent(student);
+
+                log.info("Assigned roll number and section for student with ID: {}", id);
+            }
+            DataResponse response = DataResponse.builder()
+                                    .data(studentIds)
+                                    .message("Roll number and section assigned successfully !")
+                                    .status(HttpStatus.OK)
+                                    .statusCode(200)
+                                    .build();
+            return ResponseEntity.status(200).body(response);
+        } catch (Exception e) {
+            log.error("Error assigning roll number and section: {}", e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
