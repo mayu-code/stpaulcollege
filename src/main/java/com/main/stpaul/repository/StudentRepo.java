@@ -51,6 +51,7 @@ public interface StudentRepo extends JpaRepository<Student,String>{
             AND (:session IS NULL OR s.session=:session)
             AND s.status = :status 
             AND s.isDelete = false
+            ORDER BY s.addDate DESC
             """)
     List<PendingStudents> findByStatus(@Param("query")String query,@Param("stdClass")String stdClass,@Param("section")String section,
                                         @Param("session")String session,@Param("status") Status status);
