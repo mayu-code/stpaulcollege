@@ -275,9 +275,14 @@ public class ManagerController {
         log.info("Starting addPaymentDetail method with studentId: {} and academicId: {}", studentId, academicId);
         try {
             StudentAcademics academics = this.studentAcademicsServiceImpl.getAcademicsById(academicId);
+            if(academics==null){
+                log.warn("student Academics not found with id : {}", academicId);
+                throw new EntityNotFoundException("Student Academics not present !");
+            }
             PaymentDetail paymentDetail2 = this.paymentDetailMapper.toPaymentDetail(paymentDetail);
             paymentDetail2.setStudentAcademics(academics);
             Receipt receipt = new Receipt();
+
 
             receipt.setAmountPaid(paymentDetail2.getPaidAmount());
             receipt.setTransactionId(null);
@@ -291,6 +296,8 @@ public class ManagerController {
             Student student = this.studentServiceImpl.getStudentById(studentId);
             student.setStatus(Status.Ongoing);
             this.studentServiceImpl.updateStudent(student);
+            academics.setStatus(Status.Ongoing);
+            this.studentAcademicsServiceImpl.updateStudentAcademics(academics);
             byte[] pdfBytes = PdfGenerator.generateReceiptPdf(this.studentServiceImpl.getStudentById(studentId),
                     receiptMapper.toReceiptResponse(receipt), paymentDetail2);
             DataResponse response = DataResponse.builder()

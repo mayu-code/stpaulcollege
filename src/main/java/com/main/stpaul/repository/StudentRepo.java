@@ -49,7 +49,7 @@ public interface StudentRepo extends JpaRepository<Student,String>{
             AND (:stdClass IS NULL OR s.stdClass=:stdClass)
             AND (:section IS NULL OR s.section=:section)
             AND (:session IS NULL OR s.session=:session)
-            AND s.status = :status 
+            AND sa.status = :status 
             AND s.isDelete = false
             ORDER BY s.addDate DESC
             """)

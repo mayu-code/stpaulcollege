@@ -102,9 +102,6 @@ public class AccountantController {
                 paymentDetail.setDueDate(LocalDate.now().plusDays(paymentDetail.getInstallmentGap()));
             }
 
-            // 5. Update StudentAcademics status
-            studentAcademics.setStatus(Status.Ongoing);
-
             // 6. Create Receipt
             Receipt newReceipt = new Receipt();
             newReceipt.setAmountPaid(addPaymentRequest.getAmountPaid());
@@ -115,7 +112,6 @@ public class AccountantController {
             paymentDetail = paymentDetailServiceImpl.updatePaymentDetail(paymentDetail);
             newReceipt.setPaymentDetail(paymentDetail);
             newReceipt = receiptServiceImpl.addReceipt(newReceipt);
-            studentAcademicsServiceImpl.updateStudentAcademics(studentAcademics); // this must save status
 
             // 8. Generate PDF
             byte[] pdf = PdfGenerator.generateReceiptPdf(
@@ -123,6 +119,7 @@ public class AccountantController {
                     receiptMapper.toReceiptResponse(newReceipt),
                     paymentDetail
             );
+            
 
             // 9. Build response
             DataResponse response = DataResponse.builder()
