@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.main.stpaul.entities.CollegeFees;
-
 import jakarta.transaction.Transactional;
 
 public interface CollegeFeesRepo extends JpaRepository<CollegeFees,Long>{
