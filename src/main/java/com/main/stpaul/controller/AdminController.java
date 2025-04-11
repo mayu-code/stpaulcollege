@@ -44,12 +44,18 @@ public class AdminController {
             for(String id:studentIds){
                 log.info("Processing student with ID: {}", id);
                 Student student = this.studentServiceImpl.getStudentById(id);
+                String stdClass = student.getStdClass();
                 if(student==null){
                     log.error("Student not found with ID: {}", id);
                     throw new EntityNotFoundException("Student not found !");
                 }
-                student.setStatus(Status.Ongoing);
-                student.setStdClass(String.valueOf(Integer.parseInt(student.getStdClass())+1));
+                if (stdClass.equals("12")) {
+                    student.setStatus(Status.Completed); 
+                }
+                else{
+                    student.setStatus(Status.Ongoing);
+                    student.setStdClass(String.valueOf(Integer.parseInt(student.getStdClass())+1));
+                }
                 student.setSession(StudentHelper.sessionIncrementer(student.getSession()));
                 this.studentServiceImpl.updateStudent(student);
 
@@ -68,11 +74,16 @@ public class AdminController {
 
                 log.info("Updated student academics for student ID: {}", id);
 
-                StudentAcademics newAcademics = new StudentAcademics();
-                newAcademics.setStdClass(student.getStdClass());
-                newAcademics.setSession(student.getSession());
-                newAcademics.setStudent(student);
-                this.studentAcademicsServiceImpl.addStudentAcademics(newAcademics);
+                if(stdClass.equals("12")){
+                    log.info("Student with ID: {} has completed their studies.", id);
+                }
+                else{
+                    StudentAcademics newAcademics = new StudentAcademics();
+                    newAcademics.setStdClass(student.getStdClass());
+                    newAcademics.setSession(student.getSession());
+                    newAcademics.setStudent(student);
+                    this.studentAcademicsServiceImpl.addStudentAcademics(newAcademics);
+                }
 
                 log.info("Added new student academics for student ID: {}", id);
             }
