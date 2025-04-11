@@ -167,6 +167,7 @@ public class StudentServiceImpl implements StudentService{
                     this.lastSchoolServiceImpl.addLastSchool(lastSchool);
                     StudentAcademics studentAcademics = new StudentAcademics();
                     studentAcademics.setStudent(student);
+                    studentAcademics.setStatus(Status.Pending);
                     this.academicsServiceImpl.addStudentAcademics(studentAcademics);
 
                 }
