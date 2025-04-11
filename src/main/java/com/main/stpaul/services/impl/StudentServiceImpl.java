@@ -39,6 +39,7 @@ import com.main.stpaul.entities.BankDetail;
 import com.main.stpaul.entities.GuardianInfo;
 import com.main.stpaul.entities.LastSchool;
 import com.main.stpaul.entities.Student;
+import com.main.stpaul.entities.StudentAcademics;
 import com.main.stpaul.repository.StudentRepo;
 import com.main.stpaul.services.serviceInterface.StudentService;
 
@@ -57,6 +58,9 @@ public class StudentServiceImpl implements StudentService{
 
     @Autowired
     private LastSchoolServiceImpl lastSchoolServiceImpl;
+
+    @Autowired
+    private StudentAcademicsServiceImpl academicsServiceImpl;
 
     @Override
     public Student addStudent(Student student) {
@@ -161,6 +165,10 @@ public class StudentServiceImpl implements StudentService{
                     // this.bankDetailServiceImpl.addBankDetail(bankDetail);
                     lastSchool.setStudent(student);
                     this.lastSchoolServiceImpl.addLastSchool(lastSchool);
+                    StudentAcademics studentAcademics = new StudentAcademics();
+                    studentAcademics.setStudent(student);
+                    this.academicsServiceImpl.addStudentAcademics(studentAcademics);
+
                 }
             }
         } catch (Exception e) {
