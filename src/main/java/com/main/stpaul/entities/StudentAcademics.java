@@ -39,7 +39,7 @@ public class StudentAcademics {
     private LocalDate promotionDate;
 
     @Enumerated(EnumType.STRING)
-    private Status status=Status.Ongoing;
+    private Status status=Status.Pending;
 
     private boolean isDelete = false;
     private boolean isActive = true;
