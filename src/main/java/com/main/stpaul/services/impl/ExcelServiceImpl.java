@@ -315,7 +315,7 @@ public class ExcelServiceImpl implements ExcelService {
             XSSFSheet sheet = workbook.createSheet("Raw Data");
             XSSFRow headerRow = sheet.createRow(0);
 
-            List<String> headers = List.of("session", "stdClass", "section", "firstName", "fatherName",
+            List<String> headers = List.of("formNo", "session", "stdClass", "section", "firstName", "fatherName",
                     "surname", "motherName",
                     "rollNo", "email",
                     "phoneNo", "dateOfBirth",
@@ -331,41 +331,42 @@ public class ExcelServiceImpl implements ExcelService {
 
             // Sample data for demonstration purposes
             XSSFRow dataRow = sheet.createRow(1);
-            dataRow.createCell(0).setCellValue("2023-2024");
-            dataRow.createCell(1).setCellValue("10");
-            dataRow.createCell(2).setCellValue("A");
-            dataRow.createCell(3).setCellValue("John");
-            dataRow.createCell(4).setCellValue("Doe");
-            dataRow.createCell(5).setCellValue("Smith");
-            dataRow.createCell(6).setCellValue("Jane");
-            dataRow.createCell(7).setCellValue("1234");
-            dataRow.createCell(8).setCellValue("john@gmail.com");
-            dataRow.createCell(9).setCellValue("9876543210");
-            dataRow.createCell(10).setCellValue("2005-01-01");
-            dataRow.createCell(11).setCellValue("Male");
-            dataRow.createCell(12).setCellValue("123456789012");
-            dataRow.createCell(13).setCellValue("A+");
-            dataRow.createCell(14).setCellValue("General");
+            dataRow.createCell(0).setCellValue("256");
+            dataRow.createCell(1).setCellValue("2023-2024");
+            dataRow.createCell(2).setCellValue("10");
+            dataRow.createCell(3).setCellValue("A");
+            dataRow.createCell(4).setCellValue("John");
+            dataRow.createCell(5).setCellValue("Doe");
+            dataRow.createCell(6).setCellValue("Smith");
+            dataRow.createCell(7).setCellValue("Jane");
+            dataRow.createCell(8).setCellValue("1234");
+            dataRow.createCell(9).setCellValue("john@gmail.com");
+            dataRow.createCell(10).setCellValue("9876543210");
+            dataRow.createCell(11).setCellValue("2005-01-01");
+            dataRow.createCell(12).setCellValue("Male");
+            dataRow.createCell(13).setCellValue("123456789012");
+            dataRow.createCell(14).setCellValue("A+");
             dataRow.createCell(15).setCellValue("General");
-            dataRow.createCell(16).setCellValue("None");
-            dataRow.createCell(17).setCellValue("2023-01-01");
+            dataRow.createCell(16).setCellValue("General");
+            dataRow.createCell(17).setCellValue("None");
+            dataRow.createCell(18).setCellValue("2023-01-01");
             // dataRow.createCell(17).setCellValue("Bank of America");
             // dataRow.createCell(18).setCellValue("Main Branch");
             // dataRow.createCell(19).setCellValue("1234567890");
             // dataRow.createCell(20).setCellValue("IFSC123");
-            dataRow.createCell(18).setCellValue("Michael");
-            dataRow.createCell(19).setCellValue("4534354");
-            dataRow.createCell(20).setCellValue("Father");
-            dataRow.createCell(21).setCellValue("Engineer");
-            dataRow.createCell(22).setCellValue("50000");
-            dataRow.createCell(23).setCellValue("ABC School");
-            dataRow.createCell(24).setCellValue("5678");
-            dataRow.createCell(25).setCellValue("91011");
-            dataRow.createCell(26).setCellValue("21351331");
-            dataRow.createCell(27).setCellValue("MH STATE");
-            dataRow.createCell(28).setCellValue("March 2023");
-            dataRow.createCell(29).setCellValue("85");
-            dataRow.createCell(30).setCellValue("PASS");
+            dataRow.createCell(19).setCellValue("Michael");
+            dataRow.createCell(20).setCellValue("4534354");
+            dataRow.createCell(21).setCellValue("Father");
+            dataRow.createCell(22).setCellValue("Engineer");
+            dataRow.createCell(23).setCellValue("50000");
+            dataRow.createCell(24).setCellValue("ABC School");
+            dataRow.createCell(25).setCellValue("5678");
+            dataRow.createCell(26).setCellValue("91011");
+            dataRow.createCell(27).setCellValue("21351331");
+            dataRow.createCell(28).setCellValue("MH STATE");
+            dataRow.createCell(29).setCellValue("March 2023");
+            dataRow.createCell(30).setCellValue("85");
+            dataRow.createCell(31).setCellValue("PASS");
 
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
