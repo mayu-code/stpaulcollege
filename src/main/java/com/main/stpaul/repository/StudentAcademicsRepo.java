@@ -49,4 +49,11 @@ public interface StudentAcademicsRepo extends JpaRepository<StudentAcademics,Str
     """)
     Optional<StudentAcademics> findOngoingAcademicsByStudent(@Param("studentId") String studentId,@Param("status")Status status);
 
+    @Query("""
+        SELECT s
+        FROM StudentAcademics s
+        WHERE s.student.id = :studentId AND s.isDelete = false AND s.status=:status
+    """)
+    Optional<StudentAcademics> findPendingAcademicsByStudent(@Param("studentId") String studentId,@Param("status")Status status);
+
 }

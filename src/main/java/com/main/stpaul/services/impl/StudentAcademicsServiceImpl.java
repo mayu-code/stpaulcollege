@@ -40,6 +40,11 @@ public class StudentAcademicsServiceImpl implements StudentAcademicsService{
     }
 
     @Override
+    public StudentAcademics getPendingAcademicsByStudent(String studentId) {
+        return this.studentAcademicsRepo.findPendingAcademicsByStudent(studentId, Status.Pending).orElse(null);
+    }
+
+    @Override
     public void updateStudentAcademics(StudentAcademics studentAcademics){
         this.studentAcademicsRepo.save(studentAcademics);
         return ;

@@ -246,7 +246,7 @@ public class ManagerController {
         log.info("Starting uploadDoucuments method with studentId: {}", id);
         log.info("Uploading Student Documents");
         Student student = this.studentServiceImpl.getStudentById(id);
-        StudentAcademics studnetAcademics= this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id);
+        StudentAcademics studnetAcademics= this.studentAcademicsServiceImpl.getPendingAcademicsByStudent(id);
         if (student == null) {
             log.warn("student not found for id : {}", id);
             throw new EntityNotFoundException("Student not present !");

@@ -9,5 +9,6 @@ public interface StudentAcademicsService {
     List<StudentAcademics> getAcademicsByStudent(String studentId);
     StudentAcademics getAcademicsById(String id);
     StudentAcademics getOngoingAcademicsByStudent(String studentId);
+    public StudentAcademics getPendingAcademicsByStudent(String studentId);
     void updateStudentAcademics(StudentAcademics studentAcademics) throws Exception;
 }
