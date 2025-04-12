@@ -246,9 +246,14 @@ public class ManagerController {
         log.info("Starting uploadDoucuments method with studentId: {}", id);
         log.info("Uploading Student Documents");
         Student student = this.studentServiceImpl.getStudentById(id);
+        StudentAcademics studnetAcademics= this.studentAcademicsServiceImpl.getOngoingAcademicsByStudent(id);
         if (student == null) {
             log.warn("student not found for id : {}", id);
             throw new EntityNotFoundException("Student not present !");
+        }
+        if(studnetAcademics==null){
+            log.warn("student academics not found for id : {}", id);
+            throw new EntityNotFoundException("Student Academics not present !");
         }
 
         files.forEach((docName, file) -> {
@@ -262,6 +267,8 @@ public class ManagerController {
                 throw new RuntimeException(e.getMessage());
             }
         });
+
+        studnetAcademics.setStatus(Status.Pending);
         SuccessResponse response = new SuccessResponse(HttpStatus.OK, 200, "document uploaded Successfully !");
         log.info("document uploaded Successfully ");
         return ResponseEntity.status(HttpStatus.OK).body(response);
